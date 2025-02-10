@@ -19,6 +19,7 @@ services:
       JAVA_HEAP_MIN: "${PLATFORM_JAVA_HEAP_MIN}"
       JAVA_HEAP_MAX: "${PLATFORM_JAVA_HEAP_MAX}"
       JAVA_OPTS: "${PLATFORM_JAVA_OPTS}"
+      JAVA_TOOL_OPTIONS: "${PLATFORM_JAVA_OPTS}"
     healthcheck:
       test:
         [
@@ -229,6 +230,7 @@ services:
     environment:
       HEDERA_MIRROR_GRPC_DB_HOST: db
       SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hedera-mirror-grpc/
+      JAVA_TOOL_OPTIONS: "${GRPC_PLATFORM_JAVA_OPTS}"
     networks:
       - mirror-node
     ports:
@@ -251,6 +253,7 @@ services:
     environment:
       HEDERA_MIRROR_IMPORTER_DB_HOST: db
       SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hedera-mirror-importer/
+      JAVA_TOOL_OPTIONS: "${GRPC_PLATFORM_JAVA_OPTS}"
     networks:
       - cloud-storage
       - mirror-node
@@ -292,6 +295,7 @@ services:
     environment:
       HEDERA_MIRROR_RESTJAVA_DB_HOST: db
       SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hedera-mirror-rest-java/
+      JAVA_TOOL_OPTIONS: "${GRPC_PLATFORM_JAVA_OPTS}"
     networks:
       - mirror-node
     ports:
@@ -330,6 +334,7 @@ services:
       HEDERA_MIRROR_WEB3_DB_HOST: db
       HEDERA_MIRROR_WEB3_EVM_NETWORK: OTHER
       SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hedera-mirror-web3/
+      JAVA_TOOL_OPTIONS: "${GRPC_PLATFORM_JAVA_OPTS}"
     ports:
       - "8545:8545"
     restart: unless-stopped
@@ -355,6 +360,7 @@ services:
       - network-node-bridge
     environment:
       SPRING_CONFIG_ADDITIONAL_LOCATION: "file:/usr/etc/hedera-mirror-monitor/"
+      JAVA_TOOL_OPTIONS: "${GRPC_PLATFORM_JAVA_OPTS}"
     ports:
       - "8082:8082"
     restart: unless-stopped
