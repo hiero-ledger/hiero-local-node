@@ -20,6 +20,7 @@ services:
       JAVA_HEAP_MAX: "${PLATFORM_JAVA_HEAP_MAX}"
       JAVA_OPTS: "${PLATFORM_JAVA_OPTS}"
       JAVA_TOOL_OPTIONS: "${PLATFORM_JAVA_OPTS}"
+      CONSENSUS_NODE_ID: "0"
     healthcheck:
       test:
         [
