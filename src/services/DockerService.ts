@@ -209,8 +209,10 @@ export class DockerService implements IService{
     public checkDockerImages() {
         const dockerComposeYml = yaml.load(shell.exec("docker compose config", { silent: true }).stdout) as any;
         const dockerComposeImages = Object.values(dockerComposeYml.services).map((s: any) => {
-            const parsed = s.image.split(":");
-            return `${parsed[0]}:${parsed[1] ?? "latest"}`;
+            if (s.image) {
+                const parsed = s.image.split(":");
+                return `${parsed[0]}:${parsed[1] ?? "latest"}`;
+            }
         });
         const dockerComposeImagesUnique = [...new Set(dockerComposeImages.sort())];
 
