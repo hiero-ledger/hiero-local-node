@@ -1,22 +1,4 @@
-/*-
- *
- * Hedera Local Node
- *
- * Copyright (C) 2023-2024 Hedera Hashgraph, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+// SPDX-License-Identifier: Apache-2.0
 
 import semver from'semver';
 import shell from 'shelljs';
@@ -53,6 +35,7 @@ import {
     NETWORK_NODE_CONFIG_DIR_PATH,
     OPTIONAL_PORTS
 } from '../constants';
+import os from 'os';
 
 configDotenv({ path: path.resolve(__dirname, '../../.env') });
 
@@ -219,6 +202,13 @@ export class InitState implements IState{
             this.logger.info(INIT_STATE_RELAY_LIMITS_DISABLED, this.stateName);
         }
         this.logger.info(INIT_STATE_CONFIGURING_ENV_VARIABLES_FINISH, this.stateName);
+
+        // workaround for broken Java (21 to 23) on Apple Silicon M3/M4 chipsets under MacOS Sequoia when running inside docker
+        // darwin release history can be found here https://en.wikipedia.org/wiki/Darwin_(operating_system)#Release_history
+        if (os.platform() === "darwin" && os.release().slice(0, 2) === "24") {
+            process.env.PLATFORM_JAVA_OPTS = "-XX:+UnlockExperimentalVMOptions -XX:UseSVE=0 -XX:+UseZGC -Xlog:gc*:gc.log";
+            process.env.GRPC_PLATFORM_JAVA_OPTS = "-XX:UseSVE=0";
+        }
     }
 
     /**

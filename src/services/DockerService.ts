@@ -1,22 +1,4 @@
-/*-
- *
- * Hedera Local Node
- *
- * Copyright (C) 2023-2024 Hedera Hashgraph, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+// SPDX-License-Identifier: Apache-2.0
 
 import Dockerode from 'dockerode';
 import shell from 'shelljs';
@@ -227,8 +209,10 @@ export class DockerService implements IService{
     public checkDockerImages() {
         const dockerComposeYml = yaml.load(shell.exec("docker compose config", { silent: true }).stdout) as any;
         const dockerComposeImages = Object.values(dockerComposeYml.services).map((s: any) => {
-            const parsed = s.image.split(":");
-            return `${parsed[0]}:${parsed[1] ?? "latest"}`;
+            if (s.image) {
+                const parsed = s.image.split(":");
+                return `${parsed[0]}:${parsed[1] ?? "latest"}`;
+            }
         });
         const dockerComposeImagesUnique = [...new Set(dockerComposeImages.sort())];
 
@@ -285,6 +269,7 @@ export class DockerService implements IService{
                     this.logger.error(`Hedera local node start up TERMINATED due to docker's misconfiguration`);
                     this.logger.error(SHARED_PATHS_ERROR);
                     this.logger.error(`See https://docs.docker.com/desktop/settings/mac/#file-sharing for more info.`);
+                    this.logger.error(`-- Make sure you have '/Users/<your_user>/Library/' under File Sharing Docker's Setting.`);
                     this.logger.error(`-- If you're using hedera-local as npm package - running 'npm root -g' should output the path you have to add under File Sharing Docker's Setting.`);
                     this.logger.error(`-- If you're using hedera-local as cloned repo - running 'pwd' in the project's root should output the path you have to add under File Sharing Docker's Setting.`);
                     process.exit();

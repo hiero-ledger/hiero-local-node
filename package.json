@@ -1,6 +1,6 @@
 {
   "name": "@hashgraph/hedera-local",
-  "version": "2.32.6",
+  "version": "2.34.0",
   "description": "Developer tooling for running Local Hedera Network (Consensus + Mirror Nodes).",
   "main": "index.ts",
   "scripts": {
@@ -35,7 +35,7 @@
     "@semantic-release/commit-analyzer": "^13.0.0",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/release-notes-generator": "^14.0.1",
-    "@types/chai": "^4.3.16",
+    "@types/chai": "4.3.16",
     "@types/detect-port": "^1.3.5",
     "@types/dockerode": "^3.3.29",
     "@types/expect": "^24.3.0",
@@ -47,7 +47,7 @@
     "@types/yargs": "^17.0.32",
     "@typescript-eslint/eslint-plugin": "^8.0.1",
     "@typescript-eslint/parser": "^8.0.1",
-    "chai": "^4.3.6",
+    "chai": "4.3.6",
     "conventional-changelog-conventionalcommits": "^8.0.0",
     "eslint": "^8.51.0",
     "eslint-config-airbnb": "^19.0.4",
