@@ -213,7 +213,7 @@ describe(TokenUtils.name, () => {
 
           const actualTokenCreateTransaction: TokenCreateTransaction = getTokenCreateTransactionSpy.returnValues[0];
           const expectedTokenCreateTransaction: TokenCreateTransaction = getExpectedTokenCreateTransaction(token);
-          testBed.sandbox.assert.match(actualTokenCreateTransaction, expectedTokenCreateTransaction);
+          testBed.sandbox.assert.match(JSON.stringify(actualTokenCreateTransaction), JSON.stringify(expectedTokenCreateTransaction));
         });
 
         if (keyType) {
