@@ -1,22 +1,4 @@
-/*-
- *
- * Hedera Local Node
- *
- * Copyright (C) 2023-2024 Hedera Hashgraph, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+// SPDX-License-Identifier: Apache-2.0
 
 /**
  * Class representing the local node errors.
@@ -72,22 +54,4 @@ export const Errors = {
      * @returns {LocalNodeErrors} The client error.
      */
     CLEINT_ERROR: (msg?: string) => new LocalNodeErrors("Client Error", `Something went wrong, while trying to create SDK Client${msg ? `: ${msg}` : ``}`),
-    
-    /**
-     * Create a no record file found error.
-     * @returns {LocalNodeErrors} The no record file found error.
-     */
-    NO_RECORD_FILE_FOUND_ERROR: () => new LocalNodeErrors('No record file found Error', "This record file doesn't not exist, check if timestamp is correct and local-node was started in debug mode using --enable-debug option"),
-    
-    /**
-     * Create an invalid timestamp error.
-     * @returns {LocalNodeErrors} The invalid timestamp error.
-     */
-    INVALID_TIMESTAMP_ERROR: () => new LocalNodeErrors('Invalid Timestamp Error', 'Invalid timestamp string. Accepted formats are: 0000000000.000000000 and 0000000000-000000000'),
-    
-    /**
-     * Create a debug mode check error.
-     * @returns {LocalNodeErrors} The debug mode check error.
-     */
-    DEBUG_MODE_CHECK_ERROR: () => new LocalNodeErrors('Debug Mode check Error', 'Debug mode is not enabled to use this command. Please use the --enable-debug flag to enable it.'),
 }

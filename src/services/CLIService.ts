@@ -1,22 +1,4 @@
-/*-
- *
- * Hedera Local Node
- *
- * Copyright (C) 2023-2024 Hedera Hashgraph, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+// SPDX-License-Identifier: Apache-2.0
 
 import yargs, { ArgumentsCamelCase, Argv } from 'yargs';
 import { IService } from './IService';
@@ -75,7 +57,6 @@ export class CLIService implements IService{
     public static loadStartupOptions(yargs: Argv<{}>): void {
         CLIService.loadCommonOptions(yargs)
         CLIService.loadAccountOptions(yargs, true);
-        CLIService.detachedOption(yargs);
         CLIService.hostOption(yargs);
         CLIService.rateLimitOption(yargs);
         CLIService.devModeOption(yargs);
@@ -84,20 +65,10 @@ export class CLIService implements IService{
         CLIService.userComposeOption(yargs);
         CLIService.userComposeDirOption(yargs);
         CLIService.blocklistingOption(yargs);
-        CLIService.enableDebugOption(yargs);
         CLIService.selectNetworkTag(yargs);
         CLIService.selectMirrorTag(yargs);
         CLIService.selectRelayTag(yargs);
         CLIService.createInitialResources(yargs);
-    }
-
-    /**
-     * Loads debug options for the CLI service.
-     * @param {yargs.Argv<{}>} yargs - The yargs instance.
-     */
-    public static loadDebugOptions(yargs: Argv<{}>): void {
-        CLIService.loadCommonOptions(yargs)
-        CLIService.timestampOption(yargs);
     }
 
     /**
@@ -140,7 +111,6 @@ export class CLIService implements IService{
         const accounts = argv.accounts as number;
         const async = argv.async as boolean;
         const balance = argv.balance as number;
-        const detached = argv.detached as boolean;
         const host = argv.host as string;
         const limits = argv.limits as boolean;
         const devMode = argv.dev as boolean;
@@ -151,8 +121,6 @@ export class CLIService implements IService{
         const blocklisting = argv.blocklist as boolean;
         const startup = argv.startup as boolean;
         const verbose = CLIService.resolveVerboseLevel(argv.verbose as string);
-        const timestamp = argv.timestamp as string;
-        const enableDebug = argv.enableDebug as boolean;
         const networkTag = argv.networkTag as string;
         const mirrorTag = argv.mirrorTag as string;
         const relayTag = argv.relayTag as string;
@@ -163,7 +131,6 @@ export class CLIService implements IService{
             accounts,
             async,
             balance,
-            detached,
             host,
             limits,
             devMode,
@@ -174,8 +141,6 @@ export class CLIService implements IService{
             blocklisting,
             startup,
             verbose,
-            timestamp,
-            enableDebug,
             networkTag,
             mirrorTag,
             relayTag,
@@ -196,7 +161,6 @@ export class CLIService implements IService{
         const state = argv._[0] as string
         this.currentArgv = {
             ...argv,
-            detached: CLIService.isStartup(state) ? argv.detached : true,
             startup: CLIService.isStartup(state)
         };
     }
@@ -217,8 +181,6 @@ export class CLIService implements IService{
                 return false;
             case 'generate-accounts':
                 return false;
-            case 'debug':
-                return false;
             default:
                 return true;
         };
@@ -237,26 +199,6 @@ export class CLIService implements IService{
         yargs.positional('accounts', {
             describe: 'Generated accounts of each type.',
             default: 10
-        });
-    }
-
-    /**
-     * Adds the 'detached' option to the command line arguments.
-     * This option is a boolean that specifies whether to run the local node in detached mode.
-     * It is not required and defaults to false.
-     * The option can also be set using the alias 'd'.
-     * 
-     * @param {yargs.Argv<{}>} yargs - The yargs instance to which the option is added.
-     * @private
-     * @static
-     */
-    private static detachedOption(yargs: Argv<{}>): void {
-        yargs.option('detached', {
-            alias: 'd',
-            type: 'boolean',
-            describe: 'Run the local node in detached mode',
-            demandOption: false,
-            default: false
         });
     }
 
@@ -297,23 +239,6 @@ export class CLIService implements IService{
             describe: 'Enable or disable the rate limits in the JSON-RPC relay',
             demandOption: false,
             default: false
-        });
-    }
-
-    /**
-     * Adds the 'timestamp' option to the command line arguments.
-     * This option is a string that records the file timestamp.
-     * It is required.
-     * 
-     * @param {yargs.Argv<{}>} yargs - The yargs instance to which the option is added.
-     * @private
-     * @static
-     */
-    private static timestampOption(yargs: Argv<{}>): void {
-        yargs.option('timestamp', {
-            type: 'string',
-            describe: 'Record file timestamp',
-            demandOption: true
         });
     }
 
@@ -492,24 +417,6 @@ export class CLIService implements IService{
             choices: ['silent', 'error', 'warning', 'info', 'debug', 'trace'],
             default: 'info',
         })
-    }
-    
-    /**
-     * Adds the 'enable-debug' option to the command line arguments.
-     * This option is a boolean that enables or disables debugging of the local node.
-     * It is not required and defaults to false.
-     * 
-     * @param {yargs.Argv<{}>} yargs - The yargs instance to which the option is added.
-     * @private
-     * @static
-     */
-    private static enableDebugOption(yargs: Argv<{}>): void {
-        yargs.option('enable-debug', {
-            type: 'boolean',
-            describe: 'Enable or disable debugging of the local node',
-            demandOption: false,
-            default: false
-        });
     }
 
     /**

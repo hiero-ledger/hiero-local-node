@@ -1,22 +1,4 @@
-/*-
- *
- * Hedera Local Node
- *
- * Copyright (C) 2024 Hedera Hashgraph, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+// SPDX-License-Identifier: Apache-2.0
 
 import { expect } from 'chai';
 import { resolve } from 'path';
@@ -117,8 +99,6 @@ describe('StartState tests', () => {
 
         testSandbox.assert.calledOnce(processTestBed.processCWDStub);
         testSandbox.assert.calledWith(observerSpy, EventType.Finish);
-
-        testSandbox.assert.calledOnce(loggerService.initializeTerminalUI);
     })
 
     it('should execute onStart and send DockerError event (when dockerComposeUp status code eq 1)', async () => {
@@ -130,8 +110,6 @@ describe('StartState tests', () => {
         testSandbox.assert.match(observerSpy.callCount, 2);
         testSandbox.assert.match(observerSpy.args[0], EventType.DockerError);
         testSandbox.assert.match(observerSpy.args[1], EventType.Finish);
-
-        testSandbox.assert.calledOnce(loggerService.initializeTerminalUI);
     })
 
     it('should execute onStart and handle connectionService error (LocalNodeError)', async () => {
@@ -144,8 +122,6 @@ describe('StartState tests', () => {
         testSandbox.assert.match(observerSpy.callCount, 1);
         testSandbox.assert.match(observerSpy.args[0], EventType.UnknownError);
         testSandbox.assert.calledWith(loggerService.error, 'message', StartState.name);
-
-        testSandbox.assert.calledOnce(loggerService.initializeTerminalUI);
     })
 
     it('should execute onStart and handle connectionService error (generic error)', async () => {
@@ -158,7 +134,5 @@ describe('StartState tests', () => {
         testSandbox.assert.match(observerSpy.callCount, 1);
         testSandbox.assert.match(observerSpy.args[0], EventType.UnknownError);
         testSandbox.assert.notCalled(loggerService.error);
-
-        testSandbox.assert.calledOnce(loggerService.initializeTerminalUI);
     })
 });

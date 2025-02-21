@@ -1,33 +1,15 @@
-/*-
- *
- * Hedera Local Node
- *
- * Copyright (C) 2023-2024 Hedera Hashgraph, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+// SPDX-License-Identifier: Apache-2.0
 
 import Dockerode from 'dockerode';
 import shell from 'shelljs';
 import semver from'semver';
 import fs from 'fs';
-import { IS_WINDOWS, NECESSARY_PORTS, UNKNOWN_VERSION, OPTIONAL_PORTS, 
-         MIN_CPUS, MIN_MEMORY_MULTI_MODE, MIN_MEMORY_SINGLE_MODE,
-         RECOMMENDED_CPUS, RECOMMENDED_MEMORY_SINGLE_MODE, 
-         CHECK_SUCCESS,
-         CHECK_FAIL,
-         LOADING} from '../constants';
+import {
+    IS_WINDOWS, NECESSARY_PORTS, UNKNOWN_VERSION, OPTIONAL_PORTS, MIN_CPUS,
+    MIN_MEMORY_MULTI_MODE, MIN_MEMORY_SINGLE_MODE, RECOMMENDED_CPUS,
+    RECOMMENDED_MEMORY_SINGLE_MODE, CHECK_SUCCESS, CHECK_FAIL, LOADING,
+    SHARED_PATHS_ERROR, DOCKER_PULLING_IMAGES_MESSAGE, MOUNT_ERROR,
+} from '../constants';
 import { IService } from './IService';
 import { LoggerService } from './LoggerService';
 import { ServiceLocator } from './ServiceLocator';
@@ -36,6 +18,7 @@ import * as dotenv from 'dotenv';
 import { CLIOptions } from '../types/CLIOptions';
 import path from 'path';
 import { SafeDockerNetworkRemover } from '../utils/SafeDockerNetworkRemover';
+import yaml from 'js-yaml';
 
 dotenv.config();
 
@@ -205,17 +188,44 @@ export class DockerService implements IService{
 
     public async checkDockerResources(isMultiNodeMode: boolean) {
       this.logger.info(`${LOADING} Checking docker resources...`, this.serviceName);
-      const resultDockerInfoCommand = await shell.exec(
-        "docker system info --format='{{json .}}'",
-        { silent: true }
+
+      const ncpu = await shell.exec(
+          "docker info --format='{{.NCPU}}'",
+          { silent: true }
+      );
+
+      const memTotal = await shell.exec(
+          "docker info --format='{{.MemTotal}}'",
+          { silent: true }
       );
       
-      const systemInfoJson = JSON.parse(resultDockerInfoCommand.stdout);
-      const dockerMemory = Math.round(systemInfoJson['MemTotal'] / Math.pow(1024, 3));
-      const dockerCPUs = systemInfoJson['NCPU'];
+      const dockerMemory = Math.round(parseInt(memTotal) / Math.pow(1024, 3));
+      const dockerCPUs = parseInt(ncpu);
 
       return this.checkMemoryResources(dockerMemory, isMultiNodeMode) &&
       this.checkCPUResources(dockerCPUs);
+    }
+
+    public checkDockerImages() {
+        const dockerComposeYml = yaml.load(shell.exec("docker compose config", { silent: true }).stdout) as any;
+        const dockerComposeImages = Object.values(dockerComposeYml.services).map((s: any) => {
+            if (s.image) {
+                const parsed = s.image.split(":");
+                return `${parsed[0]}:${parsed[1] ?? "latest"}`;
+            }
+        });
+        const dockerComposeImagesUnique = [...new Set(dockerComposeImages.sort())];
+
+        const dockerImagesString = shell.exec("docker images", { silent: true }).stdout.split(/\r?\n/).slice(1, -1);
+        const dockerImages = dockerImagesString.map(line => {
+            const parsed = line.replace(/\s\s+/g, " ").split(" ");
+            return `${parsed[0]}:${parsed[1]}`;
+        });
+        const dockerImagesUnique = [...new Set(dockerImages.sort())];
+
+        if (!dockerImages.length || dockerComposeImagesUnique.toString() != dockerImagesUnique.toString()) {
+            this.logger.info(DOCKER_PULLING_IMAGES_MESSAGE, this.serviceName);
+        }
     }
 
     private checkMemoryResources(dockerMemory: number, isMultiNodeMode: boolean) {
@@ -255,6 +265,15 @@ export class DockerService implements IService{
     private logShellOutput(shellExec: any) {
         [shellExec.stdout, shellExec.stderr].forEach( (output: string) => {
             output.split("\n").map((line: string) => {
+                if (line.indexOf(SHARED_PATHS_ERROR) > -1 || line.indexOf(MOUNT_ERROR) > -1) {
+                    this.logger.error(`Hedera local node start up TERMINATED due to docker's misconfiguration`);
+                    this.logger.error(SHARED_PATHS_ERROR);
+                    this.logger.error(`See https://docs.docker.com/desktop/settings/mac/#file-sharing for more info.`);
+                    this.logger.error(`-- Make sure you have '/Users/<your_user>/Library/' under File Sharing Docker's Setting.`);
+                    this.logger.error(`-- If you're using hedera-local as npm package - running 'npm root -g' should output the path you have to add under File Sharing Docker's Setting.`);
+                    this.logger.error(`-- If you're using hedera-local as cloned repo - running 'pwd' in the project's root should output the path you have to add under File Sharing Docker's Setting.`);
+                    process.exit();
+                }
                 if (line === "") return;
                 this.logger.debug(line, this.serviceName);
             });

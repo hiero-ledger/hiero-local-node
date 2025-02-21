@@ -1,22 +1,4 @@
-/*-
- *
- * Hedera Local Node
- *
- * Copyright (C) 2023-2024 Hedera Hashgraph, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+// SPDX-License-Identifier: Apache-2.0
 
 import { AccountCreationState } from '../state/AccountCreationState';
 import { CleanUpState } from '../state/CleanUpState';
@@ -26,7 +8,6 @@ import { NetworkPrepState } from '../state/NetworkPrepState';
 import { StartState } from '../state/StartState';
 import { StopState } from '../state/StopState';
 import { StateConfiguration } from '../types/StateConfiguration';
-import { DebugState } from '../state/DebugState';
 import { ResourceCreationState } from '../state/ResourceCreationState';
 
 /**
@@ -51,8 +32,6 @@ export class StateData {
                 return this.getAccountCreationConfiguration();
             case 'resourceCreation':
                 return this.getResourceCreationConfiguration();
-            case 'debug':
-                return this.getDebugConfiguration();
             default:
                 return undefined;
         }
@@ -138,20 +117,6 @@ export class StateData {
             'stateMachineName' : 'accountCreation',
             'states' : [
                 new AccountCreationState()
-            ]
-        };
-    }
-
-    /**
-     * Get the configuration for the debug state.
-     * @returns {StateConfiguration} The configuration for the debug state.
-     * @private
-     */
-    private getDebugConfiguration(): StateConfiguration {
-        return {
-            'stateMachineName' : 'debug',
-            'states' : [
-                new DebugState()
             ]
         };
     }

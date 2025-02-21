@@ -1,22 +1,4 @@
-/*-
- *
- * Hedera Local Node
- *
- * Copyright (C) 2023-2024 Hedera Hashgraph, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+// SPDX-License-Identifier: Apache-2.0
 
 export const CONTAINERS = [
     {
@@ -50,9 +32,6 @@ export const UNKNOWN_VERSION = "Unknown";
 export const NECESSARY_PORTS = [5551, 8545, 5600, 5433, 50211, 8082, 6379];
 export const OPTIONAL_PORTS = [7546, 8080, 3000];
 export const EVM_ADDRESSES_BLOCKLIST_FILE_RELATIVE_PATH = '../../compose-network/network-node'
-export const RELATIVE_TMP_DIR_PATH = 'services/record-parser/temp';
-export const RELATIVE_RECORDS_DIR_PATH = 'network-logs/node/recordStreams/record0.0.3';
-export const RECORD_PARSER_SOURCE_REL_PATH = '../../src/services/record-parser';
 export const NETWORK_NODE_CONFIG_DIR_PATH = 'compose-network/network-node/data/config';
 export const APPLICATION_YML_RELATIVE_PATH = 'compose-network/mirror-node/application.yml';
 export const MIN_MEMORY_SINGLE_MODE = 4;
@@ -101,7 +80,8 @@ export const STOP_STATE_STOPPED_MESSAGE = `${CHECK_SUCCESS} Hedera Local Node wa
 
 // Docker commands
 export const DOCKER_STOPPING_CONTAINERS_MESSAGE = `${LOADING} Stopping the docker containers...`;
-export const DOCKER_CLEANING_VALUMES_MESSAGE = `${LOADING} Cleaning the volumes and temp files...`;
+export const DOCKER_PULLING_IMAGES_MESSAGE = `${LOADING} Pulling docker images...`;
+export const DOCKER_CLEANING_VOLUMES_MESSAGE = `${LOADING} Cleaning the volumes and temp files...`;
 
 // Recovery state
 export const RECOVERY_STATE_INIT_MESSAGE = `${CHECK_SUCCESS} Recovery State Initialized!`;
@@ -126,10 +106,6 @@ export const INIT_STATE_MIRROR_PROP_SET = `${CHECK_SUCCESS} Needed mirror node p
 export const INIT_STATE_NO_NODE_CONF_NEEDED = `${CHECK_SUCCESS} No additional node configuration needed.`;
 export const INIT_STATE_NO_ENV_VAR_CONFIGURED = `${CHECK_SUCCESS} No new environment variables were configured.`;
 
-// Debug state
-export const DEBUG_STATE_INIT_MESSAGE = `${CHECK_SUCCESS} Debug State Initialized!`;
-export const DEBUG_STATE_STARTING_MESSAGE = `${LOADING} Debug State Starting...`;
-
 // StateController
 export const STATE_CONTROLLER_MISSING_STATE_CONFIG_ERROR = `${CHECK_FAIL} Something is wrong with state configuration!`;
 
@@ -144,3 +120,7 @@ export const ACCOUNT_CREATION_FINISHED = `${CHECK_SUCCESS} Accounts created succ
 export const RESOURCE_CREATION_STATE_INIT_MESSAGE = `${CHECK_SUCCESS} Resource Creation State Initialized!`;
 export const RESOURCE_CREATION_STARTING_SYNCHRONOUS_MESSAGE = `${LOADING} Starting Resource Creation state in synchronous mode...`;
 export const RESOURCE_CREATION_STARTING_ASYNCHRONOUS_MESSAGE = `${LOADING} Starting Resource Creation state in asynchronous mode...`;
+
+// Docker messages
+export const SHARED_PATHS_ERROR = `You can configure shared paths from Docker -> Preferences... -> Resources -> File Sharing.`;
+export const MOUNT_ERROR = `: error mounting`;

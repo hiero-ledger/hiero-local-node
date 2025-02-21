@@ -1,23 +1,7 @@
-/*-
- *
- * Hedera Local Node
- *
- * Copyright (C) 2023-2024 Hedera Hashgraph, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+// SPDX-License-Identifier: Apache-2.0
 
+import semver from'semver';
+import shell from 'shelljs';
 import { configDotenv } from 'dotenv';
 import { readFileSync, writeFileSync } from 'fs';
 import path, { join } from 'path';
@@ -49,9 +33,9 @@ import {
     LOADING,
     NECESSARY_PORTS,
     NETWORK_NODE_CONFIG_DIR_PATH,
-    OPTIONAL_PORTS,
-    RECORD_PARSER_SOURCE_REL_PATH
+    OPTIONAL_PORTS
 } from '../constants';
+import os from 'os';
 
 configDotenv({ path: path.resolve(__dirname, '../../.env') });
 
@@ -119,8 +103,9 @@ export class InitState implements IState{
         const isCorrectDockerComposeVersion = await this.dockerService.isCorrectDockerComposeVersion();
         const isDockerStarted = await this.dockerService.checkDocker();
         const dockerHasEnoughResources = await this.dockerService.checkDockerResources(this.cliOptions.multiNode);
+        const areNodeAndNpmVersionsValid = this.checkNodeAndNpmVersions();
 
-        if (!(isCorrectDockerComposeVersion && isDockerStarted && dockerHasEnoughResources)) {
+        if (!(isCorrectDockerComposeVersion && isDockerStarted && dockerHasEnoughResources) && areNodeAndNpmVersionsValid) {
             this.observer!.update(EventType.UnresolvableError);
             return;
         }
@@ -134,7 +119,6 @@ export class InitState implements IState{
             { key: 'NETWORK_NODE_LOGS_ROOT_PATH', value: join(this.cliOptions.workDir, 'network-logs', 'node') },
             { key: 'APPLICATION_CONFIG_PATH', value: join(this.cliOptions.workDir, 'compose-network', 'network-node', 'data', 'config') },
             { key: 'MIRROR_NODE_CONFIG_PATH', value: this.cliOptions.workDir },
-            { key: 'RECORD_PARSER_ROOT_PATH', value: join(this.cliOptions.workDir, 'services','record-parser') },
         ];
         configurationData.envConfiguration = (configurationData.envConfiguration ?? []).concat(workDirConfiguration);
         
@@ -143,6 +127,27 @@ export class InitState implements IState{
         this.configureMirrorNodeProperties();
 
         this.observer!.update(EventType.Finish);
+    }
+
+    private checkNodeAndNpmVersions(): boolean {
+        const MIN_NODE_VERSION = '17.9.1';
+        const MIN_NPM_VERSION = '8.11.0';
+        const V_OR_NEW_LINE_REGEX = /v|\n/g;
+
+        const nodeVersion = shell.exec(`node -v `, { silent: true }).replace(V_OR_NEW_LINE_REGEX, '');
+        const npmVersion = shell.exec(`npm -v `, { silent: true }).replace(V_OR_NEW_LINE_REGEX, '');
+
+        const isNodeVersionValid = semver.gte(nodeVersion, MIN_NODE_VERSION);
+        const isNpmVersionValid = semver.gte(npmVersion, MIN_NPM_VERSION);
+
+        if (!isNodeVersionValid) {
+            this.logger.error(`Current node version is ${nodeVersion} but minimum required one is ${MIN_NODE_VERSION}`);
+        }
+        if (!isNpmVersionValid) {
+            this.logger.error(`Current npm version is ${npmVersion} but minimum required one is ${MIN_NPM_VERSION}`);
+        }
+
+        return isNodeVersionValid && isNpmVersionValid;
     }
 
     /**
@@ -159,12 +164,10 @@ export class InitState implements IState{
         FileSystemUtils.createEphemeralDirectories(this.cliOptions.workDir);
         const configDirSource = join(__dirname, `../../${NETWORK_NODE_CONFIG_DIR_PATH}`);
         const configPathMirrorNodeSource = join(__dirname, `../../${APPLICATION_YML_RELATIVE_PATH}`);
-        const recordParserSource = join(__dirname, RECORD_PARSER_SOURCE_REL_PATH);
 
         const configFiles = {
             [configDirSource]: `${this.cliOptions.workDir}/${NETWORK_NODE_CONFIG_DIR_PATH}`,
             [configPathMirrorNodeSource]: `${this.cliOptions.workDir}/${APPLICATION_YML_RELATIVE_PATH}`,
-            [recordParserSource]: `${this.cliOptions.workDir}/services/record-parser`
         };
         FileSystemUtils.copyPaths(configFiles);
     }
@@ -199,6 +202,13 @@ export class InitState implements IState{
             this.logger.info(INIT_STATE_RELAY_LIMITS_DISABLED, this.stateName);
         }
         this.logger.info(INIT_STATE_CONFIGURING_ENV_VARIABLES_FINISH, this.stateName);
+
+        // workaround for broken Java (21 to 23) on Apple Silicon M3/M4 chipsets under MacOS Sequoia when running inside docker
+        // darwin release history can be found here https://en.wikipedia.org/wiki/Darwin_(operating_system)#Release_history
+        if (os.platform() === "darwin" && os.release().slice(0, 2) === "24") {
+            process.env.PLATFORM_JAVA_OPTS = "-XX:+UnlockExperimentalVMOptions -XX:UseSVE=0 -XX:+UseZGC -Xlog:gc*:gc.log";
+            process.env.GRPC_PLATFORM_JAVA_OPTS = "-XX:UseSVE=0";
+        }
     }
 
     /**
@@ -262,10 +272,9 @@ export class InitState implements IState{
      * 
      * @private
      */
-    // TODO: finish off multi node
     private configureMirrorNodeProperties(): void {
         this.logger.trace('Configuring required mirror node properties, depending on selected configuration...', this.stateName);
-        const { enableDebug, fullMode, multiNode, persistTransactionBytes, workDir } = this.cliOptions;
+        const {fullMode, multiNode, persistTransactionBytes, workDir } = this.cliOptions;
 
         const propertiesFilePath = join(workDir, 'compose-network/mirror-node/application.yml');
         const application = yaml.load(readFileSync(propertiesFilePath).toString()) as any;
@@ -273,10 +282,6 @@ export class InitState implements IState{
         if (!fullMode) {
             application.hedera.mirror.importer.dataPath = originalNodeConfiguration.turboNodeProperties.dataPath;
             application.hedera.mirror.importer.downloader.sources = originalNodeConfiguration.turboNodeProperties.sources;
-        }
-
-        if (enableDebug) {
-            application.hedera.mirror.importer.downloader.local = originalNodeConfiguration.local;
         }
 
         if (multiNode) {

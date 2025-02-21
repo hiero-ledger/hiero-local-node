@@ -1,35 +1,18 @@
-/*-
- *
- * Hedera Local Node
- *
- * Copyright (C) 2023 Hedera Hashgraph, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+// SPDX-License-Identifier: Apache-2.0
 
 import { expect } from 'chai';
 import sinon from 'sinon';
 import { StopState } from '../../../src/state/StopState';
 import {
-  DOCKER_CLEANING_VALUMES_MESSAGE,
-  DOCKER_STOPPING_CONTAINERS_MESSAGE,
-  NETWORK_PREFIX,
-  STOP_STATE_INIT_MESSAGE,
-  STOP_STATE_ON_START_MESSAGE,
-  STOP_STATE_STOPPED_MESSAGE,
-  STOP_STATE_STOPPING_MESSAGE
-} from '../../../src/constants';
+    DOCKER_CLEANING_VOLUMES_MESSAGE,
+    DOCKER_STOPPING_CONTAINERS_MESSAGE,
+    IS_WINDOWS,
+    NETWORK_PREFIX,
+    STOP_STATE_INIT_MESSAGE,
+    STOP_STATE_ON_START_MESSAGE,
+    STOP_STATE_STOPPED_MESSAGE,
+    STOP_STATE_STOPPING_MESSAGE,
+} from "../../../src/constants";
 import path from 'path';
 import { getTestBed } from '../testBed';
 import { LoggerService } from '../../../src/services/LoggerService';
@@ -91,7 +74,7 @@ describe('StopState tests', () => {
         testSandbox.assert.calledWith(loggerService.info, STOP_STATE_ON_START_MESSAGE, StopState.name);
         testSandbox.assert.calledWith(loggerService.info, STOP_STATE_STOPPING_MESSAGE, StopState.name);
         testSandbox.assert.calledWith(loggerService.trace, DOCKER_STOPPING_CONTAINERS_MESSAGE, StopState.name);
-        testSandbox.assert.calledWith(loggerService.trace, DOCKER_CLEANING_VALUMES_MESSAGE, StopState.name);
+        testSandbox.assert.calledWith(loggerService.trace, DOCKER_CLEANING_VOLUMES_MESSAGE, StopState.name);
         testSandbox.assert.calledWith(loggerService.trace, TEST_DIR_MESSAGE, StopState.name);
         testSandbox.assert.calledWith(loggerService.info, STOP_STATE_STOPPED_MESSAGE, StopState.name);
         
@@ -102,10 +85,10 @@ describe('StopState tests', () => {
         testSandbox.assert.calledThrice(shellCDStub);
 
         // shell commands: 'exec'
-        testSandbox.assert.calledWith(shellExecStub, 'docker compose kill --remove-orphans 2>/dev/null');
-        testSandbox.assert.calledWith(shellExecStub, 'docker compose down -v --remove-orphans 2>/dev/null');
-        testSandbox.assert.calledWith(shellExecStub, 'rm -rf network-logs/* >/dev/null 2>&1');
-        testSandbox.assert.calledWith(shellExecStub, 'rm -rf "testDir/network-logs" >/dev/null 2>&1');
+        testSandbox.assert.calledWith(shellExecStub, `docker compose kill --remove-orphans 2>${IS_WINDOWS ? 'null' : '/dev/null'}`);
+        testSandbox.assert.calledWith(shellExecStub, `docker compose down -v --remove-orphans 2>${IS_WINDOWS ? 'null' : '/dev/null'}`);
+        testSandbox.assert.calledWith(shellExecStub, `rm -rf network-logs/* >${IS_WINDOWS ? 'null' : '/dev/null'} 2>&1`);
+        testSandbox.assert.calledWith(shellExecStub, `rm -rf "testDir/network-logs" >${IS_WINDOWS ? 'null' : '/dev/null'} 2>&1`);
         testSandbox.assert.calledWith(shellExecStub, `docker network ls --filter name=${NETWORK_PREFIX} --format "{{.ID}}"`);
 
         expect(processTest.processCWDStub.calledOnce).to.be.true;

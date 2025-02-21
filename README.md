@@ -6,10 +6,14 @@
 [![License](https://img.shields.io/badge/license-apache2-blue.svg)](LICENSE)
 
 </div>
-The Hedera Local Node project allows developers to set up their own local network. The local network is composed of one mirror node and one consensus node. You can set this up by either using the CLI tool or by running Docker.
+The Hiero Local Node project allows developers to set up their own Hiero based local network. The local network is composed of one mirror node and one consensus node. You can set this up by either using the CLI tool or by running Docker.
 </br></br>
 
-> **_NOTE:_**  It's recomended to start using the CLI Tool.
+> [!NOTE]  
+> The project has been transfered from the https://github.com/hashgraph org and therefore the namespace is at several locations still based on `hashgraph` and `hedera`.
+> We are working activly on migration the namespace fully to hiero.
+
+> **_NOTE:_**  It's recommended to start using the CLI Tool.
 
 - [Docker](#docker)
 - [CLI Tool](#cli-tool---hashgraphhedera-local)
@@ -18,38 +22,49 @@ The Hedera Local Node project allows developers to set up their own local networ
 
 # Requirements
 
-- [Node.js](https://nodejs.org/) `>= v14.x`
+- [Node.js](https://nodejs.org/) `>= v20.11.0`
   - Node version check: `node -v`
-- NPM `>= v6.14.17`
+- NPM `>= v10.2.4`
   - NPM version check: `npm -v`
-- [Docker](https://www.docker.com/) `>= v20.10.x`
+- [Docker](https://www.docker.com/) `>= v27.3.1`
   - Docker version check: `docker -v`
-- [Docker Compose](https://docs.docker.com/compose/) `=> v2.12.2`
+- [Docker Compose](https://docs.docker.com/compose/) `=> v2.29.7`
   - Docker Compose version check: `docker compose version`
 - Minimum 16GB RAM
 
 ### Note:
 
-- **Ensure the `VirtioFS` file sharing implementation is enabled in the docker settings.**
+- Ensure the **VirtioFS** file sharing implementation is enabled in the docker settings
 
 **Note**: The image may look different if you are on a different version
-![docker-compose-settings.png](.github/docker-compose-settings.png)
+![docker-compose-settings.png](https://raw.githubusercontent.com/hashgraph/hedera-local-node/refs/heads/main/.github/docker-compose-settings.png)
 
-- Ensure the following configurations are set at minimum in Docker **Settings** -> **Resources** and are available for use
+- Ensure the following configurations are set at minimum in Docker **Settings -> Resources** and are available for use.
   - **CPUs:** 6
-  - **Memory:** 8GB
+  - **Memory:** 8 GB
   - **Swap:** 1 GB
   - **Disk Image Size:** 64 GB
 
 **Note**: The image may look different if you are on a different version
-![settings.png](.github/settings.png)
+![settings.png](https://raw.githubusercontent.com/hashgraph/hedera-local-node/refs/heads/main/.github/settings.png)
 
-- Ensure the **`Allow the default Docker sockets to be used (requires password)`** is enabled in Docker **Settings -> Advanced**.
+- Ensure the hiero-local-node folder is added to Docker File Sharing **Settings -> Resources -> File Sharing**.
+  - If you're using hiero-local as npm package - running 'npm root -g' should output the path you have to add under File Sharing Docker's Setting.
+  - If you're using hiero-local as cloned repo - running 'pwd' in the project's root should output the path you have to add under File Sharing Docker's Setting.
 
 **Note**: The image may look different if you are on a different version
-![docker-socket-setting](https://github.com/hashgraph/hedera-local-node/assets/56278409/9946dad6-27a9-4293-b37b-5286dd30d250)
+![docker-file-sharing-settings.png](https://raw.githubusercontent.com/hashgraph/hedera-local-node/refs/heads/main/.github/docker-file-sharing-settings.png)
+
+- Ensure the *Allow the default Docker sockets to be used (requires password)* is enabled in Docker **Settings -> Advanced**.
+
+**Note**: The image may look different if you are on a different version
+![docker-socket-setting.png](https://raw.githubusercontent.com/hashgraph/hedera-local-node/refs/heads/main/.github/docker-socket-settings.png)
 
 # CLI Tool - @hashgraph/hedera-local
+
+> [!NOTE]  
+> As already mentioned the project has been transfered from the https://github.com/hashgraph org and therefore the namespace is still based on `hashgraph` and `hedera`.
+> We are working activly on migration the namespace fully to hiero and publish the CLI tool under the hiero namespace to NPMJS.
 
 ## What
 
@@ -88,7 +103,7 @@ npm install && npm install -g
 `npm run stop` to stop the network
 `npm run generate-accounts` to generate new account for already started network
 
-> **_NOTE:_**  If you want to use any of the CLI options listed below, you'd need to pass `--` after `npm run start` (for example) and then specify the wanted option. For example, if you want to start in detached mode, you can use `npm run start -- -d`
+> **_NOTE:_**  If you want to use any of the CLI options listed below, you'd need to pass `--` after `npm run start` (for example) and then specify the wanted option.
 
 > **_WARNING:_** While stopping the networks, we will first list all Docker networks with the `hedera-` prefix in their names. This operation may affect not only the networks initiated by the `npm run start` command from this repository but also any other networks you have created with this prefix. Network termination can be triggered both by a direct `npm run stop` call and by the `npm run start` script if the initial startup process fails and failover recovery is activated. One of the recovery steps includes attempting to close all previously started networks with the `hedera-` prefix.
 
@@ -105,31 +120,26 @@ Local Hedera Package - Runs consensus and mirror nodes on localhost:
 Available commands:
     start - Starts the local hedera network.
         options:
-            --d or --detached for starting in detached mode.
-            --verbose set the verbose level. Defaults to 'info' choices are "info" & "trace"
+            --verbose to set the verbose level. Defaults to 'info' choices are "info" & "trace"
             --h or --host to override the default host.
             --l or --limits to enable/disable the JSON-RPC relay rate limits. Defaults to true.
             --dev to enable/disable developer mode.
             --full to enable/disable full mode. Production local-node.
-            --multinode     Enable or disable multi-node mode.
+            --multinode to enable or disable multi-node mode.
             --balance to set starting hbar balance of the created accounts.
             --async to enable or disable asynchronous creation of accounts.
             --b or --blocklist to enable or disable account blocklisting. Depending on how many private keys are blocklisted, this will affect the generated on startup accounts.
-            --enable-debug  Enable or disable debugging of the local node [boolean] [default: false]
-            --network-tag Select custom network node tag [string] [defaults: predefined selected configuration]
-            --mirror-tag Select custom mirror node tag [string] [defaults: predefined selected configuration]
-            --relay-tag Select custom hedera-json-rpc relay tag [string] [defaults: predefined selected configuration]
-            --workdir       Path to the working directory for local node [string] [default: "[USER APP DATA]/hedera-local"]
+            --network-tag to select custom network node tag [string] [defaults: predefined selected configuration]
+            --mirror-tag to select custom mirror node tag [string] [defaults: predefined selected configuration]
+            --relay-tag to select custom hedera-json-rpc relay tag [string] [defaults: predefined selected configuration]
+            --workdir path to the working directory for local node [string] [default: "[USER APP DATA]/hedera-local"]
     stop - Stops the local hedera network and delete all the existing data.
-    restart - Restart the local hedera network.
+    restart - Restarts the local hedera network.
     generate-accounts <n> - Generates N accounts, default 10.
         options:
             --h or --host to override the default host.
             --balance to set starting hbar balance of the created accounts.
             --async to enable or disable asynchronous creation of accounts.
-    debug [timestamp] - Parses and prints the contents of the record file that has been created
-                        during the selected timestamp.
-                        Important: Local node must be started with the -g, --enable-debug flag to enable this feature
 ```
 
 Note: Generated accounts are 3 types (ECDSA, Alias ECDSA and ED25519). All of them are usable via HederaSDK. Only Alias ECDSA accounts can be imported into wallet like Metamask or used in ethers.
@@ -140,24 +150,6 @@ Note: Read more about `developer mode` [here](https://github.com/hashgraph/heder
 
 #### `hedera start <options>`
 
-![Demo](.github/demo-start.gif)
-
-- --accounts - Default is 10. Specify the number of accounts to generate at startup. The first 10 are with predefined
-  private keys, and the next ones are with random generated private keys.
-
-- --h / --host - Override the default host.
-
-#### `hedera restart <options>`
-
-![Demo](.github/demo-restart.gif)
-
-- --accounts - Default is 10. Specify the number of accounts to generate at startup. The first 10 are with predefined
-  private keys, and the next ones are with random generated private keys.
-
-- --h / --host - Override the default host.
-
-#### `hedera start -d <options>`
-
 ```bash
 $ hedera start
 [Hedera-Local-Node] INFO (StateController) Starting start procedure!
@@ -165,7 +157,7 @@ $ hedera start
 [Hedera-Local-Node] INFO (InitState) Setting configuration for local network with latest images on host 127.0.0.1 with dev mode turned off using turbo mode in single node configuration...
 [Hedera-Local-Node] INFO (InitState) Hedera JSON-RPC Relay rate limits were disabled.
 [Hedera-Local-Node] INFO (InitState) Needed environment variables were set for this configuration.
-[Hedera-Local-Node] INFO (InitState) Needed bootsrap properties were set for this configuration.
+[Hedera-Local-Node] INFO (InitState) Needed bootstrap properties were set for this configuration.
 [Hedera-Local-Node] INFO (InitState) Needed mirror node properties were set for this configuration.
 [Hedera-Local-Node] INFO (StartState) Starting Hedera Local Node...
 [Hedera-Local-Node] INFO (StartState) Detecting network...
@@ -231,7 +223,6 @@ $ hedera start
 - --accounts - Default is 10 per type. Specify the number of accounts to generate at startup. The first 10 are with predefined
   private keys, and the next ones are with random generated private keys.
 
-- --d / --detached - Start the local node in detached mode.
 - --h / --host - Override the default host.
 
 ```bash
@@ -241,7 +232,7 @@ $ hedera start --accounts=2
 [Hedera-Local-Node] INFO (InitState) Setting configuration for local network with latest images on host 127.0.0.1 with dev mode turned off using turbo mode in single node configuration...
 [Hedera-Local-Node] INFO (InitState) Hedera JSON-RPC Relay rate limits were disabled.
 [Hedera-Local-Node] INFO (InitState) Needed environment variables were set for this configuration.
-[Hedera-Local-Node] INFO (InitState) Needed bootsrap properties were set for this configuration.
+[Hedera-Local-Node] INFO (InitState) Needed bootstrap properties were set for this configuration.
 [Hedera-Local-Node] INFO (InitState) Needed mirror node properties were set for this configuration.
 [Hedera-Local-Node] INFO (StartState) Starting Hedera Local Node...
 [Hedera-Local-Node] INFO (StartState) Detecting network...
@@ -295,7 +286,7 @@ No available options
 
 ---
 
-#### `hedera restart -d <options>`
+#### `hedera restart <options>`
 
 ```bash
 $ hedera restart
@@ -307,7 +298,7 @@ $ hedera restart
 [Hedera-Local-Node] INFO (InitState) Setting configuration for local network with latest images on host 127.0.0.1 with dev mode turned off using turbo mode in single node configuration...
 [Hedera-Local-Node] INFO (InitState) Hedera JSON-RPC Relay rate limits were disabled.
 [Hedera-Local-Node] INFO (InitState) Needed environment variables were set for this configuration.
-[Hedera-Local-Node] INFO (InitState) Needed bootsrap properties were set for this configuration.
+[Hedera-Local-Node] INFO (InitState) Needed bootstrap properties were set for this configuration.
 [Hedera-Local-Node] INFO (InitState) Needed mirror node properties were set for this configuration.
 [Hedera-Local-Node] INFO (StartState) Starting Hedera Local Node...
 [Hedera-Local-Node] INFO (StartState) Detecting network...
@@ -372,7 +363,6 @@ $ hedera restart
 - --accounts - Default is 10. Specify the number of accounts to generate at startup. The first 10 are with predefined
   private keys, and the next ones are with random generated private keys.
 
-- --d / --detached - Start the local node in detached mode.
 - --h / --host - Override the default host.
 
 ```bash
@@ -385,7 +375,7 @@ $ hedera restart --accounts=2
 [Hedera-Local-Node] INFO (InitState) Setting configuration for local network with latest images on host 127.0.0.1 with dev mode turned off using turbo mode in single node configuration...
 [Hedera-Local-Node] INFO (InitState) Hedera JSON-RPC Relay rate limits were disabled.
 [Hedera-Local-Node] INFO (InitState) Needed environment variables were set for this configuration.
-[Hedera-Local-Node] INFO (InitState) Needed bootsrap properties were set for this configuration.
+[Hedera-Local-Node] INFO (InitState) Needed bootstrap properties were set for this configuration.
 [Hedera-Local-Node] INFO (InitState) Needed mirror node properties were set for this configuration.
 [Hedera-Local-Node] INFO (StartState) Starting Hedera Local Node...
 [Hedera-Local-Node] INFO (StartState) Detecting network...
@@ -608,18 +598,43 @@ Dashboards may be exported as JSON definitions and placed under the `compose-net
 Any dashboard definitions placed into the root of the `compose-network/grafana/dashboards` folder will appear under the `General` folder in the Grafana dashboard list
 Placing dashboards under a subfolder will result in a new folder in the Grafana dashboard list and the dashboards will be deployed under the folder.
 
-# Support
+# FAQ
 
-If you have a question on how to use the product, please see our [support guide](https://github.com/hashgraph/.github/blob/main/SUPPORT.md).
+- Can I run the local node on a Windows machine?
+- Yes but you will need WSL v2 to be installed.
 
-# Contributing
 
-Contributions are welcome. Please see the [contributing guide](https://github.com/hashgraph/.github/blob/main/CONTRIBUTING.md) to see how you can get involved.
+- Can I run the local node on MacOS with an Intel CPU?
+- Yes but make sure that the minimum system requirements are met.
 
-# Code of Conduct
 
-This project is governed by the [Contributor Covenant Code of Conduct](https://github.com/hashgraph/.github/blob/main/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code of conduct. Please report unacceptable behavior to oss@hedera.com.
+- Can I stop the local node, save its state then start it again after a while?
+- No, currently the local node doesn't support network freezing. Once you stop it, the next start will be with a genesis state and all of your accounts/contracts/tokens will be wiped.
 
-# License
 
-[Apache License 2.0](https://github.com/hashgraph/hedera-json-rpc-relay/blob/main/LICENSE)
+- What should I do if this error appears on Windows?
+```
+Postgres error:
+/usr/local/bin/docker-entrypoint.sh: /docker-entrypoint-initdb.d/init.sh: /bin/bash: bad interpreter: No such file or directory
+Solution:
+```
+- You have to set a global git config then clone the local node repository again.
+```
+git config --global core.autocrlf input
+Delete your local repository.
+Clone it again.
+```
+
+## Contributing
+
+Whether you’re fixing bugs, enhancing features, or improving documentation, your contributions are important — let’s build something great together!
+
+Please read our [contributing guide](https://github.com/hiero-ledger/.github/blob/main/CONTRIBUTING.md) to see how you can get involved.
+
+## Code of Conduct
+
+Hiero uses the Linux Foundation Decentralised Trust [Code of Conduct](https://www.lfdecentralizedtrust.org/code-of-conduct).
+
+## License
+
+[Apache License 2.0](LICENSE)

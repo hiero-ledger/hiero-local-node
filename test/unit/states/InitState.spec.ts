@@ -1,22 +1,4 @@
-/*-
- *
- * Hedera Local Node
- *
- * Copyright (C) 2024 Hedera Hashgraph, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+// SPDX-License-Identifier: Apache-2.0
 
 import { expect } from 'chai';
 import fs from 'fs';
@@ -38,8 +20,7 @@ import {
     INIT_STATE_STARTING_MESSAGE,
     NECESSARY_PORTS,
     NETWORK_NODE_CONFIG_DIR_PATH,
-    OPTIONAL_PORTS,
-    RECORD_PARSER_SOURCE_REL_PATH
+    OPTIONAL_PORTS
 } from '../../../src/constants';
 import { ConfigurationData } from '../../../src/data/ConfigurationData';
 import { CLIService } from '../../../src/services/CLIService';
@@ -147,6 +128,7 @@ describe('InitState tests', () => {
         dockerService.isCorrectDockerComposeVersion.resolves(true)
         dockerService.checkDocker.resolves(true)
         dockerService.checkDockerResources.resolves(true)
+        testSandbox.stub(initState, 'checkNodeAndNpmVersions').returns(true);
 
         await initState.onStart();
 
@@ -164,8 +146,6 @@ describe('InitState tests', () => {
         testSandbox.assert.calledOnce(configureEnvVariablesStub);
         testSandbox.assert.calledOnce(configureNodePropertiesStub);
         testSandbox.assert.calledOnce(configureMirrorNodePropertiesStub);
-
-        testSandbox.assert.notCalled(loggerService.initializeTerminalUI);
     })
 
     it('should execute onStart and finish with UnresolvableError on docker checks (Compose Version, Docker Running, Resources)', async () => {
@@ -183,7 +163,6 @@ describe('InitState tests', () => {
         testSandbox.assert.calledWith(observerSpy, EventType.UnresolvableError);
 
         testSandbox.assert.notCalled(dockerService.isPortInUse);
-        testSandbox.assert.notCalled(loggerService.initializeTerminalUI);
     })
 
     describe('private functions', () => {
@@ -198,11 +177,9 @@ describe('InitState tests', () => {
 
         const configDirSource = join(rootDirSource, `../../${NETWORK_NODE_CONFIG_DIR_PATH}`);
         const configPathMirrorNodeSource = join(rootDirSource, `../../${APPLICATION_YML_RELATIVE_PATH}`);
-        const recordParserSource = join(rootDirSource, RECORD_PARSER_SOURCE_REL_PATH);
         const configFiles = {
             [configDirSource]: `testDir/${NETWORK_NODE_CONFIG_DIR_PATH}`,
             [configPathMirrorNodeSource]: `testDir/${APPLICATION_YML_RELATIVE_PATH}`,
-            [recordParserSource]: `testDir/services/record-parser`
         };
 
         before(() => {

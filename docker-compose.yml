@@ -19,6 +19,8 @@ services:
       JAVA_HEAP_MIN: "${PLATFORM_JAVA_HEAP_MIN}"
       JAVA_HEAP_MAX: "${PLATFORM_JAVA_HEAP_MAX}"
       JAVA_OPTS: "${PLATFORM_JAVA_OPTS}"
+      JAVA_TOOL_OPTIONS: "${PLATFORM_JAVA_OPTS}"
+      CONSENSUS_NODE_ID: "0"
     healthcheck:
       test:
         [
@@ -56,7 +58,6 @@ services:
       - "${APPLICATION_ROOT_PATH}/log4j2.xml:/opt/hgcapp/services-hedera/HapiApp2.0/log4j2.xml"
       - "${APPLICATION_ROOT_PATH}/hedera.crt:/opt/hgcapp/services-hedera/HapiApp2.0/hedera.crt"
       - "${APPLICATION_ROOT_PATH}/hedera.key:/opt/hgcapp/services-hedera/HapiApp2.0/hedera.key"
-      - "${RECORD_PARSER_ROOT_PATH}:/opt/hgcapp/recordParser"
 
   record-streams-uploader:
     image: "${UPLOADER_IMAGE_PREFIX}uploader-mirror:${UPLOADER_IMAGE_TAG}"
@@ -230,6 +231,7 @@ services:
     environment:
       HEDERA_MIRROR_GRPC_DB_HOST: db
       SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hedera-mirror-grpc/
+      JAVA_TOOL_OPTIONS: "${GRPC_PLATFORM_JAVA_OPTS}"
     networks:
       - mirror-node
     ports:
@@ -252,6 +254,7 @@ services:
     environment:
       HEDERA_MIRROR_IMPORTER_DB_HOST: db
       SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hedera-mirror-importer/
+      JAVA_TOOL_OPTIONS: "${GRPC_PLATFORM_JAVA_OPTS}"
     networks:
       - cloud-storage
       - mirror-node
@@ -278,6 +281,30 @@ services:
       - "5551:5551"
     restart: unless-stopped
     tty: false
+
+  rest-java:
+    image: "${MIRROR_IMAGE_PREFIX}hedera-mirror-rest-java:${MIRROR_REST_IMAGE_TAG:-${MIRROR_IMAGE_TAG}}"
+    container_name: mirror-node-rest-java
+    mem_swappiness: 0
+    mem_limit: "${MIRROR_REST_MEM_LIMIT}"
+    memswap_limit: "${MIRROR_REST_MEM_LIMIT}"
+    depends_on:
+      importer:
+        condition: service_started
+      db:
+        condition: service_started
+    environment:
+      HEDERA_MIRROR_RESTJAVA_DB_HOST: db
+      SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hedera-mirror-rest-java/
+      JAVA_TOOL_OPTIONS: "${GRPC_PLATFORM_JAVA_OPTS}"
+    networks:
+      - mirror-node
+    ports:
+      - 8084:8084
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - ./application.yml:/usr/etc/hedera-mirror-rest-java/application.yml
 
   explorer:
     container_name: hedera-explorer
@@ -308,6 +335,7 @@ services:
       HEDERA_MIRROR_WEB3_DB_HOST: db
       HEDERA_MIRROR_WEB3_EVM_NETWORK: OTHER
       SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hedera-mirror-web3/
+      JAVA_TOOL_OPTIONS: "${GRPC_PLATFORM_JAVA_OPTS}"
     ports:
       - "8545:8545"
     restart: unless-stopped
@@ -333,6 +361,7 @@ services:
       - network-node-bridge
     environment:
       SPRING_CONFIG_ADDITIONAL_LOCATION: "file:/usr/etc/hedera-mirror-monitor/"
+      JAVA_TOOL_OPTIONS: "${GRPC_PLATFORM_JAVA_OPTS}"
     ports:
       - "8082:8082"
     restart: unless-stopped
@@ -384,6 +413,9 @@ services:
       REDIS_URL: "${RELAY_REDIS_URL}"
       MIRROR_NODE_GET_CONTRACT_RESULTS_RETRIES: "${RELAY_MIRROR_NODE_GET_CONTRACT_RESULTS_RETRIES}"
       DEBUG_API_ENABLED: "${RELAY_DEBUG_API_ENABLED}"
+      HBAR_RATE_LIMIT_BASIC: "${RELAY_HBAR_RATE_LIMIT_BASIC}"
+      HBAR_RATE_LIMIT_EXTENDED: "${RELAY_HBAR_RATE_LIMIT_EXTENDED}"
+      HBAR_RATE_LIMIT_PRIVILEGED: "${RELAY_HBAR_RATE_LIMIT_PRIVILEGED}"
     ports:
       - "7546:7546"
     restart: unless-stopped
