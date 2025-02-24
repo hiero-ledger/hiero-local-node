@@ -64,7 +64,7 @@
   "dependencies": {
     "@hashgraph/sdk": "^2.49.2",
     "csv-parser": "^3.0.0",
-    "detect-port": "^1.6.1",
+    "detect-port": "^2.1.0",
     "dockerode": "^4.0.2",
     "dotenv": "^16.4.5",
     "ethers": "^6.13.2",
