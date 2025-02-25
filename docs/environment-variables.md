@@ -100,3 +100,11 @@ JAVA settings for the Consensus node
 
 - `DOCKER_LOCAL_MIRROR_NODE_MENU_NAME`: Name of the custom network.
 - `DOCKER_LOCAL_MIRROR_NODE_URL`: URL for the mirror node endpoint on custom network.
+
+### Block Node Variables
+
+- `BLOCK_NODE_IMAGE_PREFIX`: The registry address for the Block node image
+- `BLOCK_NODE_IMAGE_NAME`: The name of the Block node image
+- `BLOCK_NODE_IMAGE_TAG`: The version tag for the Block node image
+- `BLOCK_NODE_MEM_LIMIT`: Memory limit for the Block node container
+- `BLOCK_NODE_LOGS_ROOT_PATH`: Root path of logs directory for Block node

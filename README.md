@@ -126,12 +126,14 @@ Available commands:
             --dev to enable/disable developer mode.
             --full to enable/disable full mode. Production local-node.
             --multinode to enable or disable multi-node mode.
+            --enable-block-node to enable or disable block node.
             --balance to set starting hbar balance of the created accounts.
             --async to enable or disable asynchronous creation of accounts.
             --b or --blocklist to enable or disable account blocklisting. Depending on how many private keys are blocklisted, this will affect the generated on startup accounts.
             --network-tag to select custom network node tag [string] [defaults: predefined selected configuration]
             --mirror-tag to select custom mirror node tag [string] [defaults: predefined selected configuration]
             --relay-tag to select custom hedera-json-rpc relay tag [string] [defaults: predefined selected configuration]
+            --block-node-tag to select custom block node tag [string] [defaults: predefined selected configuration]
             --workdir path to the working directory for local node [string] [default: "[USER APP DATA]/hedera-local"]
     stop - Stops the local hedera network and delete all the existing data.
     restart - Restarts the local hedera network.
@@ -570,7 +572,8 @@ The following environment variables can be changed in the `.env` file for variou
 | Mirror Node REST API Endpoint     | [http://localhost:5551](http://localhost:5551)   |
 | JSON RPC Relay Endpoint           | [http://localhost:7546](http://localhost:7546)   |
 | JSON RPC Relay Websocket Endpoint | [http://localhost:8546](http://localhost:8546)   |
-| Mirror Node Explorer              | [http://localhost:8080](http://localhost:8080)   |
+| Mirror Node Explorer              | [http://localhost:8090](http://localhost:8090)   |
+| Block Node                        | [http://localhost:8080](http://localhost:8080)   |
 | Grafana UI                        | [http://localhost:3000](http://localhost:3000)   |
 | Prometheus UI                     | [http://localhost:9090](http://localhost:9090)   |
 
