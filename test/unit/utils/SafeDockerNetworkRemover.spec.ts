@@ -79,7 +79,7 @@ describe('SafeDockerNetworkRemover', () => {
         const config = load(data.toString());
         const services = config.services || {};
         for (const [serviceName, serviceConfig] of Object.entries(services)) {
-          if (serviceConfig.extends || (serviceConfig.network_mode || '' === 'none') || serviceName === 'block-node') {
+          if (serviceConfig.extends || (serviceConfig.network_mode || '' === 'none') || serviceName === 'block-node' || serviceName === 'cadvisor') {
             continue; // The child service might have inherited the network. There is no network in non-network mode.
           }
           const networks = serviceConfig.networks;
