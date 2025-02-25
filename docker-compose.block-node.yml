@@ -1,0 +1,9 @@
+services:
+  block-node:
+    restart: "no"
+    entrypoint:
+      [
+        "echo",
+        "This container is intentionally disabled due to selected configuration."
+      ]
+    command: []

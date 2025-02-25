@@ -12,6 +12,7 @@
  * @property {boolean} limits - Whether to impose limits.
  * @property {boolean} devMode - Whether to run in development mode.
  * @property {boolean} fullMode - Whether to run in full mode.
+ * @property {boolean} blockNode - Whether to enable block-node.
  * @property {boolean} multiNode - Whether to run in multi-node mode.
  * @property {boolean} userCompose - Whether to use user compose.
  * @property {string} userComposeDir - The directory of the user compose file.
@@ -21,6 +22,7 @@
  * @property {string} networkTag - The tag for the network.
  * @property {string} mirrorTag - The tag for the mirror.
  * @property {string} relayTag - The tag for the relay.
+ * @property {string} blockNodeTag - The tag for the block node.
  * @property {string} workDir - The working directory.
  * @property {boolean} createInitialResources - Whether to create initial resources.
  * @property {boolean} persistTransactionBytes - Whether to persist transaction bytes.
@@ -33,6 +35,7 @@ export interface CLIOptions {
     limits: boolean,
     devMode: boolean,
     fullMode: boolean,
+    blockNode: boolean,
     multiNode: boolean,
     userCompose: boolean,
     userComposeDir: string,
@@ -42,6 +45,7 @@ export interface CLIOptions {
     networkTag: string,
     mirrorTag: string,
     relayTag: string,
+    blockNodeTag: string,
     workDir: string,
     createInitialResources: boolean,
     persistTransactionBytes: boolean,

@@ -50,6 +50,7 @@ services:
       - "${NETWORK_NODE_LOGS_ROOT_PATH}/accountBalances:/opt/hgcapp/accountBalances"
       - "${NETWORK_NODE_LOGS_ROOT_PATH}/recordStreams:/opt/hgcapp/recordStreams"
       - "${APPLICATION_CONFIG_PATH}:/opt/hgcapp/services-hedera/HapiApp2.0/data/config"
+      - "${APPLICATION_CONFIG_PATH}:/opt/hgcapp/data/config"
       - "${NETWORK_NODE_LOGS_ROOT_PATH}/logs:/opt/hgcapp/services-hedera/HapiApp2.0/output"
       - "${APPLICATION_ROOT_PATH}/data/keys:/opt/hgcapp/services-hedera/HapiApp2.0/data/keys"
       - "${NETWORK_NODE_LOGS_ROOT_PATH}/stats:/opt/hgcapp/services-hedera/HapiApp2.0/data/stats"
@@ -370,7 +371,7 @@ services:
       - "${MIRROR_NODE_CONFIG_PATH}/compose-network/mirror-node/application.yml:/usr/etc/hedera-mirror-monitor/application.yml"
 
   block-node:
-    image: "${BLOCK_NODE_IMAGE_PREFIX}hedera-block-node:${BLOCK_NODE_IMAGE_TAG}"
+    image: "${BLOCK_NODE_IMAGE_PREFIX}hiero-block-node:${BLOCK_NODE_IMAGE_TAG}"
     container_name: block-node
     networks:
       - network-node-bridge

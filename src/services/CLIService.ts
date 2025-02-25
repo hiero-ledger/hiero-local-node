@@ -61,6 +61,7 @@ export class CLIService implements IService{
         CLIService.rateLimitOption(yargs);
         CLIService.devModeOption(yargs);
         CLIService.fullModeOption(yargs);
+        CLIService.enableBlockNode(yargs);
         CLIService.multiNodeOption(yargs);
         CLIService.userComposeOption(yargs);
         CLIService.userComposeDirOption(yargs);
@@ -68,6 +69,7 @@ export class CLIService implements IService{
         CLIService.selectNetworkTag(yargs);
         CLIService.selectMirrorTag(yargs);
         CLIService.selectRelayTag(yargs);
+        CLIService.selectBlockNodeTag(yargs);
         CLIService.createInitialResources(yargs);
     }
 
@@ -115,6 +117,7 @@ export class CLIService implements IService{
         const limits = argv.limits as boolean;
         const devMode = argv.dev as boolean;
         const fullMode = argv.full as boolean;
+        const blockNode = argv.enableBlockNode as boolean;
         const multiNode = argv.multinode as boolean;
         const userCompose = argv.usercompose as boolean;
         const userComposeDir = argv.composedir as string;
@@ -124,6 +127,7 @@ export class CLIService implements IService{
         const networkTag = argv.networkTag as string;
         const mirrorTag = argv.mirrorTag as string;
         const relayTag = argv.relayTag as string;
+        const blockNodeTag = argv.blockNodeTag as string;
         const workDir = FileSystemUtils.parseWorkDir(argv.workdir as string);
         const createInitialResources = argv.createInitialResources as boolean;
         const persistTransactionBytes = argv.persistTransactionBytes as boolean;
@@ -135,6 +139,7 @@ export class CLIService implements IService{
             limits,
             devMode,
             fullMode,
+            blockNode,
             multiNode,
             userCompose,
             userComposeDir,
@@ -144,6 +149,7 @@ export class CLIService implements IService{
             networkTag,
             mirrorTag,
             relayTag,
+            blockNodeTag,
             workDir,
             createInitialResources,
             persistTransactionBytes,
@@ -255,6 +261,24 @@ export class CLIService implements IService{
         yargs.option('dev', {
             type: 'boolean',
             describe: 'Enable or disable developer mode',
+            demandOption: false,
+            default: false
+        });
+    }
+
+    /**
+     * Adds the 'block-node' option to the command line arguments.
+     * This option is a boolean that enables or disables block-node.
+     * It is not required and defaults to false.
+     * 
+     * @param {yargs.Argv<{}>} yargs - The yargs instance to which the option is added.
+     * @private
+     * @static
+     */
+    private static enableBlockNode(yargs: Argv<{}>): void {
+        yargs.option('enable-block-node', {
+            type: 'boolean',
+            describe: 'Enable or disable block-node',
             demandOption: false,
             default: false
         });
@@ -450,6 +474,24 @@ export class CLIService implements IService{
         yargs.option('mirror-tag', {
             type: 'string',
             describe: 'Select custom mirror-node tag',
+            demandOption: false,
+            default: ''
+        });
+    }
+
+    /** 
+     * Adds the 'block-node-tag' option to the command line arguments.
+     * This option is a string that enables usage of custom block-node tag.
+     * It is not required and defaults to predefined configuration.
+     * 
+     * @param {yargs.Argv<{}>} yargs - The yargs instance to which the option is added.
+     * @private
+     * @static
+     */
+    private static selectBlockNodeTag(yargs: Argv<{}>): void {
+        yargs.option('block-node-tag', {
+            type: 'string', 
+            describe: 'Select custom block-node tag',
             demandOption: false,
             default: ''
         });

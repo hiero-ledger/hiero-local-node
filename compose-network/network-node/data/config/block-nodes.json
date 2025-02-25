@@ -1,0 +1,9 @@
+{
+  "nodes": [
+    {
+      "address": "block-node",
+      "port": 8080
+    }
+  ],
+  "blockItemBatchSize": 256
+}

@@ -370,9 +370,13 @@ export class DockerService implements IService{
       const { userCompose } = cliOptions;
       const { userComposeDir } = cliOptions;
       const { multiNode } = cliOptions;
-
+      const { blockNode } = cliOptions;
       if (!fullMode) {
           composeFiles.push('docker-compose.evm.yml');
+      }
+
+      if (!blockNode) {
+        composeFiles.push('docker-compose.block-node.yml');
       }
 
       if (multiNode) {

@@ -224,12 +224,28 @@ export class InitState implements IState{
     } {
         const node = variable.key;
         let tag = variable.value;
-        if (this.cliOptions.networkTag && (node === "NETWORK_NODE_IMAGE_TAG" || node === "HAVEGED_IMAGE_TAG")) {
-            tag = this.cliOptions.networkTag;
-        } else if(this.cliOptions.mirrorTag && node === "MIRROR_IMAGE_TAG") {
-            tag = this.cliOptions.mirrorTag;
-        } else if(this.cliOptions.relayTag && node === "RELAY_IMAGE_TAG") {
-            tag = this.cliOptions.relayTag;
+        switch (node) {
+            case "NETWORK_NODE_IMAGE_TAG":
+            case "HAVEGED_IMAGE_TAG":
+                if (this.cliOptions.networkTag) {
+                    tag = this.cliOptions.networkTag;
+                }
+                break;
+            case "MIRROR_IMAGE_TAG":
+                if (this.cliOptions.mirrorTag) {
+                    tag = this.cliOptions.mirrorTag;
+                }
+                break;
+            case "RELAY_IMAGE_TAG":
+                if (this.cliOptions.relayTag) {
+                    tag = this.cliOptions.relayTag;
+                }
+                break;
+            case "BLOCK_NODE_IMAGE_TAG":
+                if (this.cliOptions.blockNodeTag) {
+                    tag = this.cliOptions.blockNodeTag;
+                }
+                break;
         }
 
         return { 
@@ -256,10 +272,16 @@ export class InitState implements IState{
                 this.logger.trace(INIT_STATE_NO_NODE_CONF_NEEDED, this.stateName);
                 return;
             }
+
             nodeConfiguration!.forEach(property => {
                 newProperties = newProperties.concat(`${property.key}=${property.value}\n`);
                 this.logger.trace(`Bootstrap property ${property.key} will be set to ${property.value}.`, this.stateName);
             });
+
+            if (this.cliOptions.blockNode) {
+                newProperties = newProperties.concat(`blockStream.writerMode=FILE_AND_GRPC\n`);
+                this.logger.trace(`Bootstrap property blockStream.writerMode will be set to FILE_AND_GRPC.`, this.stateName);
+            }
 
             writeFileSync(propertiesFilePath, newProperties, { flag: 'w' });
 
