@@ -14,9 +14,11 @@ Maintainers are assigned the following scopes in this repository:
 
 <!-- Please keep this sorted alphabetically by github -->
 
-| Name | GitHub ID | Scope | LFID | Discord ID | Email | Company Affiliation |
-|----- | --------- | ----- | ---- | ---------- | ----- | ------------------- |
-|      |           |       |      |            |       |                     |
+| Name | GitHub ID  | Scope      | LFID | Discord ID | Email | Company Affiliation |
+|----- | ---------- | ---------- | ---- | ---------- | ----- | ------------------- |
+|      | Nana-EC    | Maintainer |      |            |       | Hashgraph           |
+|      | georgi-l95 | Maintainer |      |            |       |                     |
+|      | natanasow  | Maintainer |      |            |       |                     |
 
 
 ## Emeritus Maintainers
