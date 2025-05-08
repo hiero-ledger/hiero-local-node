@@ -1,0 +1,1467 @@
+name: hiero-local-node
+services:
+  account-balances-uploader:
+    command:
+      - /usr/bin/env
+      - python3.7
+      - /usr/local/bin/mirror.py
+      - --linux
+      - --watch-directory
+      - /balances
+      - --s3-endpoint
+      - http://minio:9000
+      - --debug
+    container_name: account-balances-uploader
+    depends_on:
+      minio:
+        condition: service_started
+        required: true
+    environment:
+      BUCKET_NAME: hedera-streams
+      BUCKET_PATH: accountBalances/balance0.0.3
+      DEBUG: "true"
+      GCS_ENABLE: "false"
+      REAPER_ENABLE: "true"
+      REAPER_INTERVAL: "5"
+      REAPER_MIN_KEEP: "1"
+      S3_ACCESS_KEY: minioadmin
+      S3_ENABLE: "true"
+      S3_SECRET_KEY: minioadmin
+      SIG_EXTENSION: pb_sig
+      SIG_PRIORITIZE: "true"
+      SIG_REQUIRE: "true"
+      STREAM_EXTENSION: pb
+    image: gcr.io/hedera-registry/uploader-mirror:0.7.0
+    networks:
+      cloud-storage: null
+    restart: unless-stopped
+    user: root
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/accountBalances/balance0.0.3
+        target: /balances
+        bind:
+          create_host_path: true
+  account-balances-uploader-1:
+    command:
+      - /usr/bin/env
+      - python3.7
+      - /usr/local/bin/mirror.py
+      - --linux
+      - --watch-directory
+      - /balances
+      - --s3-endpoint
+      - http://minio:9000
+      - --debug
+    container_name: account-balances-uploader-1
+    depends_on:
+      minio:
+        condition: service_started
+        required: true
+    environment:
+      BUCKET_NAME: hedera-streams
+      BUCKET_PATH: accountBalances/balance0.0.4
+      DEBUG: "true"
+      GCS_ENABLE: "false"
+      REAPER_ENABLE: "true"
+      REAPER_INTERVAL: "5"
+      REAPER_MIN_KEEP: "1"
+      S3_ACCESS_KEY: minioadmin
+      S3_ENABLE: "true"
+      S3_SECRET_KEY: minioadmin
+      SIG_EXTENSION: pb_sig
+      SIG_PRIORITIZE: "true"
+      SIG_REQUIRE: "true"
+      STREAM_EXTENSION: pb
+    image: gcr.io/hedera-registry/uploader-mirror:0.7.0
+    networks:
+      cloud-storage: null
+    restart: unless-stopped
+    user: root
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/accountBalances/balance0.0.4
+        target: /balances
+        bind:
+          create_host_path: true
+  account-balances-uploader-2:
+    command:
+      - /usr/bin/env
+      - python3.7
+      - /usr/local/bin/mirror.py
+      - --linux
+      - --watch-directory
+      - /balances
+      - --s3-endpoint
+      - http://minio:9000
+      - --debug
+    container_name: account-balances-uploader-2
+    depends_on:
+      minio:
+        condition: service_started
+        required: true
+    environment:
+      BUCKET_NAME: hedera-streams
+      BUCKET_PATH: accountBalances/balance0.0.5
+      DEBUG: "true"
+      GCS_ENABLE: "false"
+      REAPER_ENABLE: "true"
+      REAPER_INTERVAL: "5"
+      REAPER_MIN_KEEP: "1"
+      S3_ACCESS_KEY: minioadmin
+      S3_ENABLE: "true"
+      S3_SECRET_KEY: minioadmin
+      SIG_EXTENSION: pb_sig
+      SIG_PRIORITIZE: "true"
+      SIG_REQUIRE: "true"
+      STREAM_EXTENSION: pb
+    image: gcr.io/hedera-registry/uploader-mirror:0.7.0
+    networks:
+      cloud-storage: null
+    restart: unless-stopped
+    user: root
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/accountBalances/balance0.0.5
+        target: /balances
+        bind:
+          create_host_path: true
+  account-balances-uploader-3:
+    command:
+      - /usr/bin/env
+      - python3.7
+      - /usr/local/bin/mirror.py
+      - --linux
+      - --watch-directory
+      - /balances
+      - --s3-endpoint
+      - http://minio:9000
+      - --debug
+    container_name: account-balances-uploader-3
+    depends_on:
+      minio:
+        condition: service_started
+        required: true
+    environment:
+      BUCKET_NAME: hedera-streams
+      BUCKET_PATH: accountBalances/balance0.0.6
+      DEBUG: "true"
+      GCS_ENABLE: "false"
+      REAPER_ENABLE: "true"
+      REAPER_INTERVAL: "5"
+      REAPER_MIN_KEEP: "1"
+      S3_ACCESS_KEY: minioadmin
+      S3_ENABLE: "true"
+      S3_SECRET_KEY: minioadmin
+      SIG_EXTENSION: pb_sig
+      SIG_PRIORITIZE: "true"
+      SIG_REQUIRE: "true"
+      STREAM_EXTENSION: pb
+    image: gcr.io/hedera-registry/uploader-mirror:0.7.0
+    networks:
+      cloud-storage: null
+    restart: unless-stopped
+    user: root
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/accountBalances/balance0.0.6
+        target: /balances
+        bind:
+          create_host_path: true
+  block-node:
+    container_name: block-node
+    environment:
+      BLOCKNODE_STORAGE_ROOT_PATH: /app/storage
+      JAVA_OPTS: -Xms16G -Xmx16G
+      REGISTRY_PREFIX: ""
+      VERSION: 0.7.0
+    image: ghcr.io/hiero-ledger/hiero-block-node:0.7.0
+    networks:
+      mirror-node: null
+      network-node-bridge: null
+    ports:
+      - mode: ingress
+        target: 8080
+        published: "8080"
+        protocol: tcp
+      - mode: ingress
+        target: 9999
+        published: "9998"
+        protocol: tcp
+  cache:
+    container_name: relay-cache
+    image: ghcr.io/mhga24/redis:6-alpine
+    mem_limit: "805306368"
+    memswap_limit: "805306368"
+    networks:
+      network-node-bridge:
+        ipv4_address: 172.27.0.50
+    ports:
+      - mode: ingress
+        target: 6379
+        published: "6379"
+        protocol: tcp
+    restart: unless-stopped
+    stop_signal: SIGTERM
+    tty: true
+  cadvisor:
+    container_name: cadvisor
+    image: gcr.io/cadvisor/cadvisor:v0.47.0
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 8080
+        published: "8081"
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /sys
+        target: /sys
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /var/lib/docker/
+        target: /var/lib/docker
+        read_only: true
+        bind:
+          create_host_path: true
+  db:
+    container_name: mirror-node-db
+    environment:
+      GRPC_PASSWORD: mirror_grpc_pass
+      IMPORTER_PASSWORD: mirror_importer_pass
+      OWNER_PASSWORD: mirror_node_pass
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+      POSTGRES_PASSWORD: postgres_password
+      REST_PASSWORD: mirror_api_pass
+      ROSETTA_PASSWORD: mirror_rosetta_pass
+    image: ghcr.io/mhga24/postgres:latest
+    networks:
+      mirror-node: null
+    ports:
+      - mode: ingress
+        target: 5432
+        published: "5433"
+        protocol: tcp
+    restart: unless-stopped
+    stop_grace_period: 2m0s
+    stop_signal: SIGTERM
+    tty: true
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/mirror-node/init.sh
+        target: /docker-entrypoint-initdb.d/init.sh
+        bind:
+          create_host_path: true
+      - type: volume
+        source: mirror-node-postgres
+        target: /var/lib/postgresql/data
+  envoy:
+    container_name: envoy-proxy
+    image: ghcr.io/mhga24/envoyproxy/envoy:v1.22.0
+    networks:
+      network-node-bridge: null
+    ports:
+      - mode: ingress
+        target: 50213
+        published: "50213"
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/envoy.yaml
+        target: /etc/envoy/envoy.yaml
+        bind:
+          create_host_path: true
+  explorer:
+    container_name: hedera-explorer
+    environment:
+      DOCKER_LOCAL_MIRROR_NODE_MENU_NAME: LOCALNET
+      DOCKER_LOCAL_MIRROR_NODE_URL: http://127.0.0.1:5551/
+    image: gcr.io/hedera-registry/hedera-mirror-node-explorer:24.4.0
+    networks:
+      mirror-node: null
+    ports:
+      - mode: ingress
+        target: 8080
+        published: "8090"
+        protocol: tcp
+    restart: unless-stopped
+  grafana:
+    container_name: grafana
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+      GF_AUTH_DISABLE_SIGNOUT_MENU: "true"
+      GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION: "true"
+    image: ghcr.io/mhga24/grafana/grafana:8.5.16
+    networks:
+      mirror-node: null
+      network-node-bridge:
+        ipv4_address: 172.27.0.5
+    ports:
+      - mode: ingress
+        target: 3000
+        published: "3000"
+        protocol: tcp
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/grafana/datasources
+        target: /etc/grafana/provisioning/datasources
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/grafana/dashboards
+        target: /etc/grafana/provisioning/dashboards
+        bind:
+          create_host_path: true
+      - type: volume
+        source: grafana-data
+        target: /var/lib/grafana
+        volume: {}
+  grpc:
+    container_name: mirror-node-grpc
+    depends_on:
+      db:
+        condition: service_started
+        required: true
+      network-node:
+        condition: service_started
+        required: true
+    environment:
+      HEDERA_MIRROR_GRPC_DB_HOST: db
+      JAVA_TOOL_OPTIONS: ""
+      SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hedera-mirror-grpc/
+    image: gcr.io/mirrornode/hedera-mirror-grpc:0.126.0
+    mem_limit: "536870912"
+    memswap_limit: "536870912"
+    networks:
+      mirror-node: null
+    ports:
+      - mode: ingress
+        target: 5600
+        published: "5600"
+        protocol: tcp
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/mirror-node/application.yml
+        target: /usr/etc/hedera-mirror-grpc/application.yml
+        bind:
+          create_host_path: true
+  haveged:
+    command:
+      - -d 16
+    container_name: haveged
+    image: gcr.io/hedera-registry/network-node-haveged:0.61.1
+    network_mode: none
+    privileged: true
+    restart: always
+  importer:
+    container_name: mirror-node-importer
+    depends_on:
+      db:
+        condition: service_started
+        required: true
+      minio:
+        condition: service_started
+        required: true
+    environment:
+      HEDERA_MIRROR_IMPORTER_DB_HOST: db
+      JAVA_TOOL_OPTIONS: ""
+      SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hedera-mirror-importer/
+    image: gcr.io/mirrornode/hedera-mirror-importer:0.126.0
+    mem_limit: "805306368"
+    memswap_limit: "805306368"
+    networks:
+      cloud-storage: null
+      mirror-node: null
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/mirror-node/application.yml
+        target: /usr/etc/hedera-mirror-importer/application.yml
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/mirror-node/addressBook.multinode.bin
+        target: /usr/etc/hedera-mirror-importer/local-dev-1-node.addressbook.f102.json.bin
+        bind:
+          create_host_path: true
+  minio:
+    command:
+      - -c
+      - mkdir -p /data/hedera-streams && minio server /data --console-address ":9001"
+    container_name: minio
+    entrypoint:
+      - sh
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_ROOT_USER: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+    image: ghcr.io/mhga24/minio/minio
+    networks:
+      cloud-storage: null
+    ports:
+      - mode: ingress
+        target: 9000
+        published: "9000"
+        protocol: tcp
+      - mode: ingress
+        target: 9001
+        published: "9001"
+        protocol: tcp
+    volumes:
+      - type: volume
+        source: minio-data
+        target: /data
+        volume: {}
+  monitor:
+    container_name: mirror-node-monitor
+    depends_on:
+      grpc:
+        condition: service_started
+        required: true
+      network-node:
+        condition: service_healthy
+        required: true
+      network-node-1:
+        condition: service_healthy
+        required: true
+      network-node-2:
+        condition: service_healthy
+        required: true
+      network-node-3:
+        condition: service_healthy
+        required: true
+      rest:
+        condition: service_started
+        required: true
+    environment:
+      JAVA_TOOL_OPTIONS: ""
+      SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hedera-mirror-monitor/
+    image: gcr.io/mirrornode/hedera-mirror-monitor:0.126.0
+    mem_limit: "536870912"
+    memswap_limit: "536870912"
+    networks:
+      mirror-node: null
+      network-node-bridge: null
+    ports:
+      - mode: ingress
+        target: 8082
+        published: "8082"
+        protocol: tcp
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/mirror-node/application.yml
+        target: /usr/etc/hedera-mirror-monitor/application.yml
+        bind:
+          create_host_path: true
+  network-node:
+    container_name: network-node
+    depends_on:
+      haveged:
+        condition: service_started
+        required: true
+      record-streams-uploader:
+        condition: service_started
+        required: true
+    environment:
+      CONSENSUS_NODE_ID: "0"
+      JAVA_HEAP_MAX: 2g
+      JAVA_HEAP_MIN: 256m
+      JAVA_OPTS: -XX:+UnlockExperimentalVMOptions -XX:+UseZGC -Xlog:gc*:gc.log
+      JAVA_TOOL_OPTIONS: -XX:+UnlockExperimentalVMOptions -XX:+UseZGC -Xlog:gc*:gc.log
+    healthcheck:
+      test:
+        - CMD
+        - grep
+        - -E
+        - Now current platform status = ACTIVE|OBSERVING|CHECKING
+        - /opt/hgcapp/services-hedera/HapiApp2.0/output/hgcaa.log
+      timeout: 10s
+      interval: 30s
+      retries: 10
+      start_period: 10s
+    image: gcr.io/hedera-registry/consensus-node:0.61.1
+    mem_limit: "4294967296"
+    memswap_limit: "4294967296"
+    networks:
+      network-node-bridge:
+        ipv4_address: 172.27.0.3
+    ports:
+      - mode: ingress
+        target: 50211
+        published: "50211"
+        protocol: tcp
+      - mode: ingress
+        target: 50212
+        published: "50212"
+        protocol: tcp
+      - mode: ingress
+        target: 9999
+        published: "9999"
+        protocol: tcp
+    user: root
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/accountBalances
+        target: /opt/hgcapp/accountBalances
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams
+        target: /opt/hgcapp/recordStreams
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/data/config
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/data/config
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/data/config
+        target: /opt/hgcapp/data/config
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/logs
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/output
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/data/keys
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/data/keys
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/stats
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/data/stats
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/config.multinode.txt
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/config.txt
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/settings.txt
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/settings.txt
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/log4j2.xml
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/log4j2.xml
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/hedera.crt
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/hedera.crt
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/hedera.key
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/hedera.key
+        bind:
+          create_host_path: true
+  network-node-1:
+    container_name: network-node-1
+    depends_on:
+      haveged:
+        condition: service_started
+        required: true
+      network-node:
+        condition: service_healthy
+        required: true
+      record-streams-uploader:
+        condition: service_started
+        required: true
+    environment:
+      CONSENSUS_NODE_ID: "1"
+      JAVA_HEAP_MAX: 2g
+      JAVA_HEAP_MIN: 256m
+      JAVA_OPTS: -XX:+UnlockExperimentalVMOptions -XX:+UseZGC -Xlog:gc*:gc.log
+    healthcheck:
+      test:
+        - CMD
+        - grep
+        - -E
+        - Now current platform status = ACTIVE|OBSERVING|CHECKING
+        - /opt/hgcapp/services-hedera/HapiApp2.0/output/hgcaa.log
+      timeout: 10s
+      interval: 30s
+      retries: 10
+      start_period: 10s
+    image: gcr.io/hedera-registry/consensus-node:0.61.1
+    mem_limit: "4294967296"
+    memswap_limit: "4294967296"
+    networks:
+      network-node-bridge:
+        ipv4_address: 172.27.0.11
+    ports:
+      - mode: ingress
+        target: 50211
+        published: "51211"
+        protocol: tcp
+      - mode: ingress
+        target: 50212
+        published: "51212"
+        protocol: tcp
+    user: root
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/accountBalances
+        target: /opt/hgcapp/accountBalances
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams
+        target: /opt/hgcapp/recordStreams
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/data/config
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/data/config
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/logs
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/output
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/data/keys
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/data/keys
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/stats
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/data/stats
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/config.multinode.txt
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/config.txt
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/settings.txt
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/settings.txt
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/log4j2.xml
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/log4j2.xml
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/hedera.crt
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/hedera.crt
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/hedera.key
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/hedera.key
+        bind:
+          create_host_path: true
+  network-node-2:
+    container_name: network-node-2
+    depends_on:
+      haveged:
+        condition: service_started
+        required: true
+      network-node-1:
+        condition: service_healthy
+        required: true
+      record-streams-uploader:
+        condition: service_started
+        required: true
+    environment:
+      CONSENSUS_NODE_ID: "2"
+      JAVA_HEAP_MAX: 2g
+      JAVA_HEAP_MIN: 256m
+      JAVA_OPTS: -XX:+UnlockExperimentalVMOptions -XX:+UseZGC -Xlog:gc*:gc.log
+    healthcheck:
+      test:
+        - CMD
+        - grep
+        - -E
+        - Now current platform status = ACTIVE|OBSERVING|CHECKING
+        - /opt/hgcapp/services-hedera/HapiApp2.0/output/hgcaa.log
+      timeout: 10s
+      interval: 30s
+      retries: 10
+      start_period: 10s
+    image: gcr.io/hedera-registry/consensus-node:0.61.1
+    mem_limit: "4294967296"
+    memswap_limit: "4294967296"
+    networks:
+      network-node-bridge:
+        ipv4_address: 172.27.0.12
+    ports:
+      - mode: ingress
+        target: 50211
+        published: "52211"
+        protocol: tcp
+      - mode: ingress
+        target: 50212
+        published: "52212"
+        protocol: tcp
+    user: root
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/accountBalances
+        target: /opt/hgcapp/accountBalances
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams
+        target: /opt/hgcapp/recordStreams
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/data/config
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/data/config
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/logs
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/output
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/data/keys
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/data/keys
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/stats
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/data/stats
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/config.multinode.txt
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/config.txt
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/settings.txt
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/settings.txt
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/log4j2.xml
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/log4j2.xml
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/hedera.crt
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/hedera.crt
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/hedera.key
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/hedera.key
+        bind:
+          create_host_path: true
+  network-node-3:
+    container_name: network-node-3
+    depends_on:
+      haveged:
+        condition: service_started
+        required: true
+      network-node-2:
+        condition: service_healthy
+        required: true
+      record-streams-uploader:
+        condition: service_started
+        required: true
+    environment:
+      CONSENSUS_NODE_ID: "3"
+      JAVA_HEAP_MAX: 2g
+      JAVA_HEAP_MIN: 256m
+      JAVA_OPTS: -XX:+UnlockExperimentalVMOptions -XX:+UseZGC -Xlog:gc*:gc.log
+    healthcheck:
+      test:
+        - CMD
+        - grep
+        - -E
+        - Now current platform status = ACTIVE|OBSERVING|CHECKING
+        - /opt/hgcapp/services-hedera/HapiApp2.0/output/hgcaa.log
+      timeout: 10s
+      interval: 30s
+      retries: 10
+      start_period: 10s
+    image: gcr.io/hedera-registry/consensus-node:0.61.1
+    mem_limit: "4294967296"
+    memswap_limit: "4294967296"
+    networks:
+      network-node-bridge:
+        ipv4_address: 172.27.0.13
+    ports:
+      - mode: ingress
+        target: 50211
+        published: "53211"
+        protocol: tcp
+      - mode: ingress
+        target: 50212
+        published: "53212"
+        protocol: tcp
+    user: root
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/accountBalances
+        target: /opt/hgcapp/accountBalances
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams
+        target: /opt/hgcapp/recordStreams
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/data/config
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/data/config
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/logs
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/output
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/data/keys
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/data/keys
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/stats
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/data/stats
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/config.multinode.txt
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/config.txt
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/settings.txt
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/settings.txt
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/log4j2.xml
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/log4j2.xml
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/hedera.crt
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/hedera.crt
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/hedera.key
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/hedera.key
+        bind:
+          create_host_path: true
+  prometheus:
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.console.libraries=/etc/prometheus/console_libraries
+      - --web.console.templates=/etc/prometheus/consoles
+      - --web.enable-lifecycle
+    container_name: prometheus
+    image: ghcr.io/mhga24/prom/prometheus:v2.41.0
+    networks:
+      mirror-node: null
+      network-node-bridge:
+        ipv4_address: 172.27.0.4
+    ports:
+      - mode: ingress
+        target: 9090
+        published: "9090"
+        protocol: tcp
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/prometheus/prometheus.yml
+        target: /etc/prometheus/prometheus.yml
+        bind:
+          create_host_path: true
+      - type: volume
+        source: prometheus-data
+        target: /prometheus
+        volume: {}
+  record-sidecar-uploader:
+    command:
+      - /usr/bin/env
+      - python3.7
+      - /usr/local/bin/mirror.py
+      - --linux
+      - --watch-directory
+      - /sidecar-files
+      - --s3-endpoint
+      - http://minio:9000
+      - --debug
+    container_name: record-sidecar-uploader
+    depends_on:
+      minio:
+        condition: service_started
+        required: true
+    environment:
+      BUCKET_NAME: hedera-streams
+      BUCKET_PATH: recordstreams/record0.0.3/sidecar
+      DEBUG: "true"
+      GCS_ENABLE: "false"
+      REAPER_ENABLE: "true"
+      REAPER_INTERVAL: "5"
+      REAPER_MIN_KEEP: "1"
+      S3_ACCESS_KEY: minioadmin
+      S3_ENABLE: "true"
+      S3_SECRET_KEY: minioadmin
+      SIG_PRIORITIZE: "false"
+      SIG_REQUIRE: "false"
+      STREAM_EXTENSION: rcd.gz
+    image: gcr.io/hedera-registry/uploader-mirror:0.7.0
+    networks:
+      cloud-storage: null
+    restart: unless-stopped
+    user: root
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams/record0.0.3/sidecar
+        target: /sidecar-files
+        bind:
+          create_host_path: true
+  record-sidecar-uploader-1:
+    command:
+      - /usr/bin/env
+      - python3.7
+      - /usr/local/bin/mirror.py
+      - --linux
+      - --watch-directory
+      - /sidecar-files
+      - --s3-endpoint
+      - http://minio:9000
+      - --debug
+    container_name: record-sidecar-uploader-1
+    depends_on:
+      minio:
+        condition: service_started
+        required: true
+    environment:
+      BUCKET_NAME: hedera-streams
+      BUCKET_PATH: recordstreams/record0.0.4/sidecar
+      DEBUG: "true"
+      GCS_ENABLE: "false"
+      REAPER_ENABLE: "true"
+      REAPER_INTERVAL: "5"
+      REAPER_MIN_KEEP: "1"
+      S3_ACCESS_KEY: minioadmin
+      S3_ENABLE: "true"
+      S3_SECRET_KEY: minioadmin
+      SIG_PRIORITIZE: "false"
+      SIG_REQUIRE: "false"
+      STREAM_EXTENSION: rcd.gz
+    image: gcr.io/hedera-registry/uploader-mirror:0.7.0
+    networks:
+      cloud-storage: null
+    restart: unless-stopped
+    user: root
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams/record0.0.4/sidecar
+        target: /sidecar-files
+        bind:
+          create_host_path: true
+  record-sidecar-uploader-2:
+    command:
+      - /usr/bin/env
+      - python3.7
+      - /usr/local/bin/mirror.py
+      - --linux
+      - --watch-directory
+      - /sidecar-files
+      - --s3-endpoint
+      - http://minio:9000
+      - --debug
+    container_name: record-sidecar-uploader-2
+    depends_on:
+      minio:
+        condition: service_started
+        required: true
+    environment:
+      BUCKET_NAME: hedera-streams
+      BUCKET_PATH: recordstreams/record0.0.5/sidecar
+      DEBUG: "true"
+      GCS_ENABLE: "false"
+      REAPER_ENABLE: "true"
+      REAPER_INTERVAL: "5"
+      REAPER_MIN_KEEP: "1"
+      S3_ACCESS_KEY: minioadmin
+      S3_ENABLE: "true"
+      S3_SECRET_KEY: minioadmin
+      SIG_PRIORITIZE: "false"
+      SIG_REQUIRE: "false"
+      STREAM_EXTENSION: rcd.gz
+    image: gcr.io/hedera-registry/uploader-mirror:0.7.0
+    networks:
+      cloud-storage: null
+    restart: unless-stopped
+    user: root
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams/record0.0.5/sidecar
+        target: /sidecar-files
+        bind:
+          create_host_path: true
+  record-sidecar-uploader-3:
+    command:
+      - /usr/bin/env
+      - python3.7
+      - /usr/local/bin/mirror.py
+      - --linux
+      - --watch-directory
+      - /sidecar-files
+      - --s3-endpoint
+      - http://minio:9000
+      - --debug
+    container_name: record-sidecar-uploader-3
+    depends_on:
+      minio:
+        condition: service_started
+        required: true
+    environment:
+      BUCKET_NAME: hedera-streams
+      BUCKET_PATH: recordstreams/record0.0.6/sidecar
+      DEBUG: "true"
+      GCS_ENABLE: "false"
+      REAPER_ENABLE: "true"
+      REAPER_INTERVAL: "5"
+      REAPER_MIN_KEEP: "1"
+      S3_ACCESS_KEY: minioadmin
+      S3_ENABLE: "true"
+      S3_SECRET_KEY: minioadmin
+      SIG_PRIORITIZE: "false"
+      SIG_REQUIRE: "false"
+      STREAM_EXTENSION: rcd.gz
+    image: gcr.io/hedera-registry/uploader-mirror:0.7.0
+    networks:
+      cloud-storage: null
+    restart: unless-stopped
+    user: root
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams/record0.0.6/sidecar
+        target: /sidecar-files
+        bind:
+          create_host_path: true
+  record-streams-uploader:
+    command:
+      - /usr/bin/env
+      - python3.7
+      - /usr/local/bin/mirror.py
+      - --linux
+      - --watch-directory
+      - /records
+      - --s3-endpoint
+      - http://minio:9000
+      - --debug
+    container_name: record-streams-uploader
+    depends_on:
+      minio:
+        condition: service_started
+        required: true
+    environment:
+      BUCKET_NAME: hedera-streams
+      BUCKET_PATH: recordstreams/record0.0.3
+      DEBUG: "true"
+      GCS_ENABLE: "false"
+      REAPER_ENABLE: "true"
+      REAPER_INTERVAL: "5"
+      REAPER_MIN_KEEP: "1"
+      S3_ACCESS_KEY: minioadmin
+      S3_ENABLE: "true"
+      S3_SECRET_KEY: minioadmin
+      SIG_EXTENSION: rcd_sig
+      SIG_PRIORITIZE: "true"
+      SIG_REQUIRE: "true"
+      STREAM_EXTENSION: rcd.gz
+    image: gcr.io/hedera-registry/uploader-mirror:0.7.0
+    networks:
+      cloud-storage: null
+    restart: unless-stopped
+    user: root
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams/record0.0.3
+        target: /records
+        bind:
+          create_host_path: true
+  record-streams-uploader-1:
+    command:
+      - /usr/bin/env
+      - python3.7
+      - /usr/local/bin/mirror.py
+      - --linux
+      - --watch-directory
+      - /records
+      - --s3-endpoint
+      - http://minio:9000
+      - --debug
+    container_name: record-streams-uploader-1
+    depends_on:
+      minio:
+        condition: service_started
+        required: true
+    environment:
+      BUCKET_NAME: hedera-streams
+      BUCKET_PATH: recordstreams/record0.0.4
+      DEBUG: "true"
+      GCS_ENABLE: "false"
+      REAPER_ENABLE: "true"
+      REAPER_INTERVAL: "5"
+      REAPER_MIN_KEEP: "1"
+      S3_ACCESS_KEY: minioadmin
+      S3_ENABLE: "true"
+      S3_SECRET_KEY: minioadmin
+      SIG_EXTENSION: rcd_sig
+      SIG_PRIORITIZE: "true"
+      SIG_REQUIRE: "true"
+      STREAM_EXTENSION: rcd.gz
+    image: gcr.io/hedera-registry/uploader-mirror:0.7.0
+    networks:
+      cloud-storage: null
+    restart: unless-stopped
+    user: root
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams/record0.0.4
+        target: /records
+        bind:
+          create_host_path: true
+  record-streams-uploader-2:
+    command:
+      - /usr/bin/env
+      - python3.7
+      - /usr/local/bin/mirror.py
+      - --linux
+      - --watch-directory
+      - /records
+      - --s3-endpoint
+      - http://minio:9000
+      - --debug
+    container_name: record-streams-uploader-2
+    depends_on:
+      minio:
+        condition: service_started
+        required: true
+    environment:
+      BUCKET_NAME: hedera-streams
+      BUCKET_PATH: recordstreams/record0.0.5
+      DEBUG: "true"
+      GCS_ENABLE: "false"
+      REAPER_ENABLE: "true"
+      REAPER_INTERVAL: "5"
+      REAPER_MIN_KEEP: "1"
+      S3_ACCESS_KEY: minioadmin
+      S3_ENABLE: "true"
+      S3_SECRET_KEY: minioadmin
+      SIG_EXTENSION: rcd_sig
+      SIG_PRIORITIZE: "true"
+      SIG_REQUIRE: "true"
+      STREAM_EXTENSION: rcd.gz
+    image: gcr.io/hedera-registry/uploader-mirror:0.7.0
+    networks:
+      cloud-storage: null
+    restart: unless-stopped
+    user: root
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams/record0.0.5
+        target: /records
+        bind:
+          create_host_path: true
+  record-streams-uploader-3:
+    command:
+      - /usr/bin/env
+      - python3.7
+      - /usr/local/bin/mirror.py
+      - --linux
+      - --watch-directory
+      - /records
+      - --s3-endpoint
+      - http://minio:9000
+      - --debug
+    container_name: record-streams-uploader-3
+    depends_on:
+      minio:
+        condition: service_started
+        required: true
+    environment:
+      BUCKET_NAME: hedera-streams
+      BUCKET_PATH: recordstreams/record0.0.6
+      DEBUG: "true"
+      GCS_ENABLE: "false"
+      REAPER_ENABLE: "true"
+      REAPER_INTERVAL: "5"
+      REAPER_MIN_KEEP: "1"
+      S3_ACCESS_KEY: minioadmin
+      S3_ENABLE: "true"
+      S3_SECRET_KEY: minioadmin
+      SIG_EXTENSION: rcd_sig
+      SIG_PRIORITIZE: "true"
+      SIG_REQUIRE: "true"
+      STREAM_EXTENSION: rcd.gz
+    image: gcr.io/hedera-registry/uploader-mirror:0.7.0
+    networks:
+      cloud-storage: null
+    restart: unless-stopped
+    user: root
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams/record0.0.6
+        target: /records
+        bind:
+          create_host_path: true
+  relay:
+    container_name: json-rpc-relay
+    depends_on:
+      network-node:
+        condition: service_healthy
+        required: true
+      rest:
+        condition: service_started
+        required: true
+    environment:
+      CHAIN_ID: "0x12a"
+      DEBUG_API_ENABLED: "true"
+      DEFAULT_RATE_LIMIT: "200"
+      DEV_MODE: "false"
+      E2E_RELAY_HOST: http://127.0.0.1:7546
+      ETH_CALL_DEFAULT_TO_CONSENSUS_NODE: "false"
+      ETH_GET_LOGS_BLOCK_RANGE_LIMIT: "1000"
+      ETH_POPULATE_SYNTHETIC_CONTRACT_RESULTS: ""
+      FEE_HISTORY_MAX_RESULTS: "10"
+      HBAR_RATE_LIMIT_BASIC: "500000000000"
+      HBAR_RATE_LIMIT_DURATION: "0"
+      HBAR_RATE_LIMIT_EXTENDED: "600000000000"
+      HBAR_RATE_LIMIT_PRIVILEGED: "700000000000"
+      HBAR_RATE_LIMIT_TINYBAR: "0"
+      HEDERA_NETWORK: '{"network-node:50211":"0.0.3"}'
+      INPUT_SIZE_LIMIT: "1"
+      LIMIT_DURATION: "60000"
+      LOCAL_NODE: "true"
+      MIRROR_NODE_GET_CONTRACT_RESULTS_RETRIES: "20"
+      MIRROR_NODE_RETRIES: "3"
+      MIRROR_NODE_RETRY_DELAY: "250"
+      MIRROR_NODE_URL: http://mirror-node-rest:5551
+      MIRROR_NODE_URL_WEB3: http://mirror-node-web3:8545
+      OPERATOR_ID_MAIN: 0.0.2
+      OPERATOR_KEY_MAIN: 302e020100300506032b65700422042091132178e72057a1d7528025956fe39b0b847f200ab59b2fdd367017f3087137
+      RATE_LIMIT_DISABLED: "true"
+      REDIS_ENABLED: "false"
+      REDIS_URL: redis://127.0.0.1:6379
+      SERVER_PORT: "7546"
+      TIER_1_RATE_LIMIT: "100"
+      TIER_2_RATE_LIMIT: "800"
+      TIER_3_RATE_LIMIT: "1600"
+    image: ghcr.io/hashgraph/hedera-json-rpc-relay:0.66.0
+    mem_limit: "805306368"
+    memswap_limit: "805306368"
+    networks:
+      mirror-node: null
+      network-node-bridge: null
+    ports:
+      - mode: ingress
+        target: 7546
+        published: "7546"
+        protocol: tcp
+    restart: unless-stopped
+  relay-ws:
+    command:
+      - start:ws
+    container_name: json-rpc-relay-ws
+    depends_on:
+      network-node:
+        condition: service_healthy
+        required: true
+      rest:
+        condition: service_started
+        required: true
+    environment:
+      CHAIN_ID: "0x12a"
+      DEFAULT_RATE_LIMIT: "200"
+      DEV_MODE: "false"
+      E2E_RELAY_HOST: http://127.0.0.1:7546
+      ETH_CALL_DEFAULT_TO_CONSENSUS_NODE: "false"
+      ETH_GET_LOGS_BLOCK_RANGE_LIMIT: "1000"
+      ETH_POPULATE_SYNTHETIC_CONTRACT_RESULTS: ""
+      FEE_HISTORY_MAX_RESULTS: "10"
+      HBAR_RATE_LIMIT_DURATION: "0"
+      HBAR_RATE_LIMIT_TINYBAR: "0"
+      HEALTHCHECK_PORT: "8547"
+      HEDERA_NETWORK: '{"network-node:50211":"0.0.3"}'
+      INPUT_SIZE_LIMIT: "1"
+      LIMIT_DURATION: "60000"
+      LOCAL_NODE: "true"
+      MIRROR_NODE_RETRIES: "3"
+      MIRROR_NODE_RETRY_DELAY: "250"
+      MIRROR_NODE_URL: http://mirror-node-rest:5551
+      OPERATOR_ID_MAIN: 0.0.2
+      OPERATOR_KEY_MAIN: 302e020100300506032b65700422042091132178e72057a1d7528025956fe39b0b847f200ab59b2fdd367017f3087137
+      RATE_LIMIT_DISABLED: "true"
+      REDIS_ENABLED: "false"
+      REDIS_URL: redis://127.0.0.1:6379
+      SERVER_PORT: "7546"
+      SUBSCRIPTIONS_ENABLED: "true"
+      TIER_1_RATE_LIMIT: "100"
+      TIER_2_RATE_LIMIT: "800"
+      TIER_3_RATE_LIMIT: "1600"
+      WS_CONNECTION_LIMIT: ""
+      WS_CONNECTION_LIMIT_PER_IP: ""
+      WS_MAX_INACTIVITY_TTL: ""
+      WS_MULTIPLE_ADDRESSES_ENABLED: ""
+      WS_SUBSCRIPTION_LIMIT: ""
+    image: ghcr.io/hashgraph/hedera-json-rpc-relay:0.66.0
+    mem_limit: "805306368"
+    memswap_limit: "805306368"
+    networks:
+      mirror-node: null
+      network-node-bridge: null
+    ports:
+      - mode: ingress
+        target: 8546
+        published: "8546"
+        protocol: tcp
+      - mode: ingress
+        target: 8547
+        published: "8547"
+        protocol: tcp
+    restart: unless-stopped
+  rest:
+    container_name: mirror-node-rest
+    depends_on:
+      db:
+        condition: service_started
+        required: true
+      importer:
+        condition: service_started
+        required: true
+    environment:
+      HEDERA_MIRROR_REST_DB_HOST: db
+    image: gcr.io/mirrornode/hedera-mirror-rest:0.126.0
+    mem_limit: "536870912"
+    memswap_limit: "536870912"
+    networks:
+      mirror-node: null
+    ports:
+      - mode: ingress
+        target: 5551
+        published: "5551"
+        protocol: tcp
+    restart: unless-stopped
+  rest-java:
+    container_name: mirror-node-rest-java
+    depends_on:
+      db:
+        condition: service_started
+        required: true
+      importer:
+        condition: service_started
+        required: true
+    environment:
+      HEDERA_MIRROR_RESTJAVA_DB_HOST: db
+      JAVA_TOOL_OPTIONS: ""
+      SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hedera-mirror-rest-java/
+    image: gcr.io/mirrornode/hedera-mirror-rest-java:0.126.0
+    mem_limit: "536870912"
+    memswap_limit: "536870912"
+    networks:
+      mirror-node: null
+    ports:
+      - mode: ingress
+        target: 8084
+        published: "8084"
+        protocol: tcp
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/application.yml
+        target: /usr/etc/hedera-mirror-rest-java/application.yml
+        bind:
+          create_host_path: true
+  web3:
+    container_name: mirror-node-web3
+    depends_on:
+      db:
+        condition: service_started
+        required: true
+      importer:
+        condition: service_started
+        required: true
+    environment:
+      HEDERA_MIRROR_WEB3_DB_HOST: db
+      HEDERA_MIRROR_WEB3_EVM_NETWORK: OTHER
+      JAVA_TOOL_OPTIONS: ""
+      SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hedera-mirror-web3/
+    image: gcr.io/mirrornode/hedera-mirror-web3:0.126.0
+    mem_limit: "1073741824"
+    memswap_limit: "1073741824"
+    networks:
+      mirror-node: null
+    ports:
+      - mode: ingress
+        target: 8545
+        published: "8545"
+        protocol: tcp
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - type: bind
+        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/mirror-node/application.yml
+        target: /usr/etc/hedera-mirror-web3/application.yml
+        bind:
+          create_host_path: true
+networks:
+  cloud-storage:
+    name: hedera-cloud-storage
+    driver: bridge
+  default:
+    name: hiero-local-node_default
+  mirror-node:
+    name: hedera-mirror-node
+    driver: bridge
+  network-node-bridge:
+    name: hedera-network-node
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.27.0.0/16
+          gateway: 172.27.0.254
+          ip_range: 172.27.0.0/24
+volumes:
+  grafana-data:
+    name: grafana-data
+  minio-data:
+    name: minio-data
+  mirror-node-postgres:
+    name: mirror-node-postgres
+  prometheus-data:
+    name: prometheus-data

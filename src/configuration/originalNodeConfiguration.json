@@ -9,7 +9,9 @@
     "fullNodeProperties": [
         {
           "accountId": "0.0.3",
-          "host": "network-node"
+          "host": "network-node",
+          "nodeId": 0
+
         }
     ],
     "turboNodeProperties": {
@@ -19,19 +21,23 @@
     "multiNodeProperties": [
         {
             "accountId": "0.0.3",
-            "host": "network-node"
+            "host": "network-node",
+            "nodeId": 0
         },
         {
             "accountId": "0.0.4",
-            "host": "network-node-1"
+            "host": "network-node-1",
+            "nodeId": 1
         },
         {
             "accountId": "0.0.5",
-            "host": "network-node-2"
+            "host": "network-node-2",
+            "nodeId": 2
         },
         {
             "accountId": "0.0.6",
-            "host": "network-node-3"
+            "host": "network-node-3",
+            "nodeId": 3
         }
     ],
     "local": {

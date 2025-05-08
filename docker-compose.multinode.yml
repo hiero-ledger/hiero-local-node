@@ -232,3 +232,18 @@ services:
   importer:
     volumes:
       - ./compose-network/mirror-node/addressBook.multinode.bin:/usr/etc/hedera-mirror-importer/local-dev-1-node.addressbook.f102.json.bin
+
+  monitor:
+    depends_on:
+      grpc:
+        condition: service_started
+      rest:
+        condition: service_started
+      network-node:
+        condition: service_healthy
+      network-node-1:
+        condition: service_healthy
+      network-node-2:
+        condition: service_healthy
+      network-node-3:
+        condition: service_healthy
