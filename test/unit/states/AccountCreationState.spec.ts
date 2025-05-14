@@ -132,7 +132,7 @@ describe('AccountCreationState', () => {
 
   describe('generate methods', () => {
     const expectedAccountId: AccountId = AccountId.fromString('0.0.1234');
-    expectedAccountId.evmAddress = EvmAddress.fromString('0x1234');
+    expectedAccountId.evmAddress = EvmAddress.fromString('0xa122cE029F2B0CafE6695954d59f28d7b7c3fDC5');
     const expectedBalance: Hbar = new Hbar(1000);
     const accountInfo: AccountInfo = {
       accountId: expectedAccountId,

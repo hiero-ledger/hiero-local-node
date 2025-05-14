@@ -100,7 +100,7 @@ describe(AccountUtils.name, () => {
   });
 
   describe('createAliasedAccount', () => {
-    const aliasedAccountId: AccountId = AccountId.fromEvmAddress(0, 0, '0x123456');
+    const aliasedAccountId: AccountId = AccountId.fromEvmAddress(0, 0, '0xa122cE029F2B0CafE6695954d59f28d7b7c3fDC5');
     const accountId: AccountId = AccountId.fromString('0.0.1234');
     const balance: number = 100;
 
