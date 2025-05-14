@@ -396,7 +396,7 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
     
   relay:
-    image: "${RELAY_IMAGE_PREFIX}hedera-json-rpc-relay:${RELAY_IMAGE_TAG}"
+    image: "${RELAY_IMAGE_PREFIX}hiero-json-rpc-relay:${RELAY_IMAGE_TAG}"
     container_name: json-rpc-relay
     mem_swappiness: 0
     mem_limit: "${RELAY_MEM_LIMIT}"
@@ -448,7 +448,7 @@ services:
     tty: false
 
   relay-ws:
-    image: "${RELAY_IMAGE_PREFIX}hedera-json-rpc-relay:${RELAY_IMAGE_TAG}"
+    image: "${RELAY_IMAGE_PREFIX}hiero-json-rpc-relay:${RELAY_IMAGE_TAG}"
     container_name: json-rpc-relay-ws
     mem_swappiness: 0
     mem_limit: "${RELAY_MEM_LIMIT}"

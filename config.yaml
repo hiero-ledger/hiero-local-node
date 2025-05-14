@@ -1280,7 +1280,7 @@ services:
       TIER_1_RATE_LIMIT: "100"
       TIER_2_RATE_LIMIT: "800"
       TIER_3_RATE_LIMIT: "1600"
-    image: ghcr.io/hashgraph/hedera-json-rpc-relay:0.67.0
+    image: ghcr.io/hiero-ledger/hiero-json-rpc-relay:0.67.0
     mem_limit: "805306368"
     memswap_limit: "805306368"
     networks:
@@ -1337,7 +1337,7 @@ services:
       WS_MAX_INACTIVITY_TTL: ""
       WS_MULTIPLE_ADDRESSES_ENABLED: ""
       WS_SUBSCRIPTION_LIMIT: ""
-    image: ghcr.io/hashgraph/hedera-json-rpc-relay:0.67.0
+    image: ghcr.io/hiero-ledger/hiero-json-rpc-relay:0.67.0
     mem_limit: "805306368"
     memswap_limit: "805306368"
     networks:
