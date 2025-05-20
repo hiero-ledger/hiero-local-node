@@ -18,7 +18,7 @@ Maintainers are assigned the following scopes in this repository:
 |---------------------- | ---------- | ---------- | ---- | ---------- | ----- | ------------------- |
 | Nana Essilfie-Conduah | Nana-EC    | Maintainer |      |            |       | Hashgraph           |
 | Georgi Lazarov        | georgi-l95 | Maintainer |      |            |       | LimeChain           |
-| Nikolay Atanasow      | natanasow  | Maintainer |      |            |       | Hashgraph           |
+| Nikolay Atanasow      | natanasow  | Maintainer |      |            |       | LimeChain           |
 
 
 ## Emeritus Maintainers
