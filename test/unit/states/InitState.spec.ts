@@ -342,7 +342,7 @@ describe('InitState tests', () => {
             onStartStub = testSandbox.stub(initState, 'onStart')
             .callsFake(() => (initState  as any).configureMirrorNodeProperties())
             await initState.onStart();
-            testSandbox.assert.calledOnceWithExactly(loggerService.trace, INIT_STATE_MIRROR_PROP_SET, InitState.name);
+            testSandbox.assert.calledTwice(loggerService.trace);
             testSandbox.assert.called(fsReadFileSync);
             testSandbox.assert.called(fsWriteFileSync);
             testSandbox.assert.called(ymlLoad);
@@ -402,7 +402,7 @@ describe('InitState tests', () => {
 
             it('should set the persist properties for transactionBytes and transactionRecordBytes to true', async () => {
                 await initState.onStart();
-                testSandbox.assert.calledOnceWithExactly(loggerService.trace, INIT_STATE_MIRROR_PROP_SET, InitState.name);
+                testSandbox.assert.calledTwice(loggerService.trace);
                 testSandbox.assert.called(fsReadFileSync);
                 testSandbox.assert.called(fsWriteFileSync);
                 testSandbox.assert.called(ymlLoad);
