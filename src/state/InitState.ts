@@ -37,6 +37,7 @@ import {
 } from '../constants';
 import os from 'os';
 import packageJson from '../../package.json';
+import { VerboseLevel } from '../types/VerboseLevel';
 
 configDotenv({ path: path.resolve(__dirname, '../../.env') });
 
@@ -378,11 +379,26 @@ ${divider}`;
                 return acc;
             }, [] as string[])
             .join('\n');
+
+        const configStatusDivider = `
+${divider}
+    Configuration Status
+${divider}`;
+
+        const configStatus = [
+            `    Node Configuration: ${this.cliOptions.multiNode ? 'Multi' : 'Single'} Node`,
+            `    Block Node: ${this.cliOptions.blockNode ? 'Enabled' : 'Disabled'}`,
+            `    Host: ${this.cliOptions.host}`,
+            `    Verbose Level: ${VerboseLevel[this.cliOptions.verbose]}`
+        ].join('\n');
         
         console.log(logo);
         console.log(versionInfo);   
         console.log(nodesVersionDivider);
         console.log(nodeVersions);
+        console.log(divider);
+        console.log(configStatusDivider);
+        console.log(configStatus);
         console.log(divider);
         console.log();
     }
