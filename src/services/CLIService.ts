@@ -280,7 +280,7 @@ export class CLIService implements IService{
             type: 'boolean',
             describe: 'Enable or disable block-node',
             demandOption: false,
-            default: false
+            default: true
         });
     }
 
