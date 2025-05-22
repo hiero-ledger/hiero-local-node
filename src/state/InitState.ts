@@ -41,6 +41,11 @@ import { VerboseLevel } from '../types/VerboseLevel';
 
 configDotenv({ path: path.resolve(__dirname, '../../.env') });
 
+interface PackageMeta {
+    version: string;
+}
+const LOCAL_NODE_VERSION: string = (packageJson as PackageMeta).version;
+
 /**
  * Represents the initialization state of the application.
  * This state is responsible for setting up the necessary environment variables,
@@ -344,7 +349,7 @@ export class InitState implements IState{
     ╚══════╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝╚══════╝   ╚═╝  ╚═══╝ ╚═════╝ ╚═════╝ ╚══════╝
     `;
 
-        const versionInfo = `    Local-Node Version: ${packageJson.version}`;
+        const versionInfo = `    Local-Node Version: ${LOCAL_NODE_VERSION}`;
         const divider = `    ─────────────────────────────────────────────`;
         const nodesVersionDivider = `
 ${divider}
@@ -380,7 +385,7 @@ ${divider}`;
                     acc.push(`    ${nodeName} Version: ${tag}`);
                 }
                 return acc;
-            }, [] as string[])
+            }, [] as Array<string>)
             .join('\n');
 
         const configStatusDivider = `
