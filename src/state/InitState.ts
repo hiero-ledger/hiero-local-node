@@ -369,6 +369,9 @@ ${divider}`;
                     case "BLOCK_NODE_IMAGE_TAG":
                         nodeName = "Block Node";
                         break;
+                    case "MIRROR_NODE_EXPLORER_IMAGE_TAG":
+                        nodeName = "Mirror Node Explorer";
+                        break;
                     default:
                         return acc;
                 }
