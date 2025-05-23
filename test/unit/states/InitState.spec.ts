@@ -134,7 +134,7 @@ describe('InitState tests', () => {
 
         // loggin messages
         testSandbox.assert.calledWithExactly(loggerService.trace, INIT_STATE_STARTING_MESSAGE, InitState.name);
-        testSandbox.assert.calledOnce(configurationData)
+        testSandbox.assert.calledTwice(configurationData)
         testSandbox.assert.calledWithExactly(loggerService.info, INIT_STATE_START_DOCKER_CHECK, InitState.name);
         testSandbox.assert.calledOnce(dockerService.isCorrectDockerComposeVersion);
         testSandbox.assert.calledOnce(dockerService.checkDocker);
@@ -154,7 +154,7 @@ describe('InitState tests', () => {
 
         // loggin messages
         testSandbox.assert.calledOnceWithExactly(loggerService.trace, INIT_STATE_STARTING_MESSAGE, InitState.name);
-        testSandbox.assert.calledOnce(configurationData)
+        testSandbox.assert.calledTwice(configurationData)
         testSandbox.assert.calledOnceWithExactly(loggerService.info, INIT_STATE_START_DOCKER_CHECK, InitState.name);
         testSandbox.assert.calledOnce(dockerService.isCorrectDockerComposeVersion);
         testSandbox.assert.calledOnce(dockerService.checkDocker);
@@ -238,7 +238,7 @@ describe('InitState tests', () => {
             onStartStub = testSandbox.stub(initState, 'onStart')
                 .callsFake(() => (initState  as any).prepareWorkDirectory())
             await initState.onStart();
-            testSandbox.assert.calledWithExactly(loggerService.info, `${CHECK_SUCCESS} Local Node Working directory set to testDir.`, InitState.name);
+            testSandbox.assert.calledWithExactly(loggerService.trace, `${CHECK_SUCCESS} Local Node Working directory set to testDir.`, InitState.name);
             testSandbox.assert.calledOnceWithExactly(createEphemeralDirectoriesStub, "testDir");
             testSandbox.assert.calledOnceWithExactly(copyPathsStub, configFiles);
 
@@ -259,7 +259,7 @@ describe('InitState tests', () => {
             testSandbox.assert.match(process.env.TEST_VAR_2, 'test');
             testSandbox.assert.called(loggerService.trace);
             testSandbox.assert.called(extractImageTagStub);
-            testSandbox.assert.calledWithExactly(loggerService.info, INIT_STATE_CONFIGURING_ENV_VARIABLES_FINISH, InitState.name);
+            testSandbox.assert.calledWithExactly(loggerService.trace, INIT_STATE_CONFIGURING_ENV_VARIABLES_FINISH, InitState.name);
             testSandbox.assert.calledWithExactly(loggerService.info, INIT_STATE_RELAY_LIMITS_DISABLED, InitState.name);
 
             configureEnvVariablesStub = testSandbox.stub(initState as any, 'configureEnvVariables')
@@ -319,7 +319,7 @@ describe('InitState tests', () => {
                     TEST_CONFIGURATION.nodeConfiguration.properties
                 ))
             await initState.onStart();
-            testSandbox.assert.calledWithExactly(loggerService.info, INIT_STATE_BOOTSTRAPPED_PROP_SET, InitState.name);
+            testSandbox.assert.calledWithExactly(loggerService.trace, INIT_STATE_BOOTSTRAPPED_PROP_SET, InitState.name);
             testSandbox.assert.called(fsWriteFileSync);
 
             configureNodePropertiesStub = testSandbox.stub(initState as any, 'configureNodeProperties')
@@ -342,7 +342,7 @@ describe('InitState tests', () => {
             onStartStub = testSandbox.stub(initState, 'onStart')
             .callsFake(() => (initState  as any).configureMirrorNodeProperties())
             await initState.onStart();
-            testSandbox.assert.calledOnceWithExactly(loggerService.info, INIT_STATE_MIRROR_PROP_SET, InitState.name);
+            testSandbox.assert.calledTwice(loggerService.trace);
             testSandbox.assert.called(fsReadFileSync);
             testSandbox.assert.called(fsWriteFileSync);
             testSandbox.assert.called(ymlLoad);
@@ -402,7 +402,7 @@ describe('InitState tests', () => {
 
             it('should set the persist properties for transactionBytes and transactionRecordBytes to true', async () => {
                 await initState.onStart();
-                testSandbox.assert.calledOnceWithExactly(loggerService.info, INIT_STATE_MIRROR_PROP_SET, InitState.name);
+                testSandbox.assert.calledTwice(loggerService.trace);
                 testSandbox.assert.called(fsReadFileSync);
                 testSandbox.assert.called(fsWriteFileSync);
                 testSandbox.assert.called(ymlLoad);

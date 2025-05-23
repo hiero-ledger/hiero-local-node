@@ -36,8 +36,15 @@ import {
     OPTIONAL_PORTS
 } from '../constants';
 import os from 'os';
+import packageJson from '../../package.json';
+import { VerboseLevel } from '../types/VerboseLevel';
 
 configDotenv({ path: path.resolve(__dirname, '../../.env') });
+
+interface PackageMeta {
+    version: string;
+}
+const LOCAL_NODE_VERSION: string = (packageJson as PackageMeta).version;
 
 /**
  * Represents the initialization state of the application.
@@ -95,6 +102,7 @@ export class InitState implements IState{
      * @returns {Promise<void>} A promise that resolves when the state has started.
      */
     public async onStart(): Promise<void> {
+        this.printLogoAndVersion();
         this.logger.trace(INIT_STATE_STARTING_MESSAGE, this.stateName);
         const configurationData = ConfigurationData.getInstance();
 
@@ -160,7 +168,7 @@ export class InitState implements IState{
      * @returns {void}
     */
     private prepareWorkDirectory() {
-        this.logger.info(`${CHECK_SUCCESS} Local Node Working directory set to ${this.cliOptions.workDir}.`, this.stateName);
+        this.logger.trace(`${CHECK_SUCCESS} Local Node Working directory set to ${this.cliOptions.workDir}.`, this.stateName);
         FileSystemUtils.createEphemeralDirectories(this.cliOptions.workDir);
         const configDirSource = join(__dirname, `../../${NETWORK_NODE_CONFIG_DIR_PATH}`);
         const configPathMirrorNodeSource = join(__dirname, `../../${APPLICATION_YML_RELATIVE_PATH}`);
@@ -201,7 +209,7 @@ export class InitState implements IState{
             process.env.RELAY_RATE_LIMIT_DISABLED = `${relayLimitsDisabled}`;
             this.logger.info(INIT_STATE_RELAY_LIMITS_DISABLED, this.stateName);
         }
-        this.logger.info(INIT_STATE_CONFIGURING_ENV_VARIABLES_FINISH, this.stateName);
+        this.logger.trace(INIT_STATE_CONFIGURING_ENV_VARIABLES_FINISH, this.stateName);
 
         // workaround for broken Java (21 to 23) on Apple Silicon M3/M4 chipsets under MacOS Sequoia when running inside docker
         // darwin release history can be found here https://en.wikipedia.org/wiki/Darwin_(operating_system)#Release_history
@@ -285,7 +293,7 @@ export class InitState implements IState{
 
             writeFileSync(propertiesFilePath, newProperties, { flag: 'w' });
 
-            this.logger.info(INIT_STATE_BOOTSTRAPPED_PROP_SET, this.stateName);
+            this.logger.trace(INIT_STATE_BOOTSTRAPPED_PROP_SET, this.stateName);
         }
     }
 
@@ -317,6 +325,89 @@ export class InitState implements IState{
         }
 
         writeFileSync(propertiesFilePath, yaml.dump(application, { lineWidth: 256 }));
-        this.logger.info(INIT_STATE_MIRROR_PROP_SET, this.stateName);
+        this.logger.trace(INIT_STATE_MIRROR_PROP_SET, this.stateName);
+    }
+
+    /**
+     * Prints the Hiero Local-Node logo and version information.
+     * @private
+     */
+    private printLogoAndVersion(): void {
+        const logo = `
+                         ██╗  ██╗██╗███████╗██████╗  ██████╗ 
+                         ██║  ██║██║██╔════╝██╔══██╗██╔═══██╗
+                         ███████║██║█████╗  ██████╔╝██║   ██║
+                         ██╔══██║██║██╔══╝  ██╔══██╗██║   ██║
+                         ██║  ██║██║███████╗██║  ██║╚██████╔╝
+                         ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝
+                                          
+    ██╗      ██████╗  ██████╗ █████╗ ██╗        ███╗   ██╗ ██████╗ ██████╗ ███████╗
+    ██║     ██╔═══██╗██╔════╝██╔══██╗██║        ████╗  ██║██╔═══██╗██╔══██╗██╔════╝
+    ██║     ██║   ██║██║     ███████║██║        ██╔██╗ ██║██║   ██║██║  ██║█████╗  
+    ██║     ██║   ██║██║     ██╔══██║██║        ██║╚██╗██║██║   ██║██║  ██║██╔══╝  
+    ███████╗╚██████╔╝╚██████╗██║  ██║███████╗   ██║ ╚████║╚██████╔╝██████╔╝███████╗
+    ╚══════╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝╚══════╝   ╚═╝  ╚═══╝ ╚═════╝ ╚═════╝ ╚══════╝
+    `;
+
+        const versionInfo = `    Local-Node Version: ${LOCAL_NODE_VERSION}`;
+        const divider = `    ─────────────────────────────────────────────`;
+        const nodesVersionDivider = `
+${divider}
+    Hiero Nodes Version
+${divider}`;
+
+        const configurationData = ConfigurationData.getInstance();
+        const nodeVersions = configurationData.imageTagConfiguration
+            .reduce((acc, variable) => {
+                const { tag, node } = this.extractImageTag(variable);
+                let nodeName = '';
+                switch (node) {
+                    case "NETWORK_NODE_IMAGE_TAG":
+                        nodeName = "Consensus Node";
+                        break;
+                    case "MIRROR_IMAGE_TAG":
+                        nodeName = "Mirror Node";
+                        break;
+                    case "RELAY_IMAGE_TAG":
+                        nodeName = "Relay";
+                        break;
+                    case "BLOCK_NODE_IMAGE_TAG":
+                        nodeName = "Block Node";
+                        break;
+                    case "MIRROR_NODE_EXPLORER_IMAGE_TAG":
+                        nodeName = "Mirror Node Explorer";
+                        break;
+                    default:
+                        return acc;
+                }
+                // Only add if we haven't seen this node type before
+                if (!acc.some(item => item.startsWith(nodeName))) {
+                    acc.push(`    ${nodeName} Version: ${tag}`);
+                }
+                return acc;
+            }, [] as Array<string>)
+            .join('\n');
+
+        const configStatusDivider = `
+${divider}
+    Configuration Status
+${divider}`;
+
+        const configStatus = [
+            `    Node Configuration: ${this.cliOptions.multiNode ? 'Multi' : 'Single'} Node`,
+            `    Block Node: ${this.cliOptions.blockNode ? 'Enabled' : 'Disabled'}`,
+            `    Host: ${this.cliOptions.host}`,
+            `    Verbose Level: ${VerboseLevel[this.cliOptions.verbose]}`
+        ].join('\n');
+        
+        console.log(logo);
+        console.log(versionInfo);   
+        console.log(nodesVersionDivider);
+        console.log(nodeVersions);
+        console.log(divider);
+        console.log(configStatusDivider);
+        console.log(configStatus);
+        console.log(divider);
+        console.log();
     }
 }

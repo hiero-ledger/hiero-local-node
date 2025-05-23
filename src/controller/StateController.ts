@@ -57,7 +57,7 @@ export class StateController implements IOBserver{
         this.currStateNum = 0;
         this.maxStateNum = 0;
         this.logger.trace(`${CHECK_SUCCESS} State Controller Initialized!`, this.controllerName);
-        this.logger.info(`${CHECK_SUCCESS} Starting ${stateName} procedure!`, this.controllerName);
+        this.logger.trace(`${CHECK_SUCCESS} Initiating ${stateName} procedure!`, this.controllerName);
     }
 
     /**
