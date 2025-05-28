@@ -381,6 +381,10 @@ export class DockerService implements IService{
 
       if (multiNode) {
           composeFiles.push('docker-compose.multinode.yml');
+          
+          if (blockNode) {
+            composeFiles.push('docker-compose.multinode.blocknode.yml');
+          }
       }
 
       if (!fullMode && multiNode) {

@@ -1,0 +1,16 @@
+services:
+  block-node-1:
+    image: "${BLOCK_NODE_IMAGE_PREFIX}hiero-block-node:${BLOCK_NODE_IMAGE_TAG}"
+    container_name: block-node-1
+    networks:
+      network-node-bridge:
+        ipv4_address: 172.27.0.6
+      mirror-node:
+    environment:
+      VERSION: ${BLOCK_NODE_IMAGE_TAG}
+      REGISTRY_PREFIX: ${BLOCK_NODE_REGISTRY_PREFIX}
+      BLOCKNODE_STORAGE_ROOT_PATH: ${BLOCK_NODE_STORAGE_ROOT_PATH}
+      JAVA_OPTS: ${BLOCK_NODE_JAVA_OPTS}
+      SERVER_PORT: 8083
+    ports:
+      - "8083:8083"

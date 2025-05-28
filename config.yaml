@@ -38,7 +38,7 @@ services:
     user: root
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/accountBalances/balance0.0.3
+        source: ./network-logs/node/accountBalances/balance0.0.3
         target: /balances
         bind:
           create_host_path: true
@@ -80,7 +80,7 @@ services:
     user: root
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/accountBalances/balance0.0.4
+        source: ./network-logs/node/accountBalances/balance0.0.4
         target: /balances
         bind:
           create_host_path: true
@@ -122,7 +122,7 @@ services:
     user: root
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/accountBalances/balance0.0.5
+        source: ./network-logs/node/accountBalances/balance0.0.5
         target: /balances
         bind:
           create_host_path: true
@@ -164,7 +164,7 @@ services:
     user: root
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/accountBalances/balance0.0.6
+        source: ./network-logs/node/accountBalances/balance0.0.6
         target: /balances
         bind:
           create_host_path: true
@@ -175,7 +175,7 @@ services:
       JAVA_OPTS: -Xms16G -Xmx16G
       REGISTRY_PREFIX: ""
       VERSION: 0.7.0
-    image: ghcr.io/hiero-ledger/hiero-block-node:0.9.0
+    image: ghcr.io/hiero-ledger/hiero-block-node:0.10.0
     networks:
       mirror-node: null
       network-node-bridge: null
@@ -258,7 +258,7 @@ services:
     tty: true
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/mirror-node/init.sh
+        source: ./compose-network/mirror-node/init.sh
         target: /docker-entrypoint-initdb.d/init.sh
         bind:
           create_host_path: true
@@ -277,7 +277,7 @@ services:
         protocol: tcp
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/envoy.yaml
+        source: ./envoy.yaml
         target: /etc/envoy/envoy.yaml
         bind:
           create_host_path: true
@@ -316,12 +316,12 @@ services:
     restart: unless-stopped
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/grafana/datasources
+        source: ./compose-network/grafana/datasources
         target: /etc/grafana/provisioning/datasources
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/grafana/dashboards
+        source: ./compose-network/grafana/dashboards
         target: /etc/grafana/provisioning/dashboards
         bind:
           create_host_path: true
@@ -355,7 +355,7 @@ services:
     restart: unless-stopped
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/mirror-node/application.yml
+        source: ./compose-network/mirror-node/application.yml
         target: /usr/etc/hedera-mirror-grpc/application.yml
         bind:
           create_host_path: true
@@ -363,7 +363,7 @@ services:
     command:
       - -d 16
     container_name: haveged
-    image: gcr.io/hedera-registry/network-node-haveged:0.62.2
+    image: gcr.io/hedera-registry/network-node-haveged:0.62.3
     network_mode: none
     privileged: true
     restart: always
@@ -389,12 +389,12 @@ services:
     restart: unless-stopped
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/mirror-node/application.yml
+        source: ./compose-network/mirror-node/application.yml
         target: /usr/etc/hedera-mirror-importer/application.yml
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/mirror-node/addressBook.multinode.bin
+        source: ./compose-network/mirror-node/addressBook.multinode.bin
         target: /usr/etc/hedera-mirror-importer/local-dev-1-node.addressbook.f102.json.bin
         bind:
           create_host_path: true
@@ -466,7 +466,7 @@ services:
     tty: true
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/mirror-node/application.yml
+        source: ./compose-network/mirror-node/application.yml
         target: /usr/etc/hedera-mirror-monitor/application.yml
         bind:
           create_host_path: true
@@ -496,7 +496,7 @@ services:
       interval: 30s
       retries: 10
       start_period: 10s
-    image: gcr.io/hedera-registry/consensus-node:0.62.2
+    image: gcr.io/hedera-registry/consensus-node:0.62.3
     mem_limit: "4294967296"
     memswap_limit: "4294967296"
     networks:
@@ -518,62 +518,62 @@ services:
     user: root
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/accountBalances
+        source: ./network-logs/node/accountBalances
         target: /opt/hgcapp/accountBalances
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams
+        source: ./network-logs/node/recordStreams
         target: /opt/hgcapp/recordStreams
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/data/config
+        source: ./compose-network/network-node/data/config
         target: /opt/hgcapp/services-hedera/HapiApp2.0/data/config
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/data/config
+        source: ./compose-network/network-node/data/config
         target: /opt/hgcapp/data/config
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/logs
+        source: ./network-logs/node/logs
         target: /opt/hgcapp/services-hedera/HapiApp2.0/output
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/data/keys
+        source: ./compose-network/network-node/data/keys
         target: /opt/hgcapp/services-hedera/HapiApp2.0/data/keys
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/stats
+        source: ./network-logs/node/stats
         target: /opt/hgcapp/services-hedera/HapiApp2.0/data/stats
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/config.multinode.txt
+        source: ./compose-network/network-node/config.multinode.txt
         target: /opt/hgcapp/services-hedera/HapiApp2.0/config.txt
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/settings.txt
+        source: ./compose-network/network-node/settings.txt
         target: /opt/hgcapp/services-hedera/HapiApp2.0/settings.txt
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/log4j2.xml
+        source: ./compose-network/network-node/log4j2.xml
         target: /opt/hgcapp/services-hedera/HapiApp2.0/log4j2.xml
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/hedera.crt
+        source: ./compose-network/network-node/hedera.crt
         target: /opt/hgcapp/services-hedera/HapiApp2.0/hedera.crt
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/hedera.key
+        source: ./compose-network/network-node/hedera.key
         target: /opt/hgcapp/services-hedera/HapiApp2.0/hedera.key
         bind:
           create_host_path: true
@@ -605,7 +605,7 @@ services:
       interval: 30s
       retries: 10
       start_period: 10s
-    image: gcr.io/hedera-registry/consensus-node:0.62.2
+    image: gcr.io/hedera-registry/consensus-node:0.62.3
     mem_limit: "4294967296"
     memswap_limit: "4294967296"
     networks:
@@ -623,57 +623,57 @@ services:
     user: root
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/accountBalances
+        source: ./network-logs/node/accountBalances
         target: /opt/hgcapp/accountBalances
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams
+        source: ./network-logs/node/recordStreams
         target: /opt/hgcapp/recordStreams
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/data/config
+        source: ./compose-network/network-node/data/config
         target: /opt/hgcapp/services-hedera/HapiApp2.0/data/config
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/logs
+        source: ./network-logs/node/logs
         target: /opt/hgcapp/services-hedera/HapiApp2.0/output
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/data/keys
+        source: ./compose-network/network-node/data/keys
         target: /opt/hgcapp/services-hedera/HapiApp2.0/data/keys
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/stats
+        source: ./network-logs/node/stats
         target: /opt/hgcapp/services-hedera/HapiApp2.0/data/stats
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/config.multinode.txt
+        source: ./compose-network/network-node/config.multinode.txt
         target: /opt/hgcapp/services-hedera/HapiApp2.0/config.txt
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/settings.txt
+        source: ./compose-network/network-node/settings.txt
         target: /opt/hgcapp/services-hedera/HapiApp2.0/settings.txt
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/log4j2.xml
+        source: ./compose-network/network-node/log4j2.xml
         target: /opt/hgcapp/services-hedera/HapiApp2.0/log4j2.xml
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/hedera.crt
+        source: ./compose-network/network-node/hedera.crt
         target: /opt/hgcapp/services-hedera/HapiApp2.0/hedera.crt
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/hedera.key
+        source: ./compose-network/network-node/hedera.key
         target: /opt/hgcapp/services-hedera/HapiApp2.0/hedera.key
         bind:
           create_host_path: true
@@ -705,7 +705,7 @@ services:
       interval: 30s
       retries: 10
       start_period: 10s
-    image: gcr.io/hedera-registry/consensus-node:0.62.2
+    image: gcr.io/hedera-registry/consensus-node:0.62.3
     mem_limit: "4294967296"
     memswap_limit: "4294967296"
     networks:
@@ -723,57 +723,57 @@ services:
     user: root
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/accountBalances
+        source: ./network-logs/node/accountBalances
         target: /opt/hgcapp/accountBalances
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams
+        source: ./network-logs/node/recordStreams
         target: /opt/hgcapp/recordStreams
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/data/config
+        source: ./compose-network/network-node/data/config
         target: /opt/hgcapp/services-hedera/HapiApp2.0/data/config
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/logs
+        source: ./network-logs/node/logs
         target: /opt/hgcapp/services-hedera/HapiApp2.0/output
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/data/keys
+        source: ./compose-network/network-node/data/keys
         target: /opt/hgcapp/services-hedera/HapiApp2.0/data/keys
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/stats
+        source: ./network-logs/node/stats
         target: /opt/hgcapp/services-hedera/HapiApp2.0/data/stats
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/config.multinode.txt
+        source: ./compose-network/network-node/config.multinode.txt
         target: /opt/hgcapp/services-hedera/HapiApp2.0/config.txt
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/settings.txt
+        source: ./compose-network/network-node/settings.txt
         target: /opt/hgcapp/services-hedera/HapiApp2.0/settings.txt
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/log4j2.xml
+        source: ./compose-network/network-node/log4j2.xml
         target: /opt/hgcapp/services-hedera/HapiApp2.0/log4j2.xml
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/hedera.crt
+        source: ./compose-network/network-node/hedera.crt
         target: /opt/hgcapp/services-hedera/HapiApp2.0/hedera.crt
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/hedera.key
+        source: ./compose-network/network-node/hedera.key
         target: /opt/hgcapp/services-hedera/HapiApp2.0/hedera.key
         bind:
           create_host_path: true
@@ -805,7 +805,7 @@ services:
       interval: 30s
       retries: 10
       start_period: 10s
-    image: gcr.io/hedera-registry/consensus-node:0.62.2
+    image: gcr.io/hedera-registry/consensus-node:0.62.3
     mem_limit: "4294967296"
     memswap_limit: "4294967296"
     networks:
@@ -823,57 +823,57 @@ services:
     user: root
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/accountBalances
+        source: ./network-logs/node/accountBalances
         target: /opt/hgcapp/accountBalances
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams
+        source: ./network-logs/node/recordStreams
         target: /opt/hgcapp/recordStreams
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/data/config
+        source: ./compose-network/network-node/data/config
         target: /opt/hgcapp/services-hedera/HapiApp2.0/data/config
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/logs
+        source: ./network-logs/node/logs
         target: /opt/hgcapp/services-hedera/HapiApp2.0/output
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/data/keys
+        source: ./compose-network/network-node/data/keys
         target: /opt/hgcapp/services-hedera/HapiApp2.0/data/keys
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/stats
+        source: ./network-logs/node/stats
         target: /opt/hgcapp/services-hedera/HapiApp2.0/data/stats
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/config.multinode.txt
+        source: ./compose-network/network-node/config.multinode.txt
         target: /opt/hgcapp/services-hedera/HapiApp2.0/config.txt
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/settings.txt
+        source: ./compose-network/network-node/settings.txt
         target: /opt/hgcapp/services-hedera/HapiApp2.0/settings.txt
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/log4j2.xml
+        source: ./compose-network/network-node/log4j2.xml
         target: /opt/hgcapp/services-hedera/HapiApp2.0/log4j2.xml
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/hedera.crt
+        source: ./compose-network/network-node/hedera.crt
         target: /opt/hgcapp/services-hedera/HapiApp2.0/hedera.crt
         bind:
           create_host_path: true
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/network-node/hedera.key
+        source: ./compose-network/network-node/hedera.key
         target: /opt/hgcapp/services-hedera/HapiApp2.0/hedera.key
         bind:
           create_host_path: true
@@ -898,7 +898,7 @@ services:
     restart: unless-stopped
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/prometheus/prometheus.yml
+        source: ./compose-network/prometheus/prometheus.yml
         target: /etc/prometheus/prometheus.yml
         bind:
           create_host_path: true
@@ -943,7 +943,7 @@ services:
     user: root
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams/record0.0.3/sidecar
+        source: ./network-logs/node/recordStreams/record0.0.3/sidecar
         target: /sidecar-files
         bind:
           create_host_path: true
@@ -984,7 +984,7 @@ services:
     user: root
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams/record0.0.4/sidecar
+        source: ./network-logs/node/recordStreams/record0.0.4/sidecar
         target: /sidecar-files
         bind:
           create_host_path: true
@@ -1025,7 +1025,7 @@ services:
     user: root
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams/record0.0.5/sidecar
+        source: ./network-logs/node/recordStreams/record0.0.5/sidecar
         target: /sidecar-files
         bind:
           create_host_path: true
@@ -1066,7 +1066,7 @@ services:
     user: root
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams/record0.0.6/sidecar
+        source: ./network-logs/node/recordStreams/record0.0.6/sidecar
         target: /sidecar-files
         bind:
           create_host_path: true
@@ -1108,7 +1108,7 @@ services:
     user: root
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams/record0.0.3
+        source: ./network-logs/node/recordStreams/record0.0.3
         target: /records
         bind:
           create_host_path: true
@@ -1150,7 +1150,7 @@ services:
     user: root
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams/record0.0.4
+        source: ./network-logs/node/recordStreams/record0.0.4
         target: /records
         bind:
           create_host_path: true
@@ -1192,7 +1192,7 @@ services:
     user: root
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams/record0.0.5
+        source: ./network-logs/node/recordStreams/record0.0.5
         target: /records
         bind:
           create_host_path: true
@@ -1234,7 +1234,7 @@ services:
     user: root
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/network-logs/node/recordStreams/record0.0.6
+        source: ./network-logs/node/recordStreams/record0.0.6
         target: /records
         bind:
           create_host_path: true
@@ -1402,7 +1402,7 @@ services:
     tty: true
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/application.yml
+        source: ./application.yml
         target: /usr/etc/hedera-mirror-rest-java/application.yml
         bind:
           create_host_path: true
@@ -1434,7 +1434,7 @@ services:
     tty: true
     volumes:
       - type: bind
-        source: /home/iliyasavov/Desktop/repos/hiero-local-node/compose-network/mirror-node/application.yml
+        source: ./compose-network/mirror-node/application.yml
         target: /usr/etc/hedera-mirror-web3/application.yml
         bind:
           create_host_path: true

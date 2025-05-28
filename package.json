@@ -7,6 +7,8 @@
     "build": "rimraf ./build && tsc",
     "start": "npm run build && node ./build/index.js start",
     "start:block-node": "npm run build && node ./build/index.js start --enable-block-node",
+    "start:multinode": "FIRING_UP_RETRY_ATTEMPTS=1000 npm run start -- --multinode",
+    "start:multinode:block-node": "FIRING_UP_RETRY_ATTEMPTS=1000 npm run start -- --multinode --enable-block-node",
     "restart": "npm run build && node ./build/index.js restart",
     "stop": "npm run build && node ./build/index.js stop",
     "generate-accounts": "npm run build && node ./build/index.js generate-accounts",
