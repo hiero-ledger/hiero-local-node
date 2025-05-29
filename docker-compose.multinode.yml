@@ -10,7 +10,7 @@ x-first-block-node-volumes: &first-block-node-volumes
   - "${APPLICATION_ROOT_PATH}/log4j2.xml:/opt/hgcapp/services-hedera/HapiApp2.0/log4j2.xml"
   - "${APPLICATION_ROOT_PATH}/hedera.crt:/opt/hgcapp/services-hedera/HapiApp2.0/hedera.crt"
   - "${APPLICATION_ROOT_PATH}/hedera.key:/opt/hgcapp/services-hedera/HapiApp2.0/hedera.key"
-  - "${APPLICATION_CONFIG_PATH}/block-nodes.json:/opt/hgcapp/data/config/block-nodes.json"
+  - "${APPLICATION_CONFIG_PATH}/CNtoBNConfig/2to1/CN1/block-nodes.json:/opt/hgcapp/data/config/block-nodes.json"
 
 x-second-block-node-volumes: &second-block-node-volumes
   - "${NETWORK_NODE_LOGS_ROOT_PATH}/accountBalances:/opt/hgcapp/accountBalances"
@@ -24,7 +24,7 @@ x-second-block-node-volumes: &second-block-node-volumes
   - "${APPLICATION_ROOT_PATH}/log4j2.xml:/opt/hgcapp/services-hedera/HapiApp2.0/log4j2.xml"
   - "${APPLICATION_ROOT_PATH}/hedera.crt:/opt/hgcapp/services-hedera/HapiApp2.0/hedera.crt"
   - "${APPLICATION_ROOT_PATH}/hedera.key:/opt/hgcapp/services-hedera/HapiApp2.0/hedera.key"
-  - "${APPLICATION_ROOT_PATH}/data/block-nodes.json:/opt/hgcapp/data/config/block-nodes.json"
+  - "${APPLICATION_CONFIG_PATH}/CNtoBNConfig/2to1/CN2/block-nodes.json:/opt/hgcapp/data/config/block-nodes.json"
 
 services:
   network-node:
