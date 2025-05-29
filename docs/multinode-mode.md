@@ -9,6 +9,8 @@ You can invoke it for such cases as:
 
 In this mode multiple instances of the Hedera network node are run on the same machine. A decentralized setup where each node runs on a separate machine is **not** supported by Local Node.  
 Generally speaking multinode mode is an advanced mode, that should be used only for specific use cases that require multiple consensus nodes. Due to its increased resource requirements and complexity it is not recommended for day to day use.
+
+For information about running multinode with block nodes, see [Multinode with Block Node Configuration](multinode-blocknode-overview.md).
 <br><br>
 
 # Requirements
