@@ -58,7 +58,7 @@ jobs:
         run: npm run start -- -d --verbose=trace
 
       - name: Run smoke test
-        uses: step-security/retry@c136d6df914bab311859a1127ecbf4e43159c4f8 # v3.0.2
+        uses: step-security/retry@10158114dec7dac8007cc8b9ceae139f2214806c # v3.0.3
         with:
           max_attempts: 3
           timeout_minutes: 3
