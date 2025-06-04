@@ -5,6 +5,9 @@ name: Publish Semantic Release
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   release:
     permissions:
