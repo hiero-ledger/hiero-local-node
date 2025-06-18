@@ -36,7 +36,7 @@ The following ports are setup to be accessed:
 | Mirror Node REST API Endpoint     | [http://localhost:5551](http://localhost:5551)   |
 | JSON RPC Relay Endpoint           | [http://localhost:7546](http://localhost:7546)   |
 | JSON RPC Relay Websocket Endpoint | [http://localhost:8546](http://localhost:8546)   |
-| Mirror Node Explorer (Hashscan)              | [http://localhost:8080/devnet/dashboard](http://localhost:8080/devnet/dashboard)|
+| Mirror Node Explorer              | [http://localhost:8090](http://localhost:8090)   |
 | Grafana UI                        | [http://localhost:3000](http://localhost:3000)   |
 | Prometheus UI                     | [http://localhost:9090](http://localhost:9090)   |
 
@@ -73,13 +73,9 @@ curl "http://localhost:7546" \
 See the [endpoint table](https://github.com/hashgraph/hedera-json-rpc-relay/blob/main/docs/rpc-api.md#endpoint-table)
 in `hedera-json-rpc-relay` for a full list of available RPCs.
 
-#### Mirror Node Explorer (Hashscan)
+#### Mirror Node Explorer
 
-Simply visit the URL in your browser.
-
-Ensure that `LOCALNET` is selected, as this will show you
-the Hedera network running within your Codespaces environment,
-and not one of the public nodes.
+Simply visit the URL in your browser (default: [http://localhost:8090](http://localhost:8090)).
 
 ## Referenced Documents  
 

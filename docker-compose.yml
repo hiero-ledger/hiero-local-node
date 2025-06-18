@@ -307,18 +307,6 @@ services:
     volumes:
       - ./application.yml:/usr/etc/hedera-mirror-rest-java/application.yml
 
-  explorer:
-    container_name: hedera-explorer
-    image: "${MIRROR_NODE_EXPLORER_IMAGE_PREFIX}hedera-mirror-node-explorer:${MIRROR_NODE_EXPLORER_IMAGE_TAG}"
-    restart: "unless-stopped"
-    ports:
-      - "8090:8080"
-    environment:
-      DOCKER_LOCAL_MIRROR_NODE_MENU_NAME: ${DOCKER_LOCAL_MIRROR_NODE_MENU_NAME}
-      DOCKER_LOCAL_MIRROR_NODE_URL: ${DOCKER_LOCAL_MIRROR_NODE_URL}
-    networks:
-      - mirror-node
-
   web3:
     image: "${MIRROR_IMAGE_PREFIX}hedera-mirror-web3:${MIRROR_WEB3_IMAGE_TAG:-${MIRROR_IMAGE_TAG}}"
     container_name: mirror-node-web3
@@ -372,6 +360,29 @@ services:
     volumes:
       - "${MIRROR_NODE_CONFIG_PATH}/compose-network/mirror-node/application.yml:/usr/etc/hedera-mirror-monitor/application.yml"
 
+  api-proxy:
+    image: nginx:1-alpine
+    container_name: mirror-node-api-proxy
+    restart: unless-stopped
+    ports:
+      - 8091:8080
+    networks:
+      - mirror-node
+    volumes:
+      - ./compose-network/api-proxy/default.conf:/etc/nginx/conf.d/default.conf
+      
+  explorer:
+    container_name: mirror-node-explorer
+    image: "${MIRROR_NODE_EXPLORER_IMAGE_PREFIX}hiero-explorer:${MIRROR_NODE_EXPLORER_IMAGE_TAG}"
+    restart: "unless-stopped"
+    ports:
+      - "8090:8080"
+    networks:
+      - mirror-node
+    volumes:
+      - ./compose-network/mirror-node-explorer/networks-config.json:/app/networks-config.json
+      - ./compose-network/mirror-node-explorer/core-config.json:/app/core-config.json
+  
   block-node:
     image: "${BLOCK_NODE_IMAGE_PREFIX}hiero-block-node:${BLOCK_NODE_IMAGE_TAG}"
     container_name: block-node

@@ -282,11 +282,8 @@ services:
         bind:
           create_host_path: true
   explorer:
-    container_name: hedera-explorer
-    environment:
-      DOCKER_LOCAL_MIRROR_NODE_MENU_NAME: LOCALNET
-      DOCKER_LOCAL_MIRROR_NODE_URL: http://127.0.0.1:5551/
-    image: gcr.io/hedera-registry/hedera-mirror-node-explorer:24.4.0
+    container_name: mirror-node-explorer
+    image: ghcr.io/hiero-ledger/hiero-mirror-node-explorer/hiero-explorer:25.0.0
     networks:
       mirror-node: null
     ports:
@@ -1436,6 +1433,18 @@ services:
       - type: bind
         source: ./compose-network/mirror-node/application.yml
         target: /usr/etc/hedera-mirror-web3/application.yml
+        bind:
+          create_host_path: true
+  api-proxy:
+    image: nginx:1-alpine
+    container_name: mirror-node-api-proxy
+    restart: unless-stopped
+    ports:
+      - 8091:8080
+    volumes:
+      - type: bind
+        source: ./compose-network/api-proxy/default.conf
+        target: /etc/nginx/conf.d/default.conf
         bind:
           create_host_path: true
 networks:

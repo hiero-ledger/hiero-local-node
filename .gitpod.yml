@@ -9,18 +9,22 @@ tasks:
     command: hedera start -d
 
 ports:
-  - name: Consensus Node Endpoint
+  - name: Consensus Node
     port: 50211
-  - name: Mirror Node GRPC Endpoint
+  - name: Mirror Node GRPC
     port: 5600
-  - name: Mirror Node REST API Endpoint
+  - name: Mirror Node REST API
     port: 5551
-  - name: JSON RPC Relay Endpoint
+  - name: Mirror Node API Proxy
+    port: 8091
+  - name: JSON RPC Relay
     port: 7546
-  - name: JSON RPC Relay Websocket Endpoint
+  - name: JSON RPC Relay Websocket
     port: 8546
-  - name: Mirror Node Explorer
+  - name: Block Node
     port: 8080
+  - name: Mirror Node Explorer
+    port: 8090
   - name: Grafana UI
     port: 3000
   - name: Prometheus UI

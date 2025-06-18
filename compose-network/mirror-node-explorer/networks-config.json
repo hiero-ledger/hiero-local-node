@@ -1,0 +1,25 @@
+[
+  {
+    "name": "localnet",
+    "displayName": "LOCALNET",
+    "url": "http://localhost:8091",
+    "ledgerID": "FF",
+    "baseRealm": 0,
+    "baseShard": 0,
+    "enableWallet": true,
+    "enableStaking": true,
+    "enableExpiry": false,
+    "enableMarket": false,
+    "popularTokenIndexURL": null,
+    "erc20IndexURL": null,
+    "erc721IndexURL": null,
+    "erc1155IndexURL": null,
+    "publicLabelsURL": null,
+    "sourcifySetup": {
+      "activate": false,
+      "repoURL": "https://repository.local/contracts/",
+      "serverURL": "https://localhost/server/",
+      "chainID": 298
+    }
+  }
+]

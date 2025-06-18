@@ -6,5 +6,5 @@
     "memory": "8gb"
   },
   "postStartCommand": "npm install &&  npm run build &&  sudo npm install -g && hedera start -d",
-  "forwardPorts": [ 50211, 5600, 5551, 7546, 8546, 8080, 3000, 9090 ]
+  "forwardPorts": [ 50211, 5600, 5551, 7546, 8546, 8080, 8090, 8091, 3000, 9090 ]
 }
