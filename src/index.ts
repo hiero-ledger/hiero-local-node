@@ -68,3 +68,10 @@ yargs(hideBin(process.argv))
         Disk Image Size: 64 GB`
   )
   .parse();
+
+process.on('SIGINT', async () => {
+  console.log('\nCaught interrupt signal. Shutting down gracefully...\n');
+  await new StateController("stop").startStateMachine();
+  process.exit(0);
+});
+
