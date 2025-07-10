@@ -4,7 +4,7 @@
 [![Environment Variables](https://img.shields.io/badge/env-docs-green.svg)](docs/environment-variables.md)
 [![Made With](https://img.shields.io/badge/made_with-typescript-blue)](https://github.com/hashgraph/hederajson-rpc-relay/)
 [![License](https://img.shields.io/badge/license-apache2-blue.svg)](LICENSE)
-[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/hiero-ledger/hiero-local-node/badge)](https://api.scorecard.dev/projects/github.com/hiero-ledger/hiero-local-node)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/hiero-ledger/hiero-local-node/badge)](https://scorecard.dev/viewer/?uri=github.com/hiero-ledger/hiero-local-node)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/10697/badge)](https://bestpractices.coreinfrastructure.org/projects/10697)
 
 
