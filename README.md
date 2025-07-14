@@ -35,12 +35,11 @@ The Hiero Local Node project allows developers to set up their own Hiero based l
   - Docker Compose version check: `docker compose version`
 - Minimum 16GB RAM
 
-### Note:
-
-- Ensure the **VirtioFS** file sharing implementation is enabled in the docker settings
+> [!NOTE]
+> Ensure the **VirtioFS** file sharing implementation is enabled in the docker settings
 
 **Note**: The image may look different if you are on a different version
-![docker-compose-settings.png](https://raw.githubusercontent.com/hashgraph/hedera-local-node/refs/heads/main/.github/docker-compose-settings.png)
+![docker-compose-settings.png](https://raw.githubusercontent.com/hiero-ledger/hiero-local-node/refs/heads/main/.github/docker-compose-settings.png)
 
 - Ensure the following configurations are set at minimum in Docker **Settings -> Resources** and are available for use.
   - **CPUs:** 6
@@ -49,25 +48,25 @@ The Hiero Local Node project allows developers to set up their own Hiero based l
   - **Disk Image Size:** 64 GB
 
 **Note**: The image may look different if you are on a different version
-![settings.png](https://raw.githubusercontent.com/hashgraph/hedera-local-node/refs/heads/main/.github/settings.png)
+![settings.png](https://raw.githubusercontent.com/hiero-ledger/hiero-local-node/refs/heads/main/.github/settings.png)
 
 - Ensure the hiero-local-node folder is added to Docker File Sharing **Settings -> Resources -> File Sharing**.
   - If you're using hiero-local as npm package - running 'npm root -g' should output the path you have to add under File Sharing Docker's Setting.
   - If you're using hiero-local as cloned repo - running 'pwd' in the project's root should output the path you have to add under File Sharing Docker's Setting.
 
 **Note**: The image may look different if you are on a different version
-![docker-file-sharing-settings.png](https://raw.githubusercontent.com/hashgraph/hedera-local-node/refs/heads/main/.github/docker-file-sharing-settings.png)
+![docker-file-sharing-settings.png](https://raw.githubusercontent.com/hiero-ledger/hiero-local-node/refs/heads/main/.github/docker-file-sharing-settings.png)
 
 - Ensure the *Allow the default Docker sockets to be used (requires password)* is enabled in Docker **Settings -> Advanced**.
 
 **Note**: The image may look different if you are on a different version
-![docker-socket-setting.png](https://raw.githubusercontent.com/hashgraph/hedera-local-node/refs/heads/main/.github/docker-socket-settings.png)
+![docker-socket-setting.png](https://raw.githubusercontent.com/hiero-ledger/hiero-local-node/refs/heads/main/.github/docker-socket-settings.png)
 
 # CLI Tool - @hashgraph/hedera-local
 
-> [!NOTE]  
-> As already mentioned the project has been transfered from the https://github.com/hashgraph org and therefore the namespace is still based on `hashgraph` and `hedera`.
-> We are working activly on migration the namespace fully to hiero and publish the CLI tool under the hiero namespace to NPMJS.
+> [!NOTE]
+> As already mentioned the project has been transferred from the <https://github.com/hashgraph> org and therefore the namespace is still based on `hashgraph` and `hedera`.
+> We are working actively on migration the namespace fully to hiero and publish the CLI tool under the hiero namespace to NPMJS.
 
 ## What
 
@@ -76,7 +75,7 @@ Network.
 
 ## Installation
 
-#### Official NPM Release
+### Official NPM Release
 
 The command below can be used to install the official release from the NPM repository. This version may not reflect
 the most recent changes to the `main` branch of this repository.
@@ -84,18 +83,18 @@ the most recent changes to the `main` branch of this repository.
 This version uses a baked in version of the Docker Compose definitions and will not reflect any local changes made to
 the repository.
 
-```bash
+```shell
 npm install @hashgraph/hedera-local -g
 ```
 
-#### Local Development Installation
+### Local Development Installation
 
 The command below can be used to install the `hedera-local` module as a symlink against your locally checked out copy of
 this repository.
 
 This is the recommended method for testing against the latest changes or a point in time version from a branch/tag.
 
-```bash
+```shell
 npm install && npm install -g
 ```
 
@@ -107,12 +106,12 @@ npm install && npm install -g
 `npm run generate-accounts` to generate new account for already started network
 
 > **_NOTE:_**  If you want to use any of the CLI options listed below, you'd need to pass `--` after `npm run start` (for example) and then specify the wanted option.
-
+>
 > **_WARNING:_** While stopping the networks, we will first list all Docker networks with the `hedera-` prefix in their names. This operation may affect not only the networks initiated by the `npm run start` command from this repository but also any other networks you have created with this prefix. Network termination can be triggered both by a direct `npm run stop` call and by the `npm run start` script if the initial startup process fails and failover recovery is activated. One of the recovery steps includes attempting to close all previously started networks with the `hedera-` prefix.
 
 ## Using hedera-local
 
-```
+```shell
 $ hedera
 
 Local Hedera Package - Runs consensus and mirror nodes on localhost:
@@ -147,15 +146,15 @@ Available commands:
             --async to enable or disable asynchronous creation of accounts.
 ```
 
-Note: Generated accounts are 3 types (ECDSA, Alias ECDSA and ED25519). All of them are usable via HederaSDK. Only Alias ECDSA accounts can be imported into wallet like Metamask or used in ethers.
+Note: Generated accounts are 3 types (ECDSA, Alias ECDSA and ED25519). All of them are usable via HederaSDK. Only **Alias ECDSA accounts** can be imported into wallet like Metamask or used in ethers.
 
-Note: Read more about `developer mode` [here](https://github.com/hashgraph/hedera-json-rpc-relay/blob/main/docs/dev-mode.md)
+Note: Read more about [dev mode](https://github.com/hiero-ledger/hiero-json-rpc-relay/blob/main/docs/dev-mode.md).
 
 ### Commands
 
 #### `hedera start <options>`
 
-```bash
+```shell
 $ hedera start
 [Hedera-Local-Node] INFO (StateController) Starting start procedure!
 [Hedera-Local-Node] INFO (InitState) Making sure that Docker is started and it's correct version...
@@ -230,7 +229,7 @@ $ hedera start
 
 - --h / --host - Override the default host.
 
-```bash
+```shell
 $ hedera start --accounts=2
 [Hedera-Local-Node] INFO (StateController) Starting start procedure!
 [Hedera-Local-Node] INFO (InitState) Making sure that Docker is started and it's correct version...
@@ -279,7 +278,7 @@ $ hedera start --accounts=2
 
 #### `hedera stop`
 
-```bash
+```shell
 $ hedera stop
 [Hedera-Local-Node] INFO (StateController) Starting stop procedure!
 [Hedera-Local-Node] INFO (StopState) Initiating stop procedure. Trying to stop docker containers and clean up volumes...
@@ -293,7 +292,7 @@ No available options
 
 #### `hedera restart <options>`
 
-```bash
+```shell
 $ hedera restart
 [Hedera-Local-Node] INFO (StateController) Starting restart procedure!
 [Hedera-Local-Node] INFO (StopState) Initiating stop procedure. Trying to stop docker containers and clean up volumes...
@@ -370,7 +369,7 @@ $ hedera restart
 
 - --h / --host - Override the default host.
 
-```bash
+```shell
 $ hedera restart --accounts=2
 [Hedera-Local-Node] INFO (StateController) Starting restart procedure!
 [Hedera-Local-Node] INFO (StopState) Initiating stop procedure. Trying to stop docker containers and clean up volumes...
@@ -422,7 +421,7 @@ $ hedera restart --accounts=2
 
 #### `hedera generate-accounts <num>`
 
-```bash
+```shell
 $ hedera generate-accounts 2
 [Hedera-Local-Node] INFO (AccountCreationState) |------------------------------------------------------------------------------------------|
 [Hedera-Local-Node] INFO (AccountCreationState) |------------------------------| Accounts list (ECDSA keys) |------------------------------|
@@ -453,7 +452,7 @@ $ hedera generate-accounts 2
 
 #### You can use it in a hardhat project by adding the following config:
 
-```bash
+```shell
 defaultNetwork: 'local',
   networks: {
     local: {
@@ -480,23 +479,23 @@ defaultNetwork: 'local',
 
 ## Start Your Local Network
 
-1. Clone the `hedera-local-node` repo
+1. Clone the `hiero-local-node` repo
 
-```bash
-git clone https://github.com/hashgraph/hedera-local-node.git
-```
+   ```shell
+   git clone https://github.com/hiero-ledger/hiero-local-node.git
+   ```
 
-2. CD to the hedera-local-node directory
+2. Enter the hiero-local-node directory
 
-```bash
-    cd hedera-local-node
-```
+   ```shell
+   cd hiero-local-node
+   ```
 
-For Windows users: You will need to update the file endings of `compose-network/mirror-node/init.sh` by running this in WSL:
+   For Windows users: You will need to update the file endings of `compose-network/mirror-node/init.sh` by running this in WSL:
 
-```bash
-    dos2unix compose-network/mirror-node/init.sh
-```
+   ```shell
+   dos2unix compose-network/mirror-node/init.sh
+   ```
 
 3. Run `docker compose up -d` from the terminal to get the network up and running
 4. Set-up your local network client by following this [tutorial](https://docs.hedera.com/guides/docs/sdks/set-up-your-local-network)
@@ -510,11 +509,9 @@ For Windows users: You will need to update the file endings of `compose-network/
 These are the local network variables to interact with the consensus and mirror node.
 
 - Consensus Node Endpoint
-
   - `127.0.0.1:50211`
   - The IP address and port of the local consensus node.
     > **_NOTE:_** To connect to the local consensus node from a browser you will have to use the Envoy proxy at `http://127.0.0.1:50213`.
-
 - Consensus Node Account ID
   - `0.0.3`
   - The node account ID to submit transactions and queries to
@@ -562,7 +559,7 @@ The following environment variables can be changed in the `.env` file for variou
    - MIRROR_WEB3_MEM_LIMIT - memory limit for mirror node web3
 4. To change `application.properties`, `api-permission.properties` or `bootstrap.properties` properties, update the `APPLICATION_CONFIG_PATH` to the location of updated config folder in `.env` file
 
-**IMPORTANT :** Ensure to do `docker compose down -v; git clean -xfd; git reset --hard` and then `docker compose up -d` for the new changes to take any effect.
+**IMPORTANT:** Ensure to do `docker compose down -v; git clean -xfd; git reset --hard` and then `docker compose up -d` for the new changes to take any effect.
 
 &#10008; The keys under `network-node` (`hedera.key`, `hedera.crt` and the `keys` folder) are only intended to be used for testing with this docker based local network. These keys should not be used with any other networks.
 
@@ -570,11 +567,12 @@ The following environment variables can be changed in the `.env` file for variou
 
 | Type                              | Endpoint                                         |
 | --------------------------------- | ------------------------------------------------ |
-| Consensus Node Endpoint           | [http://localhost:50211](http://localhost:50211) |
-| Mirror Node GRPC Endpoint         | [http://localhost:5600](http://localhost:5600)   |
-| Mirror Node REST API Endpoint     | [http://localhost:5551](http://localhost:5551)   |
-| JSON RPC Relay Endpoint           | [http://localhost:7546](http://localhost:7546)   |
-| JSON RPC Relay Websocket Endpoint | [http://localhost:8546](http://localhost:8546)   |
+| Consensus Node                    | [http://localhost:50211](http://localhost:50211) |
+| Mirror Node GRPC                  | [http://localhost:5600](http://localhost:5600)   |
+| Mirror Node REST API              | [http://localhost:5551](http://localhost:5551)   |
+| Mirror Node API Proxy             | [http://localhost:8091](http://localhost:8091)   |
+| JSON RPC Relay                    | [http://localhost:7546](http://localhost:7546)   |
+| JSON RPC Relay Websocket          | [http://localhost:8546](http://localhost:8546)   |
 | Mirror Node Explorer              | [http://localhost:8090](http://localhost:8090)   |
 | Block Node                        | [http://localhost:8080](http://localhost:8080)   |
 | Grafana UI                        | [http://localhost:3000](http://localhost:3000)   |
@@ -606,26 +604,31 @@ Placing dashboards under a subfolder will result in a new folder in the Grafana 
 
 # FAQ
 
-- Can I run the local node on a Windows machine?
-- Yes but you will need WSL v2 to be installed.
+## Can I run the local node on a Windows machine?
 
+Yes but you will need WSL v2 to be installed.
 
-- Can I run the local node on MacOS with an Intel CPU?
-- Yes but make sure that the minimum system requirements are met.
+## Can I run the local node on MacOS with an Intel CPU?
 
+Yes but make sure that the minimum system requirements are met.
 
-- Can I stop the local node, save its state then start it again after a while?
-- No, currently the local node doesn't support network freezing. Once you stop it, the next start will be with a genesis state and all of your accounts/contracts/tokens will be wiped.
+## Can I stop the local node, save its state then start it again after a while?
 
+You can stop and restart the containers and the state will be preserved.
 
-- What should I do if this error appears on Windows?
-```
+However, the local node does not support saving the network state for later use. Therefore, if you destroy the containers (using `docker-compose down` or `hedera stop`), all your accounts, contracts and tokens will be deleted. The next time you start the local node, it will start from the genesis state, plus any accounts created at startup if you are using the `hedera start` script.
+
+## What should I do if this error appears on Windows?
+
+```shell
 Postgres error:
 /usr/local/bin/docker-entrypoint.sh: /docker-entrypoint-initdb.d/init.sh: /bin/bash: bad interpreter: No such file or directory
 Solution:
 ```
-- You have to set a global git config then clone the local node repository again.
-```
+
+You have to set a global git config then clone the local node repository again.
+
+```shell
 git config --global core.autocrlf input
 Delete your local repository.
 Clone it again.
@@ -633,7 +636,7 @@ Clone it again.
 
 ## Contributing
 
-Whether you’re fixing bugs, enhancing features, or improving documentation, your contributions are important — let’s build something great together!
+Whether you're fixing bugs, enhancing features, or improving documentation, your contributions are important — let's build something great together!
 
 Please read our [contributing guide](https://github.com/hiero-ledger/.github/blob/main/CONTRIBUTING.md) to see how you can get involved.
 
