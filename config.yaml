@@ -342,7 +342,7 @@ services:
       HEDERA_MIRROR_GRPC_DB_HOST: db
       JAVA_TOOL_OPTIONS: ""
       SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hedera-mirror-grpc/
-    image: gcr.io/mirrornode/hedera-mirror-grpc:0.129.0
+    image: gcr.io/mirrornode/hedera-mirror-grpc:0.133.1
     mem_limit: "536870912"
     memswap_limit: "536870912"
     networks:
@@ -363,7 +363,7 @@ services:
     command:
       - -d 16
     container_name: haveged
-    image: gcr.io/hedera-registry/network-node-haveged:0.62.3
+    image: gcr.io/hedera-registry/network-node-haveged:0.64.0
     network_mode: none
     privileged: true
     restart: always
@@ -380,7 +380,7 @@ services:
       HEDERA_MIRROR_IMPORTER_DB_HOST: db
       JAVA_TOOL_OPTIONS: ""
       SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hedera-mirror-importer/
-    image: gcr.io/mirrornode/hedera-mirror-importer:0.129.0
+    image: gcr.io/mirrornode/hedera-mirror-importer:0.133.1
     mem_limit: "805306368"
     memswap_limit: "805306368"
     networks:
@@ -451,7 +451,7 @@ services:
     environment:
       JAVA_TOOL_OPTIONS: ""
       SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hedera-mirror-monitor/
-    image: gcr.io/mirrornode/hedera-mirror-monitor:0.129.0
+    image: gcr.io/mirrornode/hedera-mirror-monitor:0.133.1
     mem_limit: "536870912"
     memswap_limit: "536870912"
     networks:
@@ -496,7 +496,7 @@ services:
       interval: 30s
       retries: 10
       start_period: 10s
-    image: gcr.io/hedera-registry/consensus-node:0.62.3
+    image: gcr.io/hedera-registry/consensus-node:0.64.0
     mem_limit: "4294967296"
     memswap_limit: "4294967296"
     networks:
@@ -605,7 +605,7 @@ services:
       interval: 30s
       retries: 10
       start_period: 10s
-    image: gcr.io/hedera-registry/consensus-node:0.62.3
+    image: gcr.io/hedera-registry/consensus-node:0.64.0
     mem_limit: "4294967296"
     memswap_limit: "4294967296"
     networks:
@@ -705,7 +705,7 @@ services:
       interval: 30s
       retries: 10
       start_period: 10s
-    image: gcr.io/hedera-registry/consensus-node:0.62.3
+    image: gcr.io/hedera-registry/consensus-node:0.64.0
     mem_limit: "4294967296"
     memswap_limit: "4294967296"
     networks:
@@ -805,7 +805,7 @@ services:
       interval: 30s
       retries: 10
       start_period: 10s
-    image: gcr.io/hedera-registry/consensus-node:0.62.3
+    image: gcr.io/hedera-registry/consensus-node:0.64.0
     mem_limit: "4294967296"
     memswap_limit: "4294967296"
     networks:
@@ -1280,7 +1280,7 @@ services:
       TIER_1_RATE_LIMIT: "100"
       TIER_2_RATE_LIMIT: "800"
       TIER_3_RATE_LIMIT: "1600"
-    image: ghcr.io/hiero-ledger/hiero-json-rpc-relay:0.67.0
+    image: ghcr.io/hiero-ledger/hiero-json-rpc-relay:0.69.3
     mem_limit: "805306368"
     memswap_limit: "805306368"
     networks:
@@ -1337,7 +1337,7 @@ services:
       WS_MAX_INACTIVITY_TTL: ""
       WS_MULTIPLE_ADDRESSES_ENABLED: ""
       WS_SUBSCRIPTION_LIMIT: ""
-    image: ghcr.io/hiero-ledger/hiero-json-rpc-relay:0.67.0
+    image: ghcr.io/hiero-ledger/hiero-json-rpc-relay:0.69.3
     mem_limit: "805306368"
     memswap_limit: "805306368"
     networks:
@@ -1364,7 +1364,7 @@ services:
         required: true
     environment:
       HEDERA_MIRROR_REST_DB_HOST: db
-    image: gcr.io/mirrornode/hedera-mirror-rest:0.129.0
+    image: gcr.io/mirrornode/hedera-mirror-rest:0.133.1
     mem_limit: "536870912"
     memswap_limit: "536870912"
     networks:
@@ -1388,7 +1388,7 @@ services:
       HEDERA_MIRROR_RESTJAVA_DB_HOST: db
       JAVA_TOOL_OPTIONS: ""
       SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hedera-mirror-rest-java/
-    image: gcr.io/mirrornode/hedera-mirror-rest-java:0.129.0
+    image: gcr.io/mirrornode/hedera-mirror-rest-java:0.133.1
     mem_limit: "536870912"
     memswap_limit: "536870912"
     networks:
@@ -1420,7 +1420,7 @@ services:
       HEDERA_MIRROR_WEB3_EVM_NETWORK: OTHER
       JAVA_TOOL_OPTIONS: ""
       SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hedera-mirror-web3/
-    image: gcr.io/mirrornode/hedera-mirror-web3:0.129.0
+    image: gcr.io/mirrornode/hedera-mirror-web3:0.133.1
     mem_limit: "1073741824"
     memswap_limit: "1073741824"
     networks:
