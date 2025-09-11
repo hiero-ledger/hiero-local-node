@@ -110,14 +110,14 @@ jobs:
       - name: Run the local node
         env:
           FIRING_UP_RETRY_ATTEMPTS: 10000
-        uses: step-security/retry@10158114dec7dac8007cc8b9ceae139f2214806c # v3.0.3
+        uses: step-security/retry@e1d59ce1f574b32f0915e3a8df055cfe9f99be5d # v3.0.4
         with:
           max_attempts: 5
           timeout_minutes: 60
           command: npm run restart -- --workdir /Users/runner/work/hedera-local-node/hedera-local-node
 
       - name: Run smoke test
-        uses: step-security/retry@10158114dec7dac8007cc8b9ceae139f2214806c # v3.0.3
+        uses: step-security/retry@e1d59ce1f574b32f0915e3a8df055cfe9f99be5d # v3.0.4
         with:
           max_attempts: 5
           timeout_minutes: 5
