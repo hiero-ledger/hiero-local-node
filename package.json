@@ -76,7 +76,7 @@
     "semver": "^7.7.1",
     "shelljs": "^0.8.5",
     "ts-mocha": "^11.1.0",
-    "yargs": "^17.7.2"
+    "yargs": "^18.0.0"
   },
   "nyc": {
     "check-coverage": false,
