@@ -61,7 +61,7 @@
     "nyc": "^17.0.0",
     "prettier": "^3.3.2",
     "semantic-release": "^24.2.3",
-    "sinon": "^19.0.2",
+    "sinon": "^21.0.0",
     "typescript": "^5.5.4"
   },
   "dependencies": {
