@@ -12,7 +12,7 @@
   "license": "ISC",
   "devDependencies": {
     "@hashgraph/sdk": "2.66.0",
-    "cypress": "^14.4.1",
+    "cypress": "^15.4.0",
     "cypress-wait-until": "^3.0.2",
     "html-webpack-plugin": "^5.6.3",
     "http-server": "^14.1.1",
