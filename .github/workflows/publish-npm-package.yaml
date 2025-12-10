@@ -60,7 +60,7 @@ jobs:
           
           echo "::group::Set Artifact Name"
           VERSION=$(jq -r '.version' './package.json')
-          PKG_NAME="hashgraph-local-node-${VERSION}.tgz"
+          PKG_NAME="hashgraph-hedera-local-${VERSION}.tgz"
           echo "artifact=${PKG_NAME}" >> $GITHUB_OUTPUT
           echo "::endgroup::"
 
