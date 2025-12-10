@@ -23,7 +23,7 @@ jobs:
   create-npm-package:
     runs-on: hiero-local-node-linux-medium
     outputs:
-      artifact: ${{ steps.prepare-package-data.outputs.artifact }}
+      artifact: ${{ steps.prepare-package-data.outputs.artifact-name }}
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2 # v2.13.2
@@ -61,19 +61,19 @@ jobs:
           echo "::group::Set Artifact Name"
           VERSION=$(jq -r '.version' './package.json')
           PKG_NAME="hashgraph-hedera-local-${VERSION}.tgz"
-          echo "artifact=${PKG_NAME}" >> $GITHUB_OUTPUT
+          echo "artifact-name=${PKG_NAME}" >> $GITHUB_OUTPUT
           echo "::endgroup::"
 
       - name: Build Package
         run: |
           npm pack
-          ls -lh ${{ steps.prepare-package-data.outputs.artifact }}
+          ls -lh ${{ steps.prepare-package-data.outputs.artifact-name }}
 
       - name: Upload NPM Package Artifact
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: npm-package
-          path: ./${{ steps.prepare-package-data.outputs.artifact }}
+          path: ./${{ steps.prepare-package-data.outputs.artifact-name }}
           if-no-files-found: error
 
   publish-npm-package:
@@ -95,9 +95,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install NPM latest
-        run: |
-          npm install -g npm@11.7.0
-          npm ci
+        run: npm install -g npm@11.7.0
 
       - name: Download NPM Package Artifact
         uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
@@ -111,7 +109,7 @@ jobs:
             args="${args} --dry-run"
           fi
           
-          package=${{ needs.prepare-package.outputs.artifact }}
+          package=${{ needs.create-npm-package.outputs.artifact }}
           echo "::group::Publishing package: ${package} with args: ${args}"
           npm publish ${package} ${args}
           echo "::endgroup::"
