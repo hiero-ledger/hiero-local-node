@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: Apache-2.0
-
+INTENTIONALLY BREAK TO ENABLE TESTING WITH WORKFLOW DISPATCH
 name: Publish Package to npmjs
 on:
   release:
