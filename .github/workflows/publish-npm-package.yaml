@@ -95,7 +95,9 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install NPM latest
-        run: npm install -g npm@11.7.0
+        run: |
+          npm install -g npm@11.7.0
+          npm ci
 
       - name: Download NPM Package Artifact
         uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
