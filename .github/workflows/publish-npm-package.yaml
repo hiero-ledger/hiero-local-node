@@ -110,4 +110,8 @@ jobs:
           if [[ "${{ inputs.dry-run-enabled }}" == "true" ]]; then
             args="${args} --dry-run"
           fi
-          npm publish ${{ needs.prepare-package.outputs.artifact }} ${args}
+          
+          package=${{ needs.prepare-package.outputs.artifact }}
+          echo "::group::Publishing package: ${package} with args: ${args}"
+          npm publish ${package} ${args}
+          echo "::endgroup::"
