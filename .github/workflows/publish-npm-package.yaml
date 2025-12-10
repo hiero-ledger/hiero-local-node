@@ -4,17 +4,26 @@ name: Publish Package to npmjs
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      dry-run-enabled:
+        description: 'Enable dry run mode'
+        required: false
+        default: 'false'
 
 permissions:
   contents: read
+  id-token: write
 
 defaults:
   run:
     shell: bash
 
 jobs:
-  publish-npm-package:
+  create-npm-package:
     runs-on: hiero-local-node-linux-medium
+    outputs:
+      artifact: ${{ steps.prepare-package-data.outputs.artifact-name }}
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2 # v2.13.2
@@ -24,16 +33,83 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-      - name: Use Node.js 20.x
+      - name: Setup Node
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          node-version: '20.x'
+          node-version: '20'
           registry-url: 'https://registry.npmjs.org'
+
+      - name: Setup JQ
+        uses: dcarbone/install-jq-action@b7ef57d46ece78760b4019dbc4080a1ba2a40b45 # v3.2.0
+        with:
+          version: 1.7
 
       - name: Clean install
         run: npm ci
 
+      - name: Prepare Package Data
+        id: prepare-package-data
+        run: |
+          echo "::group::Build Package"
+          npm run build
+          echo "::endgroup::"
+          
+          echo "::group::Run Tests"
+          npm run test
+          echo "::endgroup::"
+          
+          echo "::group::Set Artifact Name"
+          VERSION=$(jq -r '.version' './package.json')
+          PKG_NAME="hashgraph-hedera-local-${VERSION}.tgz"
+          echo "artifact-name=${PKG_NAME}" >> $GITHUB_OUTPUT
+          echo "::endgroup::"
+
+      - name: Build Package
+        run: |
+          npm pack
+          ls -lh ${{ steps.prepare-package-data.outputs.artifact-name }}
+
+      - name: Upload NPM Package Artifact
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: npm-package
+          path: ./${{ steps.prepare-package-data.outputs.artifact-name }}
+          if-no-files-found: error
+
+  publish-npm-package:
+    runs-on: ubuntu-latest
+    needs: create-npm-package
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2 # v2.13.2
+        with:
+          egress-policy: audit
+
+      - name: Checkout repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install NPM latest
+        run: npm install -g npm@11.7.0
+
+      - name: Download NPM Package Artifact
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        with:
+          name: npm-package
+
       - name: Publish npm package
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_HG_TOKEN }}
+        run: |
+          args="--access=public"
+          if [[ "${{ inputs.dry-run-enabled }}" == "true" ]]; then
+            args="${args} --dry-run"
+          fi
+          
+          package="${{ needs.create-npm-package.outputs.artifact }}"
+          echo "::group::Publishing package: ${package} with args: ${args}"
+          npm publish ${package} ${args}
+          echo "::endgroup::"
