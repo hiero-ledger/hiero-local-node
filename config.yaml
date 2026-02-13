@@ -553,8 +553,13 @@ services:
         bind:
           create_host_path: true
       - type: bind
-        source: ./compose-network/network-node/config.multinode.txt
-        target: /opt/hgcapp/services-hedera/HapiApp2.0/config.txt
+        source: ./compose-network/network-node/genesis-network.multinode.json
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/data/config/genesis-network.json
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ./compose-network/network-node/entrypoint.sh
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/entrypoint.sh
         bind:
           create_host_path: true
       - type: bind
@@ -653,8 +658,13 @@ services:
         bind:
           create_host_path: true
       - type: bind
-        source: ./compose-network/network-node/config.multinode.txt
-        target: /opt/hgcapp/services-hedera/HapiApp2.0/config.txt
+        source: ./compose-network/network-node/genesis-network.multinode.json
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/data/config/genesis-network.json
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ./compose-network/network-node/entrypoint.sh
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/entrypoint.sh
         bind:
           create_host_path: true
       - type: bind
@@ -753,8 +763,13 @@ services:
         bind:
           create_host_path: true
       - type: bind
-        source: ./compose-network/network-node/config.multinode.txt
-        target: /opt/hgcapp/services-hedera/HapiApp2.0/config.txt
+        source: ./compose-network/network-node/genesis-network.multinode.json
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/data/config/genesis-network.json
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ./compose-network/network-node/entrypoint.sh
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/entrypoint.sh
         bind:
           create_host_path: true
       - type: bind
@@ -853,8 +868,13 @@ services:
         bind:
           create_host_path: true
       - type: bind
-        source: ./compose-network/network-node/config.multinode.txt
-        target: /opt/hgcapp/services-hedera/HapiApp2.0/config.txt
+        source: ./compose-network/network-node/genesis-network.multinode.json
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/data/config/genesis-network.json
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ./compose-network/network-node/entrypoint.sh
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/entrypoint.sh
         bind:
           create_host_path: true
       - type: bind
