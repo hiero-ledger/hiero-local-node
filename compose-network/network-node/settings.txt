@@ -21,3 +21,4 @@ jasperDb.iteratorInputBufferBytes,             16777216
 prometheusEndpointEnabled,                     true
 transactionMaxBytes,                           30720
 event.creation.maxCreationRate,                20
+state.mainClassNameOverride,                   com.hedera.services.ServicesMain

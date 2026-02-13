@@ -1,0 +1,48 @@
+{
+  "nodeMetadata": [
+    {
+      "rosterEntry": {
+        "weight": "1",
+        "gossipCaCertificate": "MIIDyjCCAjKgAwIBAgIJAP+re6l977TVMA0GCSqGSIb3DQEBDAUAMBIxEDAOBgNVBAMTB3Mtbm9kZTAwIBcNMjIwMjE4MjE0NjE4WhgPMjEyMjAyMTgyMTQ2MThaMBIxEDAOBgNVBAMTB3Mtbm9kZTAwggGiMA0GCSqGSIb3DQEBAQUAA4IBjwAwggGKAoIBgQChIAbyUnJCzX9TucT9XehpxWL/Ttikqzpilj8/gYi+ePJY6vQrnD4+j1hpcWBBO793qt+vDZ/9hphLO8T7XwLhHorLbsZ+QmSt3KE//eg2dXjCeS/GrjJuezSFbSPwJXT1onSBVgAy1zdJ2vnTMqeINRDmDqIiiJo7/Dvt81Dzo2yto5uUU5x0+4JlZ4vVwUj7yRaa3Kz2cZuS7o1CqdL4kjzE/jtJTEZ/TpiipJ4KDvWqQzy+xDi6olauYaBZDOTmfQs/5fLamtkMJuIp0o1nlFaXjWVzVz67RiObrUq/q0/+ZOpKOXxrxfcXXhrDZIjxfGdzte2TQV5XxBxs2IZtvRI2AGIznLFU2FrRrs0ddgoJQdgOKP4kYDOoaNu8iXXzYEQx/OmvkdxCVAqwSxu+wh81918wr28FyJhkKThuK0Ob/S/VkSyCYAgB6cCFfxZeiH8iM9wsCYuhJnsFnbii23FP5QZo2/CTYEpd88IyFGcjIRzlhVJjj66fwGSn8JsCAwEAAaMhMB8wHQYDVR0OBBYEFOUxC65CvzsXSJyn3Jx9/Ampi6zQMA0GCSqGSIb3DQEBDAUAA4IBgQCSE7uf1UwX0OdVqUvHxOdWZs33fuF9lmnuApw1Inn/hKiZFb8jDKSoypfTiz8GgVu3KU/XlWHP2HMO2+jbmEG8CV40G4yBkNZVWdAKeLz6ZKYqge0zO7vkCIXZ3MAAGKdL70xGshZdRYRl9U5GnNlSToDzJBM0DGSH3x0iRHaoM02dr6Zi8554TwGciT/CCwbZlZx5hxPL+Y6WKE3jHNihjLasQDQQTSJ/U/0AZ9nLdDE/ldgHOmIMzO5S5doXhbEie5ePdf8WCwVgmQM0NfaorbqgmLs4/DTekDrMNrMOHmb02qhq/ISgrI+QoKVcwgTm6ztLYXvMj89le8p35MIN0LuOBOsKkNJvsj39RJKIIhSghzaLpquv+VtgpNLSZcTHWsQRk8izboFgnHcGpC2daFIuEWJBXJACMLM0t3f3oi+xE8iDtHUSZbSuD3dk+zpk48iMxbtfmGfhlEuw6D8Fr4mdLlLTZC6424pPZaah30LBeDHO2B4MrlbnU2xsv6I=",
+        "gossipEndpoint": [
+          {
+            "ipAddressV4": "rBsAAw==",
+            "port": 50111
+          },
+          {
+            "ipAddressV4": "rBsAAw==",
+            "port": 50111
+          }
+        ]
+      },
+      "node": {
+        "nodeId": "0",
+        "accountId": {
+          "accountNum": "3"
+        },
+        "description": "node1",
+        "gossipEndpoint": [
+          {
+            "ipAddressV4": "rBsAAw==",
+            "port": 50111
+          },
+          {
+            "ipAddressV4": "rBsAAw==",
+            "port": 50111
+          }
+        ],
+        "gossipCaCertificate": "MIIDyjCCAjKgAwIBAgIJAP+re6l977TVMA0GCSqGSIb3DQEBDAUAMBIxEDAOBgNVBAMTB3Mtbm9kZTAwIBcNMjIwMjE4MjE0NjE4WhgPMjEyMjAyMTgyMTQ2MThaMBIxEDAOBgNVBAMTB3Mtbm9kZTAwggGiMA0GCSqGSIb3DQEBAQUAA4IBjwAwggGKAoIBgQChIAbyUnJCzX9TucT9XehpxWL/Ttikqzpilj8/gYi+ePJY6vQrnD4+j1hpcWBBO793qt+vDZ/9hphLO8T7XwLhHorLbsZ+QmSt3KE//eg2dXjCeS/GrjJuezSFbSPwJXT1onSBVgAy1zdJ2vnTMqeINRDmDqIiiJo7/Dvt81Dzo2yto5uUU5x0+4JlZ4vVwUj7yRaa3Kz2cZuS7o1CqdL4kjzE/jtJTEZ/TpiipJ4KDvWqQzy+xDi6olauYaBZDOTmfQs/5fLamtkMJuIp0o1nlFaXjWVzVz67RiObrUq/q0/+ZOpKOXxrxfcXXhrDZIjxfGdzte2TQV5XxBxs2IZtvRI2AGIznLFU2FrRrs0ddgoJQdgOKP4kYDOoaNu8iXXzYEQx/OmvkdxCVAqwSxu+wh81918wr28FyJhkKThuK0Ob/S/VkSyCYAgB6cCFfxZeiH8iM9wsCYuhJnsFnbii23FP5QZo2/CTYEpd88IyFGcjIRzlhVJjj66fwGSn8JsCAwEAAaMhMB8wHQYDVR0OBBYEFOUxC65CvzsXSJyn3Jx9/Ampi6zQMA0GCSqGSIb3DQEBDAUAA4IBgQCSE7uf1UwX0OdVqUvHxOdWZs33fuF9lmnuApw1Inn/hKiZFb8jDKSoypfTiz8GgVu3KU/XlWHP2HMO2+jbmEG8CV40G4yBkNZVWdAKeLz6ZKYqge0zO7vkCIXZ3MAAGKdL70xGshZdRYRl9U5GnNlSToDzJBM0DGSH3x0iRHaoM02dr6Zi8554TwGciT/CCwbZlZx5hxPL+Y6WKE3jHNihjLasQDQQTSJ/U/0AZ9nLdDE/ldgHOmIMzO5S5doXhbEie5ePdf8WCwVgmQM0NfaorbqgmLs4/DTekDrMNrMOHmb02qhq/ISgrI+QoKVcwgTm6ztLYXvMj89le8p35MIN0LuOBOsKkNJvsj39RJKIIhSghzaLpquv+VtgpNLSZcTHWsQRk8izboFgnHcGpC2daFIuEWJBXJACMLM0t3f3oi+xE8iDtHUSZbSuD3dk+zpk48iMxbtfmGfhlEuw6D8Fr4mdLlLTZC6424pPZaah30LBeDHO2B4MrlbnU2xsv6I=",
+        "weight": "50",
+        "adminKey": {
+          "ed25519": "CqjiEGTGHquG4qnBZFZbTnqaQUYQbgps0DqMOVoRDpI="
+        },
+        "serviceEndpoint": [
+          {
+            "ipAddressV4": "rBsAAw==",
+            "port": 50211
+          }
+        ]
+      }
+    }
+  ]
+}
