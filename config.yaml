@@ -558,8 +558,8 @@ services:
         bind:
           create_host_path: true
       - type: bind
-        source: ./compose-network/network-node/entrypoint.sh
-        target: /opt/hgcapp/services-hedera/HapiApp2.0/entrypoint.sh
+        source: ./compose-network/network-node/config.multinode.txt
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/config.txt
         bind:
           create_host_path: true
       - type: bind
@@ -663,8 +663,8 @@ services:
         bind:
           create_host_path: true
       - type: bind
-        source: ./compose-network/network-node/entrypoint.sh
-        target: /opt/hgcapp/services-hedera/HapiApp2.0/entrypoint.sh
+        source: ./compose-network/network-node/config.multinode.txt
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/config.txt
         bind:
           create_host_path: true
       - type: bind
@@ -768,8 +768,8 @@ services:
         bind:
           create_host_path: true
       - type: bind
-        source: ./compose-network/network-node/entrypoint.sh
-        target: /opt/hgcapp/services-hedera/HapiApp2.0/entrypoint.sh
+        source: ./compose-network/network-node/config.multinode.txt
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/config.txt
         bind:
           create_host_path: true
       - type: bind
@@ -873,8 +873,8 @@ services:
         bind:
           create_host_path: true
       - type: bind
-        source: ./compose-network/network-node/entrypoint.sh
-        target: /opt/hgcapp/services-hedera/HapiApp2.0/entrypoint.sh
+        source: ./compose-network/network-node/config.multinode.txt
+        target: /opt/hgcapp/services-hedera/HapiApp2.0/config.txt
         bind:
           create_host_path: true
       - type: bind
