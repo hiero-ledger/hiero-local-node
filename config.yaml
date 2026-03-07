@@ -174,7 +174,7 @@ services:
       BLOCKNODE_STORAGE_ROOT_PATH: /app/storage
       JAVA_OPTS: -Xms16G -Xmx16G
       REGISTRY_PREFIX: ""
-    image: ghcr.io/hiero-ledger/hiero-block-node:0.29.0-rc1
+    image: ghcr.io/hiero-ledger/hiero-block-node:0.27.0
     networks:
       mirror-node: null
       network-node-bridge: null

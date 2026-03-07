@@ -385,8 +385,10 @@ services:
       BLOCKNODE_STORAGE_ROOT_PATH: ${BLOCK_NODE_STORAGE_ROOT_PATH}
       JAVA_OPTS: ${BLOCK_NODE_JAVA_OPTS}
     ports:
-      - "8080:8080"
-      - "9998:9999"
+      - "40840:40840"
+      - "5005:5005"
+      - "16007:16007"
+      - "8849:8849"
 
   cadvisor:
     image: "gcr.io/cadvisor/cadvisor:v0.47.0"
