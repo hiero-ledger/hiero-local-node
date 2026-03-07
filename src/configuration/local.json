@@ -1,10 +1,10 @@
 {
   "imageTagConfiguration": [
-    {"key": "NETWORK_NODE_IMAGE_TAG", "value": "0.66.0"},
-    {"key": "HAVEGED_IMAGE_TAG", "value": "0.66.0"},
+    {"key": "NETWORK_NODE_IMAGE_TAG", "value": "0.72.0-rc.1"},
+    {"key": "HAVEGED_IMAGE_TAG", "value": "0.72.0-rc.1"},
     {"key": "BLOCK_NODE_IMAGE_TAG", "value": "0.11.0"},
-    {"key": "MIRROR_IMAGE_TAG", "value": "0.140.0"},
-    {"key": "RELAY_IMAGE_TAG", "value": "0.70.0"},
+    {"key": "MIRROR_IMAGE_TAG", "value": "0.150.0-rc1"},
+    {"key": "RELAY_IMAGE_TAG", "value": "0.75.0"},
     {"key": "MIRROR_NODE_EXPLORER_IMAGE_TAG", "value": "24.4.0"}
   ],
   "envConfiguration": [
@@ -35,7 +35,17 @@
     "properties": [
       {"key": "files.maxSizeKb", "value": "6144"},
       {"key": "accounts.blocklist.enabled", "value": false},
-      {"key": "accounts.blocklist.path", "value": "data/config/evm-addresses-blocklist.csv"}
+      {"key": "accounts.blocklist.path", "value": "data/config/evm-addresses-blocklist.csv"},
+      {"key": "blockStream.streamMode", "value": "RECORDS"},
+      {"key": "blockStream.writerMode", "value": "FILE"},
+      {"key": "blockStream.buffer.isBufferPersistenceEnabled", "value": false},
+      {"key": "hedera.recordStream.writeWrappedRecordFileBlockHashesToDisk", "value": false},
+      {"key": "hedera.recordStream.computeHashesFromWrappedRecordBlocks", "value": false},
+      {"key": "hedera.recordStream.liveWritePrevWrappedRecordHashes", "value": false},
+      {"key": "tss.enableCutover", "value": false},
+      {"key": "tss.hintsEnabled", "value": false},
+      {"key": "tss.historyEnabled", "value": false},
+      {"key": "tss.wrapsEnabled", "value": false}
     ]
   }
 }
