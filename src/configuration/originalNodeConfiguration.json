@@ -4,7 +4,17 @@
         {"key": "netty.mode", "value": "DEV"},
         {"key": "contracts.chainId", "value": "298"},
         {"key": "hedera.recordStream.logPeriod", "value": "1"},
-        {"key": "balances.exportPeriodSecs", "value": "400"}
+        {"key": "balances.exportPeriodSecs", "value": "400"},
+        {"key": "blockStream.streamMode", "value": "RECORDS"},
+        {"key": "blockStream.writerMode", "value": "FILE"},
+        {"key": "blockStream.buffer.isBufferPersistenceEnabled", "value": false},
+        {"key": "hedera.recordStream.writeWrappedRecordFileBlockHashesToDisk", "value": false},
+        {"key": "hedera.recordStream.computeHashesFromWrappedRecordBlocks", "value": false},
+        {"key": "hedera.recordStream.liveWritePrevWrappedRecordHashes", "value": false},
+        {"key": "tss.enableCutover", "value": false},
+        {"key": "tss.hintsEnabled", "value": false},
+        {"key": "tss.historyEnabled", "value": false},
+        {"key": "tss.wrapsEnabled", "value": false}
     ],
     "fullNodeProperties": [
         {

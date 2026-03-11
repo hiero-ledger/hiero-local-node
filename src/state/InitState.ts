@@ -33,6 +33,7 @@ import {
     LOADING,
     NECESSARY_PORTS,
     NETWORK_NODE_CONFIG_DIR_PATH,
+    NGINX_CONFIG_RELATIVE_PATH,
     OPTIONAL_PORTS
 } from '../constants';
 import os from 'os';
@@ -133,6 +134,7 @@ export class InitState implements IState{
         this.configureEnvVariables(configurationData.imageTagConfiguration, configurationData.envConfiguration);
         this.configureNodeProperties(configurationData.nodeConfiguration?.properties);
         this.configureMirrorNodeProperties();
+        await this.setupNginxProxyConfig();
 
         this.observer!.update(EventType.Finish);
     }
@@ -326,6 +328,86 @@ export class InitState implements IState{
 
         writeFileSync(propertiesFilePath, yaml.dump(application, { lineWidth: 256 }));
         this.logger.trace(INIT_STATE_MIRROR_PROP_SET, this.stateName);
+    }
+
+    /**
+     * Additional nginx server blocks appended to the mirror-node proxy config.
+     * These allow the proxy to intercept traffic on every relevant mirror node port so that
+     * both host-level and intra-Docker requests are routed through it uniformly.
+     */
+    private static readonly ADDITIONAL_PROXY_SERVER_BLOCKS = `
+# REST-Java direct passthrough on port 8084
+server {
+  listen 8084;
+  proxy_http_version 1.1;
+  proxy_set_header Host $host;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto $scheme;
+  proxy_set_header "Connection" "";
+  location / { proxy_pass http://rest_java_host$request_uri; }
+}
+
+`;
+
+    /**
+     * Downloads the nginx proxy config from hiero-mirror-node's docker-compose.yml on GitHub,
+     * extracts the proxy-config block, and writes it to the work directory.
+     * Falls back to the bundled config if the download or parse fails.
+     * Caches the result per mirror tag to avoid redundant downloads.
+     *
+     * @private
+     */
+    private async setupNginxProxyConfig(): Promise<void> {
+        const mirrorTag = process.env.MIRROR_IMAGE_TAG ?? '';
+        const nginxDir = join(this.cliOptions.workDir, 'compose-network', 'nginx');
+        const configDestPath = join(this.cliOptions.workDir, NGINX_CONFIG_RELATIVE_PATH);
+        const cacheTagPath = join(nginxDir, '.mirror-tag');
+        const bundledConfigPath = join(__dirname, '../../', NGINX_CONFIG_RELATIVE_PATH);
+
+        FileSystemUtils.ensureDirectoryExists(nginxDir);
+
+        // Use cached config if the same mirror tag was already downloaded
+        try {
+            const cachedTag = readFileSync(cacheTagPath, 'utf8').trim();
+            if (cachedTag === mirrorTag) {
+                this.logger.trace(`${CHECK_SUCCESS} Using cached nginx proxy config for mirror-node v${mirrorTag}.`, this.stateName);
+                return;
+            }
+        } catch {
+            // Cache miss — proceed with download
+        }
+
+        const url = `https://raw.githubusercontent.com/hiero-ledger/hiero-mirror-node/v${mirrorTag}/docker-compose.yml`;
+        this.logger.trace(`${LOADING} Fetching nginx proxy config from mirror-node v${mirrorTag}...`, this.stateName);
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`GitHub returned HTTP ${response.status} for ${url}`);
+            }
+            const text = await response.text();
+            const parsed = yaml.load(text) as any;
+            const rawProxyConfig: string = parsed?.configs?.['proxy-config']?.content;
+            if (typeof rawProxyConfig !== 'string' || rawProxyConfig.trim().length === 0) {
+                throw new Error('proxy-config block not found or empty in mirror-node docker-compose.yml');
+            }
+            // mirror-node embeds the nginx config inside docker-compose.yml and escapes nginx variables
+            // as $$ so Docker Compose doesn't interpolate them. When we write the config as a standalone
+            // file (not processed by Docker Compose), we must unescape $$ back to $.
+            // We also rewrite the listen port from 8080 (mirror-node default) to 5551, and append
+            // additional server blocks so the proxy handles all internal/external traffic on every
+            // relevant mirror node port.
+            const proxyConfig = rawProxyConfig.replace(/\$\$/g, '$').replace(/\blisten\s+8080\b/g, 'listen 5551')
+                + InitState.ADDITIONAL_PROXY_SERVER_BLOCKS;
+            writeFileSync(configDestPath, proxyConfig);
+            writeFileSync(cacheTagPath, mirrorTag);
+            this.logger.trace(`${CHECK_SUCCESS} nginx proxy config fetched and cached for mirror-node v${mirrorTag}.`, this.stateName);
+        } catch (err: any) {
+            this.logger.warn(`${CHECK_SUCCESS} Could not fetch nginx proxy config from GitHub (${err?.message ?? err}). Using bundled fallback.`, this.stateName);
+            const fallback = readFileSync(bundledConfigPath, 'utf8');
+            writeFileSync(configDestPath, fallback);
+        }
     }
 
     /**

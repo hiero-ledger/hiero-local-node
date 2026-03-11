@@ -266,7 +266,7 @@ services:
 
   rest:
     image: "${MIRROR_IMAGE_PREFIX}hedera-mirror-rest:${MIRROR_REST_IMAGE_TAG:-${MIRROR_IMAGE_TAG}}"
-    container_name: mirror-node-rest
+    container_name: mirror-node-rest-internal
     mem_swappiness: 0
     mem_limit: "${MIRROR_REST_MEM_LIMIT}"
     memswap_limit: "${MIRROR_REST_MEM_LIMIT}"
@@ -279,14 +279,12 @@ services:
       HEDERA_MIRROR_REST_DB_HOST: db
     networks:
       - mirror-node
-    ports:
-      - "5551:5551"
     restart: unless-stopped
     tty: false
 
   rest-java:
     image: "${MIRROR_IMAGE_PREFIX}hedera-mirror-rest-java:${MIRROR_REST_IMAGE_TAG:-${MIRROR_IMAGE_TAG}}"
-    container_name: mirror-node-rest-java
+    container_name: mirror-node-rest-java-internal
     mem_swappiness: 0
     mem_limit: "${MIRROR_REST_MEM_LIMIT}"
     memswap_limit: "${MIRROR_REST_MEM_LIMIT}"
@@ -301,12 +299,33 @@ services:
       JAVA_TOOL_OPTIONS: "${GRPC_PLATFORM_JAVA_OPTS}"
     networks:
       - mirror-node
-    ports:
-      - 8084:8084
     restart: unless-stopped
     tty: true
     volumes:
       - ./application.yml:/usr/etc/hedera-mirror-rest-java/application.yml
+
+  api-proxy:
+    container_name: mirror-node-api-proxy
+    image: nginx:1-alpine
+    restart: unless-stopped
+    mem_swappiness: 0
+    mem_limit: "${MIRROR_REST_MEM_LIMIT}"
+    memswap_limit: "${MIRROR_REST_MEM_LIMIT}"
+    depends_on:
+      rest:
+        condition: service_started
+      rest-java:
+        condition: service_started
+    networks:
+      mirror-node:
+        aliases:
+          - mirror-node-rest
+          - mirror-node-rest-java
+    ports:
+      - "5551:5551"
+      - "8084:8084"
+    volumes:
+      - "${MIRROR_NODE_CONFIG_PATH}/compose-network/nginx/api-proxy.conf:/etc/nginx/conf.d/default.conf:ro"
 
   explorer:
     container_name: hedera-explorer
@@ -385,8 +404,10 @@ services:
       BLOCKNODE_STORAGE_ROOT_PATH: ${BLOCK_NODE_STORAGE_ROOT_PATH}
       JAVA_OPTS: ${BLOCK_NODE_JAVA_OPTS}
     ports:
-      - "8080:8080"
-      - "9998:9999"
+      - "40840:40840"
+      - "5005:5005"
+      - "16007:16007"
+      - "8849:8849"
 
   cadvisor:
     image: "gcr.io/cadvisor/cadvisor:v0.47.0"
