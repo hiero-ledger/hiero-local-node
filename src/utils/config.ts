@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { join } from 'path';
-import yaml from 'js-yaml';
+import yaml from 'yaml';
 import { readFileSync } from 'fs';
 import { APPLICATION_YML_RELATIVE_PATH } from '../constants';
 
@@ -13,7 +13,7 @@ import { APPLICATION_YML_RELATIVE_PATH } from '../constants';
  */
 export default function readApplicationYML() {
     const propertiesFilePath = join(__dirname, APPLICATION_YML_RELATIVE_PATH);
-    const application = yaml.load(readFileSync(propertiesFilePath).toString()) as any;
+    const application = yaml.parse(readFileSync(propertiesFilePath).toString()) as any;
 
     return {
         propertiesFilePath,

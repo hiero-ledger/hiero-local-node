@@ -5,7 +5,7 @@ import sinon from 'sinon';
 import { SafeDockerNetworkRemover } from '../../../src/utils/SafeDockerNetworkRemover';
 import { IS_WINDOWS, NETWORK_PREFIX } from '../../../src/constants';
 import { getTestBed } from '../testBed';
-import { load } from 'js-yaml';
+import { load } from 'yaml';
 import { readdirSync, readFileSync } from 'fs';
 import { join } from "path";
 

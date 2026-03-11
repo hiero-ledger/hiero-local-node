@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import { CleanUpState } from '../../../src/state/CleanUpState';
 import { LoggerService } from '../../../src/services/LoggerService';
 import { EventType } from '../../../src/types/EventType';
-import yaml from 'js-yaml';
+import yaml from 'yaml';
 import fs from 'fs';
 import path from 'path';
 import { SinonSandbox, SinonStub, SinonStubbedInstance } from 'sinon';

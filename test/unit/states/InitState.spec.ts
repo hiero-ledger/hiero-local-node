@@ -2,7 +2,7 @@
 
 import { expect } from 'chai';
 import fs from 'fs';
-import yaml from 'js-yaml';
+import yaml from 'yaml';
 import { after } from "mocha";
 import { join } from 'path';
 import { SinonSandbox, SinonSpy, SinonStub, SinonStubbedInstance } from 'sinon';
