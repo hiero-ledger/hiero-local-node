@@ -266,7 +266,7 @@ services:
 
   rest:
     image: "${MIRROR_IMAGE_PREFIX}hedera-mirror-rest:${MIRROR_REST_IMAGE_TAG:-${MIRROR_IMAGE_TAG}}"
-    container_name: mirror-node-rest
+    container_name: mirror-node-rest-internal
     mem_swappiness: 0
     mem_limit: "${MIRROR_REST_MEM_LIMIT}"
     memswap_limit: "${MIRROR_REST_MEM_LIMIT}"
@@ -284,7 +284,7 @@ services:
 
   rest-java:
     image: "${MIRROR_IMAGE_PREFIX}hedera-mirror-rest-java:${MIRROR_REST_IMAGE_TAG:-${MIRROR_IMAGE_TAG}}"
-    container_name: mirror-node-rest-java
+    container_name: mirror-node-rest-java-internal
     mem_swappiness: 0
     mem_limit: "${MIRROR_REST_MEM_LIMIT}"
     memswap_limit: "${MIRROR_REST_MEM_LIMIT}"
@@ -299,8 +299,6 @@ services:
       JAVA_TOOL_OPTIONS: "${GRPC_PLATFORM_JAVA_OPTS}"
     networks:
       - mirror-node
-    ports:
-      - 8084:8084
     restart: unless-stopped
     tty: true
     volumes:
@@ -319,9 +317,13 @@ services:
       rest-java:
         condition: service_started
     networks:
-      - mirror-node
+      mirror-node:
+        aliases:
+          - mirror-node-rest
+          - mirror-node-rest-java
     ports:
-      - "5551:8080"
+      - "5551:5551"
+      - "8084:8084"
     volumes:
       - "${MIRROR_NODE_CONFIG_PATH}/compose-network/nginx/api-proxy.conf:/etc/nginx/conf.d/default.conf:ro"
 

@@ -331,6 +331,26 @@ export class InitState implements IState{
     }
 
     /**
+     * Additional nginx server blocks appended to the mirror-node proxy config.
+     * These allow the proxy to intercept traffic on every relevant mirror node port so that
+     * both host-level and intra-Docker requests are routed through it uniformly.
+     */
+    private static readonly ADDITIONAL_PROXY_SERVER_BLOCKS = `
+# REST-Java direct passthrough on port 8084
+server {
+  listen 8084;
+  proxy_http_version 1.1;
+  proxy_set_header Host $host;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto $scheme;
+  proxy_set_header "Connection" "";
+  location / { proxy_pass http://rest_java_host$request_uri; }
+}
+
+`;
+
+    /**
      * Downloads the nginx proxy config from hiero-mirror-node's docker-compose.yml on GitHub,
      * extracts the proxy-config block, and writes it to the work directory.
      * Falls back to the bundled config if the download or parse fails.
@@ -375,13 +395,17 @@ export class InitState implements IState{
             // mirror-node embeds the nginx config inside docker-compose.yml and escapes nginx variables
             // as $$ so Docker Compose doesn't interpolate them. When we write the config as a standalone
             // file (not processed by Docker Compose), we must unescape $$ back to $.
-            const proxyConfig = rawProxyConfig.replace(/\$\$/g, '$');
+            // We also rewrite the listen port from 8080 (mirror-node default) to 5551, and append
+            // additional server blocks so the proxy handles all internal/external traffic on every
+            // relevant mirror node port.
+            const proxyConfig = rawProxyConfig.replace(/\$\$/g, '$').replace(/\blisten\s+8080\b/g, 'listen 5551')
+                + InitState.ADDITIONAL_PROXY_SERVER_BLOCKS;
             writeFileSync(configDestPath, proxyConfig);
             writeFileSync(cacheTagPath, mirrorTag);
             this.logger.trace(`${CHECK_SUCCESS} nginx proxy config fetched and cached for mirror-node v${mirrorTag}.`, this.stateName);
         } catch (err: any) {
             this.logger.warn(`${CHECK_SUCCESS} Could not fetch nginx proxy config from GitHub (${err?.message ?? err}). Using bundled fallback.`, this.stateName);
-            const fallback = readFileSync(bundledConfigPath);
+            const fallback = readFileSync(bundledConfigPath, 'utf8');
             writeFileSync(configDestPath, fallback);
         }
     }
