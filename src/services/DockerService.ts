@@ -18,7 +18,7 @@ import * as dotenv from 'dotenv';
 import { CLIOptions } from '../types/CLIOptions';
 import path from 'path';
 import { SafeDockerNetworkRemover } from '../utils/SafeDockerNetworkRemover';
-import yaml from 'yaml';
+import yaml from 'js-yaml';
 
 dotenv.config();
 
@@ -207,7 +207,7 @@ export class DockerService implements IService{
     }
 
     public checkDockerImages() {
-        const dockerComposeYml = yaml.parse(shell.exec("docker compose config", { silent: true }).stdout) as any;
+        const dockerComposeYml = yaml.load(shell.exec("docker compose config", { silent: true }).stdout) as any;
         const dockerComposeImages = Object.values(dockerComposeYml.services).map((s: any) => {
             if (s.image) {
                 const parsed = s.image.split(":");

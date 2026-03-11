@@ -2,7 +2,7 @@
 
 import { expect } from 'chai';
 import fs from 'fs';
-import yaml from 'yaml';
+import yaml from 'js-yaml';
 import { after } from "mocha";
 import { join } from 'path';
 import { SinonSandbox, SinonSpy, SinonStub, SinonStubbedInstance } from 'sinon';
@@ -187,7 +187,7 @@ describe('InitState tests', () => {
             copyPathsStub = testSandbox.stub(FileSystemUtils, "copyPaths").callsFake(() => {})
             fsWriteFileSync = testSandbox.stub(fs, 'writeFileSync');
             fsReadFileSync = testSandbox.stub(fs, 'readFileSync').returns('test');
-            ymlLoad = testSandbox.stub(yaml, 'parse').returns({
+            ymlLoad = testSandbox.stub(yaml, 'load').returns({
                 hedera: {
                     mirror: {
                         importer: {
@@ -220,7 +220,7 @@ describe('InitState tests', () => {
                     }
                 }
             });
-            ymlDump = testSandbox.stub(yaml, 'stringify');
+            ymlDump = testSandbox.stub(yaml, 'dump');
         })
 
         afterEach(() => {

@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import { CleanUpState } from '../../../src/state/CleanUpState';
 import { LoggerService } from '../../../src/services/LoggerService';
 import { EventType } from '../../../src/types/EventType';
-import yaml from 'yaml';
+import yaml from 'js-yaml';
 import fs from 'fs';
 import path from 'path';
 import { SinonSandbox, SinonStub, SinonStubbedInstance } from 'sinon';
@@ -110,8 +110,8 @@ describe('CleanUpState', () => {
     it('should revert mirror node properties', () => {
       // Arrange
       const readFileSyncStub = testSandbox.stub(fs, 'readFileSync');
-      const yamlLoadStub = testSandbox.stub(yaml, 'parse').resolves();
-      const yamlDumpStub = testSandbox.stub(yaml, 'stringify').returns('3');
+      const yamlLoadStub = testSandbox.stub(yaml, 'load').resolves();
+      const yamlDumpStub = testSandbox.stub(yaml, 'dump').returns('3');
       existsSyncStub.returns(true);
       // Mock file operations
       const fileContent = '...'; // original content

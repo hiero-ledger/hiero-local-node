@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { readFileSync, writeFileSync, existsSync } from 'fs';
-import yaml from 'yaml';
+import yaml from 'js-yaml';
 import { join } from 'path';
 import { IOBserver } from '../controller/IObserver';
 import originalNodeConfiguration from '../configuration/originalNodeConfiguration.json';
@@ -90,13 +90,13 @@ export class CleanUpState implements IState{
             this.logger.trace(`Mirror Node Properties File doesn't exist at path ${propertiesFilePath}`,this.stateName);
             return;
         }
-        const application = yaml.parse(readFileSync(propertiesFilePath).toString()) as any;
+        const application = yaml.load(readFileSync(propertiesFilePath).toString()) as any;
         delete application.hedera.mirror.importer.dataPath;
         delete application.hedera.mirror.importer.downloader.sources;
         delete application.hedera.mirror.importer.downloader.local
 
         application.hedera.mirror.monitor.nodes = originalNodeConfiguration.fullNodeProperties;
-        writeFileSync(propertiesFilePath, yaml.stringify(application, { lineWidth: 256 }));
+        writeFileSync(propertiesFilePath, yaml.dump(application, { lineWidth: 256 }));
         this.logger.info(`${CHECK_SUCCESS} Clean up of mirror node properties finished.`, this.stateName);
     }
 

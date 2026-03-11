@@ -5,7 +5,7 @@ import shell from 'shelljs';
 import { configDotenv } from 'dotenv';
 import { readFileSync, writeFileSync } from 'fs';
 import path, { join } from 'path';
-import yaml from 'yaml';
+import yaml from 'js-yaml';
 import { LoggerService } from '../services/LoggerService';
 import { ServiceLocator } from '../services/ServiceLocator';
 import { IState } from './IState';
@@ -309,7 +309,7 @@ export class InitState implements IState{
         const {fullMode, multiNode, persistTransactionBytes, workDir } = this.cliOptions;
 
         const propertiesFilePath = join(workDir, 'compose-network/mirror-node/application.yml');
-        const application = yaml.parse(readFileSync(propertiesFilePath).toString()) as any;
+        const application = yaml.load(readFileSync(propertiesFilePath).toString()) as any;
 
         if (!fullMode) {
             application.hedera.mirror.importer.dataPath = originalNodeConfiguration.turboNodeProperties.dataPath;
@@ -326,7 +326,7 @@ export class InitState implements IState{
             application.hedera.mirror.importer.parser.record.entity.persist.transactionRecordBytes = true;
         }
 
-        writeFileSync(propertiesFilePath, yaml.stringify(application, { lineWidth: 256 }));
+        writeFileSync(propertiesFilePath, yaml.dump(application, { lineWidth: 256 }));
         this.logger.trace(INIT_STATE_MIRROR_PROP_SET, this.stateName);
     }
 
@@ -387,7 +387,7 @@ server {
                 throw new Error(`GitHub returned HTTP ${response.status} for ${url}`);
             }
             const text = await response.text();
-            const parsed = yaml.parse(text) as any;
+            const parsed = yaml.load(text) as any;
             const rawProxyConfig: string = parsed?.configs?.['proxy-config']?.content;
             if (typeof rawProxyConfig !== 'string' || rawProxyConfig.trim().length === 0) {
                 throw new Error('proxy-config block not found or empty in mirror-node docker-compose.yml');

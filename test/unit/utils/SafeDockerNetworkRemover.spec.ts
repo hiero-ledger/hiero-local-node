@@ -5,7 +5,7 @@ import sinon from 'sinon';
 import { SafeDockerNetworkRemover } from '../../../src/utils/SafeDockerNetworkRemover';
 import { IS_WINDOWS, NETWORK_PREFIX } from '../../../src/constants';
 import { getTestBed } from '../testBed';
-import { parse } from 'yaml';
+import { load } from 'js-yaml';
 import { readdirSync, readFileSync } from 'fs';
 import { join } from "path";
 
@@ -65,7 +65,7 @@ describe('SafeDockerNetworkRemover', () => {
       const files = readdirSync(join(__dirname, relativePath)).filter(name => /^docker-compose.*\.yml$/.test(name));
       for (const file of files) {
         const data = readFileSync(join(__dirname, `${relativePath}/${file}`));
-        const config = parse(data.toString());
+        const config = load(data.toString());
         for (const network of Object.values(config.networks || {}).map((network: any) => network.name.trim())) {
           expect(network.startsWith(NETWORK_PREFIX), `Network '${network}' does not start with the prefix '${NETWORK_PREFIX}'. It won't be removed by 'npm run stop'`).to.be.true;
         }
@@ -76,7 +76,7 @@ describe('SafeDockerNetworkRemover', () => {
       const files = readdirSync(join(__dirname, relativePath)).filter(name => /^docker-compose(?!.*(evm|multinode)\.yml$).*\.yml$/.test(name));
       for (const file of files) {
         const data = readFileSync(join(__dirname, `${relativePath}/${file}`));
-        const config = parse(data.toString());
+        const config = load(data.toString());
         const services = config.services || {};
         for (const [serviceName, serviceConfig] of Object.entries(services)) {
           if (serviceConfig.extends || (serviceConfig.network_mode || '' === 'none') || serviceName === 'block-node' || serviceName === 'cadvisor') {
