@@ -34,6 +34,7 @@ export const OPTIONAL_PORTS = [7546, 8080, 3000];
 export const EVM_ADDRESSES_BLOCKLIST_FILE_RELATIVE_PATH = '../../compose-network/network-node'
 export const NETWORK_NODE_CONFIG_DIR_PATH = 'compose-network/network-node/data/config';
 export const APPLICATION_YML_RELATIVE_PATH = 'compose-network/mirror-node/application.yml';
+export const NGINX_CONFIG_RELATIVE_PATH = 'compose-network/nginx/api-proxy.conf';
 export const MIN_MEMORY_SINGLE_MODE = 4;
 export const MIN_MEMORY_MULTI_MODE = 14;
 export const RECOMMENDED_MEMORY_SINGLE_MODE = 8;
