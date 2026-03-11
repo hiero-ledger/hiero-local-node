@@ -187,7 +187,7 @@ describe('InitState tests', () => {
             copyPathsStub = testSandbox.stub(FileSystemUtils, "copyPaths").callsFake(() => {})
             fsWriteFileSync = testSandbox.stub(fs, 'writeFileSync');
             fsReadFileSync = testSandbox.stub(fs, 'readFileSync').returns('test');
-            ymlLoad = testSandbox.stub(yaml, 'load').returns({
+            ymlLoad = testSandbox.stub(yaml, 'parse').returns({
                 hedera: {
                     mirror: {
                         importer: {
@@ -220,7 +220,7 @@ describe('InitState tests', () => {
                     }
                 }
             });
-            ymlDump = testSandbox.stub(yaml, 'dump');
+            ymlDump = testSandbox.stub(yaml, 'stringify');
         })
 
         afterEach(() => {
