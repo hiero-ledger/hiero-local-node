@@ -76,12 +76,12 @@ jobs:
       matrix:
         node-version: [18.x]
 
-      env:
-        HAVEGED_IMAGE_PREFIX: us-docker.pkg.dev/swirlds-registry/local-node/
-        NETWORK_NODE_IMAGE_PREFIX: us-docker.pkg.dev/swirlds-registry/local-node/
-        NETWORK_NODE_IMAGE_NAME: main-network-node
-        NETWORK_NODE_IMAGE_TAG: 0.73.0-cn-only-blockstream.x047c0c1
-        HAVEGED_IMAGE_TAG: 0.73.0-cn-only-blockstream.x047c0c1
+    env:
+      HAVEGED_IMAGE_PREFIX: us-docker.pkg.dev/swirlds-registry/local-node/
+      NETWORK_NODE_IMAGE_PREFIX: us-docker.pkg.dev/swirlds-registry/local-node/
+      NETWORK_NODE_IMAGE_NAME: main-network-node
+      NETWORK_NODE_IMAGE_TAG: 0.73.0-cn-only-blockstream.x047c0c1
+      HAVEGED_IMAGE_TAG: 0.73.0-cn-only-blockstream.x047c0c1
 
     steps:
       - name: Harden Runner
