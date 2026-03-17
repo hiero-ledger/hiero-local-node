@@ -67,6 +67,56 @@ jobs:
       - name: Stop the local node
         run: npm run stop
 
+  smoke-tests-default-block-streams:
+    name: Smoke Tests with Consensus node with Block Streams enabled by default
+    runs-on: hiero-local-node-linux-medium
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [18.x]
+
+      env:
+        HAVEGED_IMAGE_PREFIX: us-docker.pkg.dev/swirlds-registry/local-node/
+        NETWORK_NODE_IMAGE_PREFIX: us-docker.pkg.dev/swirlds-registry/local-node/
+        NETWORK_NODE_IMAGE_NAME: main-network-node
+        NETWORK_NODE_IMAGE_TAG: 0.73.0-cn-only-blockstream.x047c0c1
+        HAVEGED_IMAGE_TAG: 0.73.0-cn-only-blockstream.x047c0c1
+
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # v2.15.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout repository
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd test/smoke
+          npm ci
+
+      - name: Start the local node
+        run: npm run start -- -d --verbose=trace
+
+      - name: Run smoke test
+        uses: step-security/retry@e1d59ce1f574b32f0915e3a8df055cfe9f99be5d # v3.0.4
+        with:
+          max_attempts: 3
+          timeout_minutes: 3
+          command: npm run test:smoke
+
+      - name: Stop the local node
+        run: npm run stop
+
   browser-tests:
     name: Browser Tests
     runs-on: hiero-local-node-linux-large
