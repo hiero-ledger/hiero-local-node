@@ -233,7 +233,7 @@ export class InitState implements IState{
         node: string
     } {
         const node = variable.key;
-        let tag = variable.value;
+        let tag = process.env[node] ?? variable.value;
         switch (node) {
             case "NETWORK_NODE_IMAGE_TAG":
             case "HAVEGED_IMAGE_TAG":
