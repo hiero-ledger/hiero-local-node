@@ -7,8 +7,21 @@
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/hiero-ledger/hiero-local-node/badge)](https://scorecard.dev/viewer/?uri=github.com/hiero-ledger/hiero-local-node)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/10697/badge)](https://bestpractices.coreinfrastructure.org/projects/10697)
 
-
 </div>
+
+# ⚠️ Deprecation Notice
+
+This repository is **deprecated** and will be **archived** September 2026.
+
+It will remain available in read-only mode for reference, but **no further development, updates, or support will be provided**.
+
+- ❌ No new features  
+- ❌ No bug fixes  
+- ❌ No active support  
+
+👉 For migration guidance, see: https://hedera.com/blog/hiero-local-node-deprecation-6-month-transition-to-solo/
+
+---
 The Hiero Local Node project allows developers to set up their own Hiero based local network. The local network is composed of one mirror node and one consensus node. You can set this up by either using the CLI tool or by running Docker.
 </br></br>
 
