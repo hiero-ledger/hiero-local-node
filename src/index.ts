@@ -2,6 +2,14 @@
 
 // SPDX-License-Identifier: Apache-2.0
 
+console.warn(
+  '\x1b[33m⚠️  DEPRECATION NOTICE: Local Node is being deprecated and the project will be archived in a future release.\x1b[0m'
+);
+console.warn(
+  '\x1b[33m   For more information, see: https://hedera.com/blog/hiero-local-node-deprecation-6-month-transition-to-solo/\x1b[0m'
+);
+console.warn('');
+
 import { Bootstrapper } from "./services/Bootstrapper";
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
