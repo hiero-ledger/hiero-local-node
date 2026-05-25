@@ -33,6 +33,6 @@ jobs:
           egress-policy: audit
 
       - name: Check PR Title
-        uses: step-security/conventional-pr-title-action@e2a9b8d87a4b25077f0696ec3e2b4dd5a3f43734 # v3.2.4
+        uses: step-security/conventional-pr-title-action@b54c0688e6fd1d221f8a936e05fdd82f500640d6 # v3.2.7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
